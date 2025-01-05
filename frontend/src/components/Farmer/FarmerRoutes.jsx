@@ -16,6 +16,7 @@ function FarmerRoutes() {
       <Route path='D2C' element={<DtoC />} />
       <Route path='/weather' element={<Weather />} />
       <Route path='/orders' element={<Orders/>} />
+    
     </Routes>
   );
 }

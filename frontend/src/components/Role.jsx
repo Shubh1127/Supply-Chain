@@ -14,7 +14,7 @@ const Role = () => {
     <div className=' h-[80vh] m-3 flex  items-center flex-col justify-center gap-10 mb-9'>
         <h1 className='font-bold text-3xl'>What&apos;s Your Role ?</h1>
         <div className='flex gap-10'>
-        <Link to={'/role/farmer/farmer-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link>
+        <Link to={'/role/farmer/signup'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link>
         <Link to={'/role/farmer/buyer-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link>
         <Link to={'/role/farmer/provider-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Logistics Provider</Link>
         </div>
