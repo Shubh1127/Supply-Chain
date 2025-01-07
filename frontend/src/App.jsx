@@ -4,7 +4,7 @@ import Role from './components/Role'
 import FarmerDashboard from './components/Farmer/FarmerDashboard'
 import BuyerDashboard from './components/Buyer/BuyerDashboard'
 import ProviderDashboard from './components/Provider/ProviderDashboard'
-import SignupFarmer from './components/Farmer/SignupFarmer'
+import SignupFarmer from './components/Farmer/Auth/SignupFarmer'
 function App() {
   return (
     <Routes>
