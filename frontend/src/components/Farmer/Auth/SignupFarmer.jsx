@@ -1,62 +1,278 @@
-// import Footer from "../Footer"
-import Header from "../../Header"
+import Header from "../../Header";
 import { useState } from "react";
-import axios from "axios";
+import { motion } from 'framer-motion';
+// import { useNavigate } from "react-router-dom";
+import { useFarmer } from '../../../Context/FarmerContext';
+
 const SignupFarmer = () => {
+  // const navigate = useNavigate();
+  const { signup, message } = useFarmer();
   const [user, setUser] = useState({
-    name:'',
-    email:'',
-    password:'',
-    phoneNumber:'',
+    name: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
+    profileImage: null,
   });
-  const [message,setMessage]=useState('');
-  const handleChange=(e)=>{
-    setUser({...user,[e.target.name]:e.target.value})
-  }
-  const handleSubmit=async(e)=>{
-    e.preventDefault(); 
-    try{
-      const User=await axios.post('http://localhost:3000/farmer/register',user);
-      setMessage(User.data.message);
-      console.log(User.data.message);
-    }catch(er){
-      setMessage(er.response.data.message);
-      // console.log(er.response.data.message);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'profileImage') {
+      setUser({ ...user, profileImage: files[0] });
+    } else {
+      setUser({ ...user, [name]: value });
     }
-    
-    // console.log(user);
-  }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    await signup(user);
+    setLoading(false);
+  };
+
   return (
     <>
     <Header/>
-    <div className="h-screen w-screen content-center flex items-center justify-center ">
-        <div className="h-1/2  w-1/2 flex flex-col gap-1 items-center justify-center ">
-                <h2 className="text-3xl font-bold">GROW your business <br/>WITH SupplyChainPro</h2>
-                <h2 className="text-3xl font-bold mt-10">Get Started ---&gt;</h2>
-        </div>
-        <div className=" h-2/2 w-1/2 flex flex-col items-center justify-center ">
-        <h2 className="mb-2 text-2xl font-semibold">SignUp</h2>
-        <form className="border border-black flex flex-col gap-2 p-4 h-full w-2/4" onSubmit={handleSubmit}>
-            <label className="font-semibold ms-1" htmlFor='name'>Name</label>
-            <input className="rounded p-1 border border-black" placeholder="enter your name" type='text'  name='name' onChange={handleChange} required />
-            <label className="font-semibold ms-1" htmlFor='phone'>Phone</label>
-            <input className="rounded p-1 border border-black" placeholder="enter your phone" type='tel'  name='phoneNumber' onChange={handleChange} required />
-            <label className="font-semibold ms-1" htmlFor='email'>Email</label>
-            <input className="rounded p-1 border border-black" placeholder="enter your email" type='email' name='email' onChange={handleChange} required />
-            <label className="font-semibold ms-1" htmlFor='password'>Password</label>
-            <input className="rounded p-1 border border-black" placeholder="enter your password" type='password'  name='password' onChange={handleChange} required />
-            <span className="flex items-center gap-2">
-            <input type="checkbox" className="border border black rounded p-1 h-10"   name="terms" required />
-             <p className="text-sm text-blue-500">Accept Terms and Conditions</p>
-            </span>
-            {message && <p className="text-red-500">{message}</p>}
-            <button type='submit' className='bg-blue-500 text-white font-semibold p-2 rounded mt-2'>Signup</button>
-        </form>
-        </div>
-    </div>
-    {/* <Footer/> */}
-    </>
-  )
-}
+    <div style={styles.container} >
+      <div style={styles.animatedBackground} className="flex flex-col text-white font-semibold ">
+      <div className="absolute top-[28vh] text-4xl z-1 ">
+        Grow Your Business With Us<br/>
+       <p className="ms-[9vw] mt-9"> Get Started</p>
+      </div>
+        <motion.div
+          animate={{
+            scale: [1, 2, 2, 1, 1],
+            rotate: [0, 0, 270, 270, 0],
+            borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+          }}
+          transition={{
+            duration: 10,
+            ease: "easeInOut",
+            times: [0, 0.2, 0.5, 0.8, 1],
+            repeat: Infinity,
+            repeatDelay: 1
+          }}
+          style={styles.animatedShape}
+          />
+      </div>
+      <div style={styles.formContainer}>
+        <motion.form 
+          onSubmit={handleSubmit} 
+          style={styles.form}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          >
+            {message && <p className="text-red-500 ms-[5rem]">{message}</p>}
+          <h2 style={styles.title}>Join the Future</h2>
+          <p style={styles.subtitle}>Sign up for an innovative experience</p>
+          <motion.div 
+            style={styles.inputGroup}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+           <input
+              type="text"
+              name="name"
+              value={user.name}
+              onChange={handleChange}
+              placeholder="name"
+              style={styles.input}
+              required
+              />
+          </motion.div>
+          <motion.div 
+            style={styles.inputGroup}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+           <input
+              type="phoneNumber"
+              name="phoneNumber"
+              value={user.phoneNumber}
+              onChange={handleChange}
+              placeholder="PhoneNumber"
+              style={styles.input}
+              required
+              />
+          </motion.div>
+          <motion.div 
+            style={styles.inputGroup}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+            <input
+              type="email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              placeholder="Email"
+              style={styles.input}
+              required
+              />
+          </motion.div>
 
-export default SignupFarmer
+          <motion.div 
+            style={styles.inputGroup}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+            <input
+              type="password"
+              name="password"
+              value={user.password}
+              onChange={handleChange}
+              placeholder="Password"
+              style={styles.input}
+              required
+              />
+          </motion.div>
+          
+          
+          <motion.div 
+            style={styles.inputGroup}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+            <label htmlFor="profileImage" style={styles.label}>Profile Image</label>
+            <input
+              type="file"
+              name="profileImage"
+              onChange={handleChange}
+              placeholder="Profile Image"
+              accept="image/*"
+              style={styles.input}
+              // required
+              />
+          </motion.div>
+
+          <motion.button
+             type="submit"
+             style={styles.button}
+            whileHover={!loading && { scale: 1.1 }}
+            whileTap={!loading && { scale: 0.9 }}
+            disabled={loading}
+            >
+              {loading ? (
+                    <div className="spinner" style={styles.spinner}></div>
+                        ) : (
+                          "Sign Up"
+              )}
+          </motion.button>
+
+          <p style={styles.loginLink}>
+            Already have an account? <a href="/login" style={styles.link}>Log in</a>
+          </p>
+        </motion.form>
+      </div>
+    </div>
+</>
+  );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    height: '100vh',
+    fontFamily: 'Arial, sans-serif',
+  },
+  animatedBackground: {
+    flex: 1,
+    backgroundColor: '#6C63FF',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  spinner: {
+    width: '20px',
+    height: '20px',
+    border: '3px solid #fff',
+    borderTop: '3px solid transparent',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+  },
+  '@keyframes spin': {
+    '0%': {
+      transform: 'rotate(0deg)',
+    },
+    '100%': {
+      transform: 'rotate(360deg)',
+    },
+  },
+  animatedShape: {
+    width: 100,
+    height: 100,
+    backgroundColor: '#4CAF50',
+  },
+  formContainer: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F0F0F0',
+  },
+  label: {
+    display: 'block',
+    marginBottom: '5px',
+    fontSize: '14px',
+    color: '#333',
+  },  
+  form: {
+    width: '80%',
+    maxWidth: 400,
+    padding: 40,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  title: {
+    fontSize: 28,
+    color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    padding: '10px 15px',
+    fontSize: 16,
+    border: '2px solid #ddd',
+    borderRadius: 5,
+    transition: 'border-color 0.3s',
+    outline: 'none',
+  },
+  button: {
+    width: '100%',
+    padding: '12px',
+    fontSize: 18,
+    color: 'white',
+    backgroundColor: '#6C63FF',
+    border: 'none',
+    borderRadius: 5,
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+  },
+  loginLink: {
+    marginTop: 20,
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#666',
+  },
+  link: {
+    color: '#6C63FF',
+    textDecoration: 'none',
+  },
+};
+
+export default SignupFarmer;

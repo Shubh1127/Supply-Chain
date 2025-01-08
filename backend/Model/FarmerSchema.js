@@ -21,6 +21,9 @@ const FarmerSchema = new mongoose.Schema({
     },
     socketid:{
         type:String,
+    },
+    profileImageUrl:{
+        type:String,
     }
 });
 

@@ -1,10 +1,13 @@
-import{ useState } from "react";
+import{ useState ,useEffect} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { useFarmer } from "../../Context/FarmerContext";
 const Home = () => {
+  const {user,logout}=useFarmer();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [showPopup, setShowPopup] = useState(false);
   const data = [
     { name: 'Jan', sales: 4000 },
     { name: 'Feb', sales: 3000 },
@@ -13,7 +16,15 @@ const Home = () => {
     { name: 'May', sales: 1890 },
     { name: 'Jun', sales: 2390 },
   ]
-  
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".relative")) {
+        setShowPopup(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
     <div className="h-[80vh] bg-white content-center px-1  rounded-md ">
       <div className="h-[79vh] bg-sky-400 rounded-md pt-4 py-1 text-black p-6">
@@ -38,10 +49,45 @@ const Home = () => {
             className="bg-white border  text-black p-2 rounded"
             />
         </div>
-        <div className="h-max flex items-center gap-5 ">
-          <div>Shubham </div>
-          <div className="rounded-[50%] w-10 h-10 bg-red-500"></div>
-        </div>
+        <div className="h-max flex items-center gap-5 relative">
+            <div>{user && <p>{user}</p> || <p>User</p>}</div>
+            <div
+              className="w-10 h-10 relative cursor-pointer rounded-full"
+              onClick={() => setShowPopup(!showPopup)}
+            >
+              {user && user.profilePicture ? (
+                <img
+                  src={user.profilePicture}
+                  alt="Profile"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <img
+                  src='https://t4.ftcdn.net/jpg/03/32/59/65/360_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg'
+                  alt="Profile"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              )}
+              {showPopup && (
+                <div className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-40 p-2">
+                  <ul className="space-y-2 text-sm">
+                    <li
+                      className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
+                      onClick={() => console.log("Show Profile clicked")}
+                    >
+                      Show Profile
+                    </li>
+                    <li
+                      className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
+                      onClick={() => logout()}
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
       </header>
 
       {/* Metrics */}

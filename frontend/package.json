@@ -12,9 +12,11 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",
     "@shadcn/ui": "^0.0.4",
+    "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotted-map": "^2.2.3",
+    "framer-motion": "^12.0.0-alpha.2",
     "lucide-react": "^0.469.0",
     "motion": "^12.0.0-alpha.2",
     "path": "^0.12.7",
@@ -30,7 +32,7 @@
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",  
+    "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
