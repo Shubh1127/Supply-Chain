@@ -3,8 +3,7 @@ import Footer from './Footer'
 import { Truck } from 'lucide-react'
 import { useFarmer } from '../Context/FarmerContext'
 const Role = () => {
-  const {user}=useFarmer();
-  console.log(user)
+  const {farmer}=useFarmer();
   return (
     <>
     <header className="px-4 lg:px-6 h-14 flex items-center">
@@ -17,9 +16,9 @@ const Role = () => {
     <div className=' h-[80vh] m-3 flex  items-center flex-col justify-center gap-10 mb-9'>
         <h1 className='font-bold text-3xl'>What&apos;s Your Role ?</h1>
         <div className='flex gap-10'>
-          {user 
+          {farmer 
           &&
-           <Link to={'/role/farmer/farmer-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link> 
+           <Link to={'/role/farmer/'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link> 
            || <Link to={'/role/farmer/signup'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link>
            }
         <Link to={'/role/farmer/buyer-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link>

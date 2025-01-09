@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from 'framer-motion';
 // import { useNavigate } from "react-router-dom";
 import { useFarmer } from '../../../Context/FarmerContext';
+import { Link } from "react-router-dom";
 
 const SignupFarmer = () => {
   // const navigate = useNavigate();
@@ -89,7 +90,7 @@ const SignupFarmer = () => {
             whileTap={{ scale: 0.95 }}
             >
            <input
-              type="phoneNumber"
+              type="Number"
               name="phoneNumber"
               value={user.phoneNumber}
               onChange={handleChange}
@@ -163,7 +164,7 @@ const SignupFarmer = () => {
           </motion.button>
 
           <p style={styles.loginLink}>
-            Already have an account? <a href="/login" style={styles.link}>Log in</a>
+            Already have an account? <Link to='/role/farmer/login' style={styles.link}>Log in</Link >
           </p>
         </motion.form>
       </div>

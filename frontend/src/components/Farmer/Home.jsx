@@ -3,11 +3,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useFarmer } from "../../Context/FarmerContext";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
-  const {user,logout}=useFarmer();
+  const {logout,farmer,getprofile}=useFarmer();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
   const data = [
     { name: 'Jan', sales: 4000 },
     { name: 'Feb', sales: 3000 },
@@ -50,14 +52,14 @@ const Home = () => {
             />
         </div>
         <div className="h-max flex items-center gap-5 relative">
-            <div>{user && <p>{user}</p> || <p>User</p>}</div>
+            <div>{farmer && <p>{farmer.name}</p> || <p>User</p>}</div>
             <div
               className="w-10 h-10 relative cursor-pointer rounded-full"
               onClick={() => setShowPopup(!showPopup)}
             >
-              {user && user.profilePicture ? (
+              {farmer && farmer.profileImageUrl ? (
                 <img
-                  src={user.profilePicture}
+                  src={farmer.profileImageUrl}
                   alt="Profile"
                   className="w-full h-full rounded-full object-cover"
                 />
@@ -73,7 +75,7 @@ const Home = () => {
                   <ul className="space-y-2 text-sm">
                     <li
                       className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
-                      onClick={() => console.log("Show Profile clicked")}
+                      onClick={() => navigate('/role/farmer/profile')}
                     >
                       Show Profile
                     </li>
