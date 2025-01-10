@@ -21,7 +21,7 @@ const Role = () => {
            <Link to={'/role/farmer/'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link> 
            || <Link to={'/role/farmer/signup'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link>
            }
-        <Link to={'/role/farmer/buyer-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link>
+        <Link to={'/role/buyer'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link>
         <Link to={'/role/farmer/provider-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Logistics Provider</Link>
         </div>
     </div>
