@@ -35,7 +35,29 @@ function AddProductForm() {
             value={product.name}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Image</label>
+          <input
+            type="file"
+            name="name"
+            value={product.name}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Description</label>
+          <input
+            type="text"
+            name="name"
+            value={product.name}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
           />
         </div>
         <div>
@@ -47,7 +69,7 @@ function AddProductForm() {
             value={product.quantity}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
           />
         </div>
         <div>
@@ -60,7 +82,7 @@ function AddProductForm() {
             onChange={handleChange}
             required
             step="0.01"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
           />
         </div>
         <button

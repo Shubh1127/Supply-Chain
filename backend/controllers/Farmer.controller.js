@@ -1,4 +1,5 @@
 const FarmerModel=require('../Model/FarmerSchema');
+const ProductModel=require('../Model/ProductSchema')
 const cloudinary=require('../config/cloudinaryConfig')
 module.exports.register = async (req, res) => {
     try {
@@ -90,3 +91,44 @@ module.exports.getProfile = async (req, res) => {
     }
   };
   
+  module.exports.addProduct = async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) {
+            return res.status(401).json({ message: 'Please login first' });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const farmer = await FarmerModel.findById(decoded._id);
+
+        if (!farmer) {
+            return res.status(401).json({ message: 'Invalid token or user not found' });
+        }
+
+        const { name, description, price ,quantity} = req.body;
+        let productPhotoUrl = null;
+
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'Products/Photos',
+            });
+            productPhotoUrl = result.secure_url;
+        }
+
+        const product = await ProductModel.create({
+            name,
+            description,
+            price,
+            quantity,
+            photo: productPhotoUrl,
+            farmer: farmer._id,
+        });
+
+        return res.status(201).json({
+            message: 'Product added successfully',
+            product,
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

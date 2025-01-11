@@ -24,7 +24,19 @@ const BuyerSchema=new mongoose.Schema({
     },
     profileImageUrl:{
         type:String,
-    }
+    },
+    address:{
+        type:String,
+        required:true
+    },
+    orders: [
+        {
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+            quantity: { type: Number, required: true },
+            orderDate: { type: Date, default: Date.now },
+            totalPrice: { type: Number, required: true } // Optional field for total price of the order
+        }
+    ]
 });
 
 BuyerSchema.methods.generateAuthToken=function(){
