@@ -26,7 +26,7 @@ export const BuyerProvider = ({ children }) => {
 
   useEffect(() => {
     if (buyer) {
-      localStorage.setItem('buyer', JSON.stringify(buyer)); // Store farmer data as a string
+      localStorage.setItem('buyer', JSON.stringify(buyer)); // Store buyer data as a string
     } else {
       localStorage.removeItem('buyer');
     }
@@ -41,7 +41,7 @@ export const BuyerProvider = ({ children }) => {
     formData.append('profileImage', user.profileImage);
   
     try {
-      const response = await axios.post('http://localhost:3000/farmer/register', formData, {
+      const response = await axios.post('http://localhost:3000/buyer/register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -50,16 +50,12 @@ export const BuyerProvider = ({ children }) => {
       if (response.data.token) {
         // Save token in localStorage
         localStorage.setItem('token', response.data.token);
-  
-        // Save farmer data in localStorage
-        localStorage.setItem('farmer', JSON.stringify(response.data.farmer));
-  
-        // Update state with the farmer data
-        setFarmer(response.data.farmer);
+        localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
+        setBuyer(response.data.buyer);
       }
   
       setMessage(response.data.message);
-      navigate('/role/farmer/');
+      navigate('/role/buyer/');
     } catch (error) {
       setMessage(error.response.data.message);
     }
@@ -67,24 +63,20 @@ export const BuyerProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:3000/farmer/login', { email, password });
+      const response = await axios.post('http://localhost:3000/buyer/login', { email, password });
   
       if (response.data.token) {
         // Save token in localStorage
         localStorage.setItem('token', response.data.token);
   
-        // Save farmer data in localStorage
-        localStorage.setItem('farmer', JSON.stringify(response.data.farmer));
-  
-        // Set token in axios headers for subsequent requests
+        // Save buyer data in localStorage
+        localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
-  
-        // Update state with the farmer data
-        setFarmer(response.data.farmer);
+        setBuyer(response.data.buyer);
       }
   
       setMessage(response.data.message);
-      navigate('/role/farmer/');
+      navigate('/role/buyer/');
     } catch (error) {
       setMessage(error.response.data.message);
     }
@@ -92,18 +84,18 @@ export const BuyerProvider = ({ children }) => {
   const logout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/farmer/logout', {
+      const response = await axios.get('http://localhost:3000/buyer/logout', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
   
       // Remove user-related data from localStorage
-      localStorage.removeItem('farmer'); // Remove farmer data
+      localStorage.removeItem('buyer'); // Remove buyer data
       localStorage.removeItem('token');  // Remove token
   
-      // Clear the farmer state
-      setFarmer(null);
+      // Clear the buyer state
+      setBuyer(null);
   
       console.log(response.data.message); // Log the success message
       navigate('/'); // Navigate to the home page
@@ -115,12 +107,12 @@ export const BuyerProvider = ({ children }) => {
   const getProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/farmer/profile', {
+      const response = await axios.get('http://localhost:3000/buyer/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setFarmer(response.data.farmer);
+      setBuyer(response.data.buyer);
     } catch (error) {
       setMessage(error.response.data.message);
     }
@@ -135,12 +127,12 @@ export const BuyerProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/farmer/updateProfile', formData, {
+      const response = await axios.post('http://localhost:3000/buyer/updateProfile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setFarmer(response.data.farmer);
+      setBuyer(response.data.buyer);
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response.data.message);
@@ -155,8 +147,8 @@ export const BuyerProvider = ({ children }) => {
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile,updateProfile, message }}>
+    <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile, message }}>
       {children}
-    </FarmerContext.Provider>
+    </BuyerContext.Provider>
   );
 };

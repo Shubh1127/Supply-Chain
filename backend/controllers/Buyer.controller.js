@@ -3,7 +3,7 @@ const cloudinary=require('../config/cloudinaryConfig')
 
 module.exports.register=async(req,res)=>{
     try{
-        const {name,email,password,phone,ProfileImageUrl}=req.body;
+        const {name,email,password,phone}=req.body;
         let profilePhotoUrl=null;
         if(req.file){
             const result=await cloudinary.uploader.upload(req.file.path,{
@@ -11,12 +11,12 @@ module.exports.register=async(req,res)=>{
             })
             profilePhotoUrl=result.secure_url;
         }
-        const hashedPassword=await BuyerModel.hashedPassword(password);
+        const hashedPassword=await BuyerModel.hashPassword(password);
         const isBuyerExist=await BuyerModel.findOne({email});
         if(isBuyerExist){
             return res.status(400).json({message:'Buyer already exists'});
         }
-        const buyer=new BuyerModel.create({
+        const buyer=await BuyerModel.create({
             name,
             email,
             password:hashedPassword,

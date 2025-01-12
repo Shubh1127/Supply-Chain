@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom'
 import Footer from './Footer'
 import { Truck } from 'lucide-react'
 import { useFarmer } from '../Context/FarmerContext'
+import { useBuyer } from '../Context/BuyerContext'
 const Role = () => {
   const {farmer}=useFarmer();
+  const {buyer}=useBuyer();
   return (
     <>
     <header className="px-4 lg:px-6 h-14 flex items-center">
@@ -21,7 +23,11 @@ const Role = () => {
            <Link to={'/role/farmer/'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link> 
            || <Link to={'/role/farmer/signup'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Farmer</Link>
            }
-        <Link to={'/role/buyer'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link>
+          {buyer 
+          &&
+           <Link to={'/role/buyer/'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link> 
+           || <Link to={'/role/buyer/signup'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Buyer</Link>
+           }
         <Link to={'/role/farmer/provider-dashboard'} className='border  outline rounded p-3 bg-blue-500 hover:bg-blue-700 font-semibold text-white'>Logistics Provider</Link>
         </div>
     </div>
