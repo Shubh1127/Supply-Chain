@@ -3,7 +3,7 @@ const cloudinary=require('../config/cloudinaryConfig')
 
 module.exports.register=async(req,res)=>{
     try{
-        const {name,email,password,phone}=req.body;
+        const {name,email,password,phoneNumber}=req.body;
         let profilePhotoUrl=null;
         if(req.file){
             const result=await cloudinary.uploader.upload(req.file.path,{
@@ -20,7 +20,7 @@ module.exports.register=async(req,res)=>{
             name,
             email,
             password:hashedPassword,
-            phone,
+            phone:phoneNumber,
             profileImageUrl:profilePhotoUrl,
         })
         const token=buyer.generateAuthToken();

@@ -19,6 +19,28 @@ const FarmerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    address:{
+        houseNo:{
+            type:String,
+            default:"123"
+        },
+        street:{
+            type:String,
+            default:"abc"
+        },
+        city:{
+            type:String,
+            default:"xyz"
+        },
+        state:{
+            type:String,
+            default:"pqr"
+        },
+        pincode:{
+            type:String,
+            default:"123456"
+        }
+    },
     socketid:{
         type:String,
     },

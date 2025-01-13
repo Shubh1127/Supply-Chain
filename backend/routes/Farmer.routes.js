@@ -8,4 +8,5 @@ router.post('/register', upload.single('profileImage'),farmerController.register
 router.post('/login',farmerController.login);
 router.get('/logout',authMiddleware,farmerController.logout);
 router.get('/profile',authMiddleware,farmerController.getProfile);
+router.post('/updateprofile',authMiddleware,farmerController.updateProfile);
 module.exports=router;

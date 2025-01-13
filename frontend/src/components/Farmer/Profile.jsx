@@ -10,27 +10,40 @@ const Profile = () => {
     phoneNumber: '',
     profileImage: null,
     profileImageUrl: '',
+    address: {
+      houseNo: '',
+      street: '',
+      city: '',
+      state: '',
+      pincode: '',
+    }
   });
-  console.log(farmer);
+
+  // Set user state from farmer only if not editing
   useEffect(() => {
-    if (farmer) {
+    if (farmer && !isEditing) {
       setUser({
         name: farmer.name,
         email: farmer.email,
         phoneNumber: farmer.phone,
         profileImageUrl: farmer.profileImageUrl,
+        address: farmer.address,
       });
     }
-  }, [farmer]);
+  }, [farmer, isEditing]);  // Runs when farmer or isEditing changes
 
+  // Load profile on component mount
   useEffect(() => {
     getProfile();
-  }, []);
+  }, []); // This will run only once on component mount
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'profileImage') {
       setUser({ ...user, profileImage: files[0] });
+    } else if (name.startsWith('address.')) {
+      const key = name.split('.')[1];
+      setUser({ ...user, address: { ...user.address, [key]: value } });
     } else {
       setUser({ ...user, [name]: value });
     }
@@ -38,8 +51,8 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateProfile(user);
-    setIsEditing(false);
+    await updateProfile(user); // Update the profile with the new data
+    setIsEditing(false); // Exit editing mode
   };
 
   return (
@@ -67,6 +80,7 @@ const Profile = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="profile-edit">
+          {/* Name field */}
           <div className="mb-4">
             <label className="block text-gray-700">Name</label>
             <input
@@ -78,6 +92,8 @@ const Profile = () => {
               required
             />
           </div>
+          
+          {/* Email field */}
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <input
@@ -89,10 +105,12 @@ const Profile = () => {
               required
             />
           </div>
+          
+          {/* Phone Number field */}
           <div className="mb-4">
             <label className="block text-gray-700">Phone Number</label>
             <input
-              type="Number"
+              type="text"
               name="phoneNumber"
               value={user.phoneNumber}
               onChange={handleChange}
@@ -100,6 +118,70 @@ const Profile = () => {
               required
             />
           </div>
+          
+          {/* Address fields */}
+          <div className="flex flex-col">
+            <div className="font-semibold">Address</div>
+            <div className="flex flex-wrap">
+              <div className="mb-4 mr-3">
+                <label className="block text-gray-700">House Number</label>
+                <input
+                  type="text"
+                  name="address.houseNo"
+                  value={user.address.houseNo}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4 mr-3">
+                <label className="block text-gray-700">Street</label>
+                <input
+                  type="text"
+                  name="address.street"
+                  value={user.address.street}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4 mr-3">
+                <label className="block text-gray-700">City</label>
+                <input
+                  type="text"
+                  name="address.city"
+                  value={user.address.city}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4 mr-3">
+                <label className="block text-gray-700">State</label>
+                <input
+                  type="text"
+                  name="address.state"
+                  value={user.address.state}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">PinCode</label>
+                <input
+                  type="number"
+                  name="address.pincode"
+                  value={user.address.pincode}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Profile Image field */}
           <div className="mb-4">
             <label className="block text-gray-700">Profile Image</label>
             <input
@@ -110,6 +192,8 @@ const Profile = () => {
               className="w-full px-3 py-2 border rounded"
             />
           </div>
+          
+          {/* Save and Cancel buttons */}
           <div className="flex items-center">
             <button
               type="submit"

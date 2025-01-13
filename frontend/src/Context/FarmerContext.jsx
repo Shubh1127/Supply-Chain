@@ -127,20 +127,27 @@ export const FarmerProvider = ({ children }) => {
       setMessage(error.response.data.message);
     }
   };
+  
   const updateProfile = async (user) => {
     const formData = new FormData();
     formData.append('name', user.name);
     formData.append('email', user.email);
     formData.append('phoneNumber', user.phoneNumber);
+    formData.append('address.houseNo', user.address.houseNo);
+    formData.append('address.street', user.address.street);
+    formData.append('address.city', user.address.city);
+    formData.append('address.state', user.address.state);
+    formData.append('address.pincode', user.address.pincode);
     if (user.profileImage) {
       formData.append('profileImage', user.profileImage);
     }
-
+    // console.log(formData);
     try {
-      const response = await axios.post('http://localhost:3000/farmer/updateProfile', formData, {
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:3000/farmer/updateprofile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        },
+          'Authorization': `Bearer ${token}`       },
       });
       setFarmer(response.data.farmer);
       setMessage(response.data.message);

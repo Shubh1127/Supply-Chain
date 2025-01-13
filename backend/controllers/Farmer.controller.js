@@ -1,6 +1,7 @@
 const FarmerModel=require('../Model/FarmerSchema');
 const ProductModel=require('../Model/ProductSchema')
 const cloudinary=require('../config/cloudinaryConfig')
+const jwt=require('jsonwebtoken');
 module.exports.register = async (req, res) => {
     try {
       const { name, email, password, phoneNumber } = req.body;
@@ -77,17 +78,64 @@ module.exports.getProfile = async (req, res) => {
       if (!farmer) {
         return res.status(401).json({ message: 'Invalid token or user not found' });
       }
-  
       return res.status(200).json({
         farmer: {
           name: farmer.name,
           email: farmer.email,
           phone: farmer.phone,
-          profileImageUrl: farmer.profileImageUrl, // Assuming profile image is stored in this field
+          profileImageUrl: farmer.profileImageUrl, 
+          address: farmer.address,
         },
       });
     } catch (error) {
       return res.status(400).json({ message: 'Invalid token.' });
+    }
+  };
+  
+  module.exports.updateProfile = async (req, res) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      return res.status(401).json({ message: 'Please login first' });
+    }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const farmer = await FarmerModel.findById(decoded._id);
+      if (!farmer) {
+        return res.status(401).json({ message: 'Invalid token or user not found' });
+      }
+  
+      const { name, email, phone, address } = req.body;
+      let profileImageUrl = farmer.profileImageUrl;
+  
+      if (req.file) {
+        profileImageUrl = req.file.path;
+      }
+  
+      const updatedFarmer = await FarmerModel.findByIdAndUpdate(
+        decoded._id,
+        {
+          name,
+          email,
+          phone,
+          address,
+          profileImageUrl,
+        },
+        { new: true }
+      );
+      await updatedFarmer.save();
+  
+      return res.status(200).json({
+        farmer: {
+          name: updatedFarmer.name,
+          email: updatedFarmer.email,
+          phone: updatedFarmer.phone,
+          profileImageUrl: updatedFarmer.profileImageUrl,
+          address: updatedFarmer.address,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(400).json({ message: 'Something went wrong.' });
     }
   };
   
@@ -132,3 +180,4 @@ module.exports.getProfile = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
