@@ -1,6 +1,7 @@
 const FarmerModel=require('../Model/FarmerSchema');
 const ProductModel=require('../Model/ProductSchema')
 const cloudinary=require('../config/cloudinaryConfig')
+const axios=require('axios');
 const jwt=require('jsonwebtoken');
 module.exports.register = async (req, res) => {
     try {
@@ -202,4 +203,14 @@ module.exports.getProducts = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
+};
+
+module.exports.Weather = async (req, res) => {
+  try {
+    const apiKey = process.env.WEATHER_API_KEY;
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${req.query.lat}&lon=${req.query.lon}&appid=${apiKey}&units=metric`);
+    return res.status(200).json(response.data);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
 };

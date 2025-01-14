@@ -12,4 +12,6 @@ router.put('/updateprofile',authMiddleware,upload.single('profileImage'),farmerC
 //products routes
 router.post('/addproduct',authMiddleware,upload.single('productImage'),farmerController.addProduct);
 router.get('/products',authMiddleware,farmerController.getProducts);
+//weather route
+router.get('/weather',farmerController.Weather);
 module.exports=router;

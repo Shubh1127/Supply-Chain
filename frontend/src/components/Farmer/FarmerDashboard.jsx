@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
 import FarmerRoutes from "./FarmerRoutes"; // Import FarmerRoutes
-
+import '../../App.css'
 const FarmerDashboard = () => {
   return (
     <>
@@ -15,12 +15,12 @@ const FarmerDashboard = () => {
           <Link to="/role/farmer/Addproduct" className="block p-4 hover:bg-gray-300"><i className="fa-solid fa-plus mr-2"></i>Add Product</Link>
           <Link to="/role/farmer/D2C" className="block p-4 hover:bg-gray-300"><i className="fa-solid fa-diamond-turn-right mr-2"></i>Direct to Consumer</Link>
           <Link to="/role/farmer/weather" className="block p-4 hover:bg-gray-300"><i className="fa-solid fa-cloud mr-2"></i>Weather</Link>
-          <Link to="/role/farmer/orders" className="block p-4 hover:bg-gray-300">Orders</Link>
-          <Link to="/role/farmer/profile" className="block p-4 hover:bg-gray-300">Profile</Link>  
+          <Link to="/role/farmer/orders" className="block p-4 hover:bg-gray-300"><i className="fa-solid fa-cart-shopping mr-2"></i>Orders</Link>
+          <Link to="/role/farmer/profile" className="block p-4 hover:bg-gray-300"><i className="fa-solid fa-user mr-2"></i>Profile</Link>  
           <div className="flex justify-evenly">
-            <Link to={'/instagram'}>hello</Link>
-            <Link to={'/google'}>there</Link>
-            <Link to={'/youtube'}>Shubham</Link>
+            <Link to={'/instagram'}></Link>
+            <Link to={'/google'}></Link>
+            <Link to={'/youtube'}> </Link>
           </div>
         </div>
         {/* Main Content */}
@@ -32,5 +32,6 @@ const FarmerDashboard = () => {
     </>
   );
 };
+
 
 export default FarmerDashboard;

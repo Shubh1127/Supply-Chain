@@ -10,7 +10,7 @@ export const useFarmer = () => {
 
 export const FarmerProvider = ({ children }) => {
   const [farmer, setFarmer] = useState(null);
-
+  const [weather,setWeather]=useState(null);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
@@ -184,7 +184,14 @@ export const FarmerProvider = ({ children }) => {
       console.error('Error:', error.response?.data?.message || error.message);
     }
   }
-
+  const getWeather = async (lat, lon) => {
+    try {
+      const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,visibility,wind_speed_10m,soil_temperature_0cm,soil_moisture_0_to_1cm&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,daylight_duration,sunshine_duration,precipitation_sum,rain_sum,showers_sum,precipitation_probability_max,wind_speed_10m_max`);
+      setWeather(response.data);
+    } catch (error) {
+      console.error('Error:', error.response?.data?.message || error.message);
+    }
+  };
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -193,7 +200,7 @@ export const FarmerProvider = ({ children }) => {
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile,updateProfile,addProduct, message }}>
+    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile,updateProfile,addProduct,getWeather,weather, message }}>
       {children}
     </FarmerContext.Provider>
   );
