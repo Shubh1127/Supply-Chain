@@ -10,6 +10,7 @@ export const useFarmer = () => {
 
 export const FarmerProvider = ({ children }) => {
   const [farmer, setFarmer] = useState(null);
+
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
@@ -129,42 +130,70 @@ export const FarmerProvider = ({ children }) => {
   };
   
   const updateProfile = async (user) => {
+    console.log('request is coming here');
+    console.log(user);
+  
     const formData = new FormData();
     formData.append('name', user.name);
     formData.append('email', user.email);
-    formData.append('phoneNumber', user.phoneNumber);
-    formData.append('address.houseNo', user.address.houseNo);
-    formData.append('address.street', user.address.street);
-    formData.append('address.city', user.address.city);
-    formData.append('address.state', user.address.state);
-    formData.append('address.pincode', user.address.pincode);
+    formData.append('phone', user.phoneNumber);
+    formData.append('address[houseNo]', user.address.houseNo);
+    formData.append('address[street]', user.address.street);
+    formData.append('address[city]', user.address.city);
+    formData.append('address[state]', user.address.state);
+    formData.append('address[pincode]', user.address.pincode);
+  
     if (user.profileImage) {
-      formData.append('profileImage', user.profileImage);
+      formData.append('profileImage', user.profileImage); // Ensure this is a valid File object
     }
-    // console.log(formData);
+  
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:3000/farmer/updateprofile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`       },
-      });
-      setFarmer(response.data.farmer);
-      setMessage(response.data.message);
+      const response = await axios.put(
+        'http://localhost:3000/farmer/updateprofile',
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('Response:', response.data);
     } catch (error) {
-      setMessage(error.response.data.message);
+      console.error('Error:', error.response?.data?.message || error.message);
     }
   };
+  
+  const addProduct=async(product)=>{
+    const token=localStorage.getItem('token');
+    const formData=new FormData();
+    formData.append('name',product.name);
+    formData.append('description',product.description);
+    formData.append('price',product.price);
+    formData.append('quantity',product.quantity);
+    formData.append('productImage',product.productImage);
+    try{
+      const response=await axios.post('http://localhost:3000/farmer/addproduct',formData,{
+        headers:{
+          'Content-Type':'multipart/form-data',
+          'Authorization':`Bearer ${token}`
+        }
+        });
+        console.log(response);
+    }catch(error){
+      console.error('Error:', error.response?.data?.message || error.message);
+    }
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      getProfile(); // Fetch the profile if token is available
+      getProfile();
     }
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile,updateProfile, message }}>
+    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile,updateProfile,addProduct, message }}>
       {children}
     </FarmerContext.Provider>
   );

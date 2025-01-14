@@ -8,5 +8,8 @@ router.post('/register', upload.single('profileImage'),farmerController.register
 router.post('/login',farmerController.login);
 router.get('/logout',authMiddleware,farmerController.logout);
 router.get('/profile',authMiddleware,farmerController.getProfile);
-router.post('/updateprofile',authMiddleware,farmerController.updateProfile);
+router.put('/updateprofile',authMiddleware,upload.single('profileImage'),farmerController.updateProfile);
+//products routes
+router.post('/addproduct',authMiddleware,upload.single('productImage'),farmerController.addProduct);
+router.get('/products',authMiddleware,farmerController.getProducts);
 module.exports=router;

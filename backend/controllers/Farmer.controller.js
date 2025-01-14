@@ -97,6 +97,7 @@ module.exports.getProfile = async (req, res) => {
     if (!token) {
       return res.status(401).json({ message: 'Please login first' });
     }
+    
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const farmer = await FarmerModel.findById(decoded._id);
@@ -106,11 +107,12 @@ module.exports.getProfile = async (req, res) => {
   
       const { name, email, phone, address } = req.body;
       let profileImageUrl = farmer.profileImageUrl;
-  
       if (req.file) {
-        profileImageUrl = req.file.path;
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'Farmers/ProfilePhotos', // Cloudinary folder
+        });
+        profileImageUrl = result.secure_url; 
       }
-  
       const updatedFarmer = await FarmerModel.findByIdAndUpdate(
         decoded._id,
         {
@@ -118,11 +120,10 @@ module.exports.getProfile = async (req, res) => {
           email,
           phone,
           address,
-          profileImageUrl,
+          profileImageUrl, 
         },
         { new: true }
       );
-      await updatedFarmer.save();
   
       return res.status(200).json({
         farmer: {
@@ -138,6 +139,7 @@ module.exports.getProfile = async (req, res) => {
       return res.status(400).json({ message: 'Something went wrong.' });
     }
   };
+  
   
   module.exports.addProduct = async (req, res) => {
     try {
@@ -169,7 +171,7 @@ module.exports.getProfile = async (req, res) => {
             price,
             quantity,
             photo: productPhotoUrl,
-            farmer: farmer._id,
+            farmerId: farmer._id,
         });
 
         return res.status(201).json({
@@ -181,3 +183,23 @@ module.exports.getProfile = async (req, res) => {
     }
 };
 
+
+module.exports.getProducts = async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) {
+            return res.status(401).json({ message: 'Please login first' });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const farmer = await FarmerModel.findById(decoded._id);
+
+        if (!farmer) {
+            return res.status(401).json({ message: 'Invalid token or user not found' });
+        }
+        const products = await ProductModel.find({ farmerId:decoded._id });
+        return res.status(200).json({ products });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

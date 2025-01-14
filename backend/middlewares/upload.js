@@ -1,21 +1,17 @@
 const multer = require('multer');
 
-const storage = multer.diskStorage({}); // No local storage setup since files are uploaded to Cloudinary
-
-// Add file filter to accept only image files
+const storage = multer.diskStorage({}); 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
     cb(null, true); // Accept file
   } else {
-    cb(new Error('Invalid file type. Only image files are allowed'), false); // Reject file
+    cb(new Error('Invalid file type. Only image files are allowed'), false); 
   }
 };
-
-// Initialize multer
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Optional: Limit file size to 5MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB file size limit
 });
 
 module.exports = upload;
