@@ -24,7 +24,7 @@ const FarmerDashboard = () => {
           </div>
         </div>
         {/* Main Content */}
-        <div className="h-[84vh] w-[85%] p-6 rounded-xl bg-sky-300 overflow-y-auto">
+        <div className="h-[84vh] w-[85%] p-6 rounded-xl bg-teal-300 overflow-y-auto">
           <FarmerRoutes />
         </div>
       </div>

@@ -90,8 +90,8 @@ const Weather = () => {
                   </div>
 
                   <div className="mt-2 ms-2">
-                    <span className="text-4xl font-semibold ms-2">
-                      Curr Temp
+                    <span className="text-4xl  ms-2">
+                       Temperature
                     </span>
                   </div>
                 </div>
@@ -102,8 +102,8 @@ const Weather = () => {
                       {weather.main.feels_like}°C
                     </span>
 
-                  <div className="mt-3 ms-2">
-                  <div className=" text-4xl font-semibold">Feels Like</div>
+                  <div className="mt-3 ms-7">
+                  <div className=" text-4xl ">Feels Like</div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-4 bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4">
@@ -143,67 +143,72 @@ const Weather = () => {
                   </div>
                 </div>
               </div>
-              <div className="bottom h-[20vh]  flex justify-evenly  ">
-                <div className="flex flex-col gap-4 bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4 ">
+              <div className="bottom h-[20vh] gap-2  flex justify-evenly  ">
+                <div className="flex flex-col gap-4 ms-4 bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4 ">
                   <div className="flex justify-evenly">
-                    <Droplets color="skyBlue" size={50} />
-                    <span className="text-5xl">{weather.main.humidity}%</span>
+                    <Droplets color="Blue" size={50} />
+                    <span className="text-4xl">{weather.main.humidity}%</span>
                   </div>
 
                   <div className="flex">
-                    <span className="text-5xl ms-2">
+                    <span className="text-4xl ms-2">
                         Humidity
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-4 bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4 ">
                   <div className="flex">
-                    <CircleGauge color="red" size={50} />
-                    <span className="text-5xl">{weather.main.pressure / 1000} atm</span>
+                    <CircleGauge color="red" size={40} />
+                    <span className="text-4xl">{weather.main.pressure / 1000} atm</span>
                   </div>
 
                   <div className="flex">
-                    <span className="text-5xl ms-8">
+                    <span className="text-4xl ms-8 mt-4">
                       Pressure
                     </span>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-4 bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4">
-                  <div className="flex">
-                    <Thermometer color="red" size={50} />
-                    <span className="text-5xl">{weather.main.temp}°C</span>
+                  <div className="flex items-center justify-evenly">
+                    <Wind color="white" size={50} />
+                    <span className="text-3xl">{weather.wind.speed} km/h</span>
                   </div>
 
                   <div className="flex">
-                    <Droplets color="skyBlue" size={50} />
-                    <span className="text-5xl ms-2">
-                      {weather.main.humidity}%
+                    <span className="text-4xl ms-12 mt-2">
+                      Wind
                     </span>
                   </div>
                 </div>
-                <div className="sunrise bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4">
-                  <span>Sunset: {formatTime(weather.sys.sunset)}</span>
+                <div className="flex flex-col gap-4 bg-opacity-30 backdrop-blur-lg bg-white/20 rounded-lg p-4">
+                  <div className="flex items-center justify-evenly">
+                    <Wind color="white" size={50} />
+                    <span className="text-3xl">{weather.wind.gust} km/h</span>
+                  </div>
+
+                  <div className="flex">
+                    <span className="text-3xl ms-2 mt-2">
+                      Wind Gusts
+                    </span>
+                  </div>
                 </div>
+                
               </div>
             </div>
           </div>
-
-          <div className="weather-info">
-            <div className="wind">
-              {/* <span>Wind: {weather.wind.speed} km/h</span> */}
+          <div className="w-full flex flex-col ps-12 ms-2">
+            <div className="flex gap-2 ms-[1.1vw]">
+            {weather.main.temp_max}°C 
+            <p> |</p>
+            {weather.main.temp_min}°C
             </div>
-            <div className="forecast"></div>
-          </div>
-          <div>
-            <h2>Current Weather</h2>
-            <p></p>
-            <p>min temp: {weather.main.temp_min}°C</p>
-            <p>max temp: {weather.main.temp_max}°C</p>
-            <p>pressure: </p>
-            <p>Humidity: </p>
-            <p>Wind Speed: </p>
-            <p>Wind Gustsa: {weather.wind.gust} km/h</p>
+            <div className="flex gap-2">
+            <p>max temp </p>
+            <p>|</p>
+            <span>min temp</span>
+            </div>
+
           </div>
         </>
       ) : (
