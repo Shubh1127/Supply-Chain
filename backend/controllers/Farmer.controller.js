@@ -71,7 +71,7 @@ module.exports.getProfile = async (req, res) => {
     if (!token) {
       return res.status(401).json({ message: 'Please login first' });
     }
-  
+    
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET); 
       const farmer = await FarmerModel.findById(decoded._id); 

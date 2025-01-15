@@ -1,4 +1,4 @@
-import { createContext, useState, useContext,useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -10,26 +10,37 @@ export const useFarmer = () => {
 
 export const FarmerProvider = ({ children }) => {
   const [farmer, setFarmer] = useState(null);
-  const [weather,setWeather]=useState(null);
+  const [weather, setWeather] = useState(null);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve token and farmer info from localStorage when page loads
     const token = localStorage.getItem('token');
+    const storedTime = localStorage.getItem('tokenTime');
     const storedFarmer = localStorage.getItem('farmer');
-    if (token) {
-      // Set token in axios headers for subsequent requests
-      axios.defaults.headers['Authorization'] = `Bearer ${token}`;
-    }
-    if (storedFarmer) {
-      setFarmer(JSON.parse(storedFarmer)); // Parse and set stored farmer data
+
+    if (token && storedTime) {
+      const currentTime = new Date().getTime();
+      const elapsedTime = currentTime - storedTime;
+
+      // Check if the token is older than 24 hours
+      if (elapsedTime > 24 * 60 * 60 * 1000) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenTime');
+        localStorage.removeItem('farmer');
+        setFarmer(null);
+      } else {
+        axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+        if (storedFarmer) {
+          setFarmer(JSON.parse(storedFarmer));
+        }
+      }
     }
   }, []);
 
   useEffect(() => {
     if (farmer) {
-      localStorage.setItem('farmer', JSON.stringify(farmer)); // Store farmer data as a string
+      localStorage.setItem('farmer', JSON.stringify(farmer));
     } else {
       localStorage.removeItem('farmer');
     }
@@ -42,25 +53,22 @@ export const FarmerProvider = ({ children }) => {
     formData.append('password', user.password);
     formData.append('phoneNumber', user.phoneNumber);
     formData.append('profileImage', user.profileImage);
-  
+
     try {
       const response = await axios.post('http://localhost:3000/farmer/register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       if (response.data.token) {
-        // Save token in localStorage
+        const currentTime = new Date().getTime();
         localStorage.setItem('token', response.data.token);
-  
-        // Save farmer data in localStorage
+        localStorage.setItem('tokenTime', currentTime);
         localStorage.setItem('farmer', JSON.stringify(response.data.farmer));
-  
-        // Update state with the farmer data
         setFarmer(response.data.farmer);
       }
-  
+
       setMessage(response.data.message);
       navigate('/role/farmer/');
     } catch (error) {
@@ -71,27 +79,23 @@ export const FarmerProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post('http://localhost:3000/farmer/login', { email, password });
-  
+
       if (response.data.token) {
-        // Save token in localStorage
+        const currentTime = new Date().getTime();
         localStorage.setItem('token', response.data.token);
-  
-        // Save farmer data in localStorage
+        localStorage.setItem('tokenTime', currentTime);
         localStorage.setItem('farmer', JSON.stringify(response.data.farmer));
-  
-        // Set token in axios headers for subsequent requests
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
-  
-        // Update state with the farmer data
         setFarmer(response.data.farmer);
       }
-  
+
       setMessage(response.data.message);
       navigate('/role/farmer/');
     } catch (error) {
       setMessage(error.response.data.message);
     }
   };
+
   const logout = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -100,16 +104,14 @@ export const FarmerProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
-      // Remove user-related data from localStorage
-      localStorage.removeItem('farmer'); // Remove farmer data
-      localStorage.removeItem('token');  // Remove token
-  
-      // Clear the farmer state
+
+      localStorage.removeItem('farmer');
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenTime');
       setFarmer(null);
-  
-      console.log(response.data.message); // Log the success message
-      navigate('/'); // Navigate to the home page
+
+      console.log(response.data.message);
+      navigate('/');
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
     }
@@ -128,11 +130,8 @@ export const FarmerProvider = ({ children }) => {
       setMessage(error.response.data.message);
     }
   };
-  
+
   const updateProfile = async (user) => {
-    console.log('request is coming here');
-    console.log(user);
-  
     const formData = new FormData();
     formData.append('name', user.name);
     formData.append('email', user.email);
@@ -142,56 +141,55 @@ export const FarmerProvider = ({ children }) => {
     formData.append('address[city]', user.address.city);
     formData.append('address[state]', user.address.state);
     formData.append('address[pincode]', user.address.pincode);
-  
+
     if (user.profileImage) {
-      formData.append('profileImage', user.profileImage); // Ensure this is a valid File object
+      formData.append('profileImage', user.profileImage);
     }
-  
+
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(
-        'http://localhost:3000/farmer/updateprofile',
-        formData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.put('http://localhost:3000/farmer/updateprofile', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       console.log('Response:', response.data);
     } catch (error) {
       console.error('Error:', error.response?.data?.message || error.message);
     }
   };
-  
-  const addProduct=async(product)=>{
-    const token=localStorage.getItem('token');
-    const formData=new FormData();
-    formData.append('name',product.name);
-    formData.append('description',product.description);
-    formData.append('price',product.price);
-    formData.append('quantity',product.quantity);
-    formData.append('productImage',product.productImage);
-    try{
-      const response=await axios.post('http://localhost:3000/farmer/addproduct',formData,{
-        headers:{
-          'Content-Type':'multipart/form-data',
-          'Authorization':`Bearer ${token}`
-        }
-        });
-        console.log(response);
-    }catch(error){
+
+  const addProduct = async (product) => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('name', product.name);
+    formData.append('description', product.description);
+    formData.append('price', product.price);
+    formData.append('quantity', product.quantity);
+    formData.append('productImage', product.productImage);
+
+    try {
+      const response = await axios.post('http://localhost:3000/farmer/addproduct', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+    } catch (error) {
       console.error('Error:', error.response?.data?.message || error.message);
     }
-  }
+  };
+
   const getWeather = async (lat, lon) => {
     try {
-      const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,visibility,wind_speed_10m,soil_temperature_0cm,soil_moisture_0_to_1cm&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,daylight_duration,sunshine_duration,precipitation_sum,rain_sum,showers_sum,precipitation_probability_max,wind_speed_10m_max`);
+      const response = await axios.get(`http://localhost:3000/farmer/weather?lat=${lat}&lon=${lon}`);
       setWeather(response.data);
     } catch (error) {
       console.error('Error:', error.response?.data?.message || error.message);
     }
   };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -200,7 +198,7 @@ export const FarmerProvider = ({ children }) => {
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile,updateProfile,addProduct,getWeather,weather, message }}>
+    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather, message }}>
       {children}
     </FarmerContext.Provider>
   );

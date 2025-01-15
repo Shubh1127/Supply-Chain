@@ -1,0 +1,46 @@
+.weather-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 350px;
+    margin: 20px auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .weather-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .weather-info > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .weather-info .temp,
+  .weather-info .humidity {
+    font-size: 18px;
+  }
+  
+  .weather-info .uv-index,
+  .weather-info .wind {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .forecast {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .sunset {
+    font-size: 14px;
+    color: #888;
+  }
+  
