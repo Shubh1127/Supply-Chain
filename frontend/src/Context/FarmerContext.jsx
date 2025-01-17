@@ -9,6 +9,8 @@ export const useFarmer = () => {
 };
 
 export const FarmerProvider = ({ children }) => {
+  const [inventory, setInventory] = useState([]);
+  const [totalItems,setTotalItems] = useState(0);
   const [farmer, setFarmer] = useState(null);
   const [weather, setWeather] = useState(null);
   const [message, setMessage] = useState('');
@@ -159,6 +161,22 @@ export const FarmerProvider = ({ children }) => {
     }
   };
 
+  const fetchInventory = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3000/farmer/products", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const products = Array.isArray(response.data) ? response.data : response.data.products;
+      setInventory(products);
+      setTotalItems(products.length);
+    } catch (error) {
+      console.error("Error fetching inventory:", error);
+    }
+  };
+
   const addProduct = async (product) => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
@@ -198,7 +216,7 @@ export const FarmerProvider = ({ children }) => {
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather, message }}>
+    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather,fetchInventory,totalItems,inventory, message }}>
       {children}
     </FarmerContext.Provider>
   );

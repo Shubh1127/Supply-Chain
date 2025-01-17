@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useFarmer } from "../../Context/FarmerContext";
 import {
   BarChart,
   Bar,
@@ -12,30 +12,15 @@ import {
 } from "recharts";
 
 const InventoryGraph = () => {
-  const [inventory, setInventory] = useState([]);
+  const {inventory, fetchInventory} = useFarmer();
 
   useEffect(() => {
-    const fetchInventory = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3000/farmer/products", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const products = Array.isArray(response.data) ? response.data : response.data.products;
-        setInventory(products);
-      } catch (error) {
-        console.error("Error fetching inventory:", error);
-      }
-    };
-
     fetchInventory();
-  }, []);
+  }, [fetchInventory]);
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Inventory</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-white">Inventory</h2>
       {/* Scrollable table container */}
       <div className=" overflow-y-auto max-h-[400px] border border-gray-300 rounded shadow-md">
         <table className="min-w-full bg-white">
@@ -64,12 +49,12 @@ const InventoryGraph = () => {
         </table>
       </div>
 
-      <h2 className="text-xl font-semibold mt-12 mb-4">Inventory Quantity Graph</h2>
+      <h2 className="text-xl font-semibold text-white mt-12 mb-4">Inventory Quantity Graph</h2>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={inventory}>
+        <BarChart data={inventory} >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="name" stroke="#FFFFFF" tick={{ fill: "#FFFFFF" }} />
+          <YAxis stroke="#FFFFFF" tick={{ fill: "#FFFFFF" }} />
           <Tooltip />
           <Legend />
           <Bar dataKey="quantity" fill="#4CAF50" />

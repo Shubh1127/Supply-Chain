@@ -67,11 +67,11 @@ const Profile = () => {
             />
             <div className="ml-4">
               <h2 className="text-2xl font-semibold">{user.name}</h2>
-              <p className="text-gray-600">{user.email}</p>
-              <p className="text-gray-600">{user.phoneNumber}</p>
+              <p className="text-white">{user.email}</p>
+              <p className="text-white">{user.phoneNumber}</p>
               <button
                 onClick={() => setIsEditing(true)}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 Edit
               </button>
@@ -82,99 +82,99 @@ const Profile = () => {
         <form onSubmit={handleSubmit} className="profile-edit">
           {/* Name field */}
           <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
+            <label className="block text-gray-700 text-white">Name</label>
             <input
               type="text"
               name="name"
               value={user.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded bg-gray-300"
               required
             />
           </div>
           
           {/* Email field */}
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700 text-white">Email</label>
             <input
               type="email"
               name="email"
               value={user.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded bg-gray-300"
               required
             />
           </div>
           
           {/* Phone Number field */}
           <div className="mb-4">
-            <label className="block text-gray-700">Phone Number</label>
+            <label className="block text-gray-700 text-white">Phone Number</label>
             <input
               type="text"
               name="phoneNumber"
               value={user.phoneNumber}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded bg-gray-300 bg-gray-300"
               required
             />
           </div>
           
           {/* Address fields */}
           <div className="flex flex-col">
-            <div className="font-semibold">Address</div>
+            <div className="font-semibold text-white">Address</div>
             <div className="flex flex-wrap">
               <div className="mb-4 mr-3">
-                <label className="block text-gray-700">House Number</label>
+                <label className="block text-gray-700 text-white">House Number</label>
                 <input
                   type="text"
                   name="address.houseNo"
                   value={user.address.houseNo}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded bg-gray-300"
                   required
                 />
               </div>
               <div className="mb-4 mr-3">
-                <label className="block text-gray-700">Street</label>
+                <label className="block text-gray-700 text-white">Street</label>
                 <input
                   type="text"
                   name="address.street"
                   value={user.address.street}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded bg-gray-300"
                   required
                 />
               </div>
               <div className="mb-4 mr-3">
-                <label className="block text-gray-700">City</label>
+                <label className="block text-gray-700 text-white">City</label>
                 <input
                   type="text"
                   name="address.city"
                   value={user.address.city}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded bg-gray-300"
                   required
                 />
               </div>
               <div className="mb-4 mr-3">
-                <label className="block text-gray-700">State</label>
+                <label className="block text-gray-700 text-white">State</label>
                 <input
                   type="text"
                   name="address.state"
                   value={user.address.state}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded bg-gray-300"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">PinCode</label>
+                <label className="block text-gray-700 text-white">PinCode</label>
                 <input
                   type="number"
                   name="address.pincode"
                   value={user.address.pincode}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 border rounded bg-gray-300"
                   required
                 />
               </div>
@@ -183,13 +183,13 @@ const Profile = () => {
           
           {/* Profile Image field */}
           <div className="mb-4">
-            <label className="block text-gray-700">Profile Image</label>
+            <label className="block text-gray-700 text-white">Profile Image</label>
             <input
               type="file"
               name="profileImage"
               onChange={handleChange}
               accept="image/*"
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded bg-gray-300"
             />
           </div>
           
@@ -197,14 +197,14 @@ const Profile = () => {
           <div className="flex items-center">
             <button
               type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+              className="px-4 py-2 bg-green-500 text-white rounded mr-2 hover:bg-green-600"
             >
               Save
             </button>
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="px-4 py-2 bg-gray-500 text-white rounded"
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
             >
               Cancel
             </button>
