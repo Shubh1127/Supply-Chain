@@ -8,7 +8,7 @@ export default function Header() {
     <header className="bg-gray-900 text-white">
       <div className="container mx-auto px-4">
         <div className="flex items-center py-2">
-          <Link to="/" className="text-2xl font-bold mr-4">Supply Chain Pro</Link>
+          <Link to="/role/buyer/" className="text-2xl font-bold mr-4">Supply Chain Pro</Link>
           <div className="flex items-center text-sm mr-4">
             <MapPin className="h-4 w-4 mr-1" />
             <span>Deliver to Your Business</span>
@@ -22,7 +22,7 @@ export default function Header() {
             </div>
           </div>
           <nav className="hidden md:flex items-center ml-4 space-x-4">
-            <Link to="/account" className="hover:text-gray-300">Account</Link>
+            <Link to="/role/buyer/account" className="hover:text-gray-300">Account</Link>
             <Link to="/orders" className="hover:text-gray-300">Orders</Link>
             <Link to="/cart" className="flex items-center hover:text-gray-300">
               <ShoppingCart className="h-5 w-5 mr-1" />

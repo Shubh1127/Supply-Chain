@@ -164,7 +164,7 @@ const SignupFarmer = () => {
           </motion.button>
 
           <p style={styles.loginLink}>
-            Already have an account? <Link to='/role/farmer/login' style={styles.link}>Log in</Link >
+            Already have an account? <Link to='/role/buyer/login' style={styles.link}>Log in</Link >
           </p>
         </motion.form>
       </div>

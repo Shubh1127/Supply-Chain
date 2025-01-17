@@ -109,6 +109,10 @@ module.exports.getProfile = async (req, res) => {
       const { name, email, phone, address } = req.body;
       let profileImageUrl = farmer.profileImageUrl;
       if (req.file) {
+        if(farmer.profileImageUrl){
+          const publicId = farmer.profileImageUrl.match(/Farmers\/ProfilePhotos\/(.*)\./)[1];
+          await cloudinary.uploader.destroy(publicId);
+        }
         const result = await cloudinary.uploader.upload(req.file.path, {
           folder: 'Farmers/ProfilePhotos', // Cloudinary folder
         });

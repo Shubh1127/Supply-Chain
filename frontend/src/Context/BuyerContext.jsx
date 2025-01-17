@@ -49,7 +49,7 @@ export const BuyerProvider = ({ children }) => {
   
       if (response.data.token) {
         // Save token in localStorage
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('Buyertoken', response.data.token);
         localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
         setBuyer(response.data.buyer);
       }
@@ -64,17 +64,14 @@ export const BuyerProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post('http://localhost:3000/buyer/login', { email, password });
-  
+      console.log(response.data);
       if (response.data.token) {
-        // Save token in localStorage
-        localStorage.setItem('token', response.data.token);
-  
-        // Save buyer data in localStorage
+        localStorage.setItem('Buyertoken', response.data.token);
         localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
         setBuyer(response.data.buyer);
       }
-  
+      
       setMessage(response.data.message);
       navigate('/role/buyer/');
     } catch (error) {
@@ -106,7 +103,7 @@ export const BuyerProvider = ({ children }) => {
 
   const getProfile = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('Buyertoken');
       const response = await axios.get('http://localhost:3000/buyer/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -121,15 +118,22 @@ export const BuyerProvider = ({ children }) => {
     const formData = new FormData();
     formData.append('name', user.name);
     formData.append('email', user.email);
-    formData.append('phoneNumber', user.phoneNumber);
+    formData.append('phone', user.phoneNumber);
+    formData.append('address[houseNo]', user.address.houseNo);
+    formData.append('address[street]', user.address.street);
+    formData.append('address[city]', user.address.city);
+    formData.append('address[state]', user.address.state);
+    formData.append('address[pincode]', user.address.pincode);
     if (user.profileImage) {
       formData.append('profileImage', user.profileImage);
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/buyer/updateProfile', formData, {
+      const token=localStorage.getItem('Buyertoken');
+      const response = await axios.put('http://localhost:3000/buyer/updateprofile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         },
       });
       setBuyer(response.data.buyer);

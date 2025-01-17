@@ -1,11 +1,11 @@
 import Header from "../../Header";
 import { useState } from "react";
 import { motion } from 'framer-motion';
-import { useFarmer } from '../../../Context/FarmerContext';
+import { useBuyer } from '../../../Context/BuyerContext';
 import { Link } from "react-router-dom";
 
 const LoginFarmer = () => {
-  const { login, message } = useFarmer();
+  const { login, message } = useBuyer();
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -106,7 +106,7 @@ const LoginFarmer = () => {
             </motion.button>
 
             <p style={styles.loginLink}>
-              Don&aos;t have an account? <Link to='/role/farmer/signup' style={styles.link}>Sign Up</Link>
+              Don&apos;t have an account? <Link to='/role/buyer/signup' style={styles.link}>Sign Up</Link>
             </p>
           </motion.form>
         </div>

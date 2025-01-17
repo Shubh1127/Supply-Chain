@@ -7,7 +7,10 @@ import ProviderDashboard from './components/Provider/ProviderDashboard'
 import SignupFarmer from './components/Farmer/Auth/SignupFarmer'
 import LoginFarmer from "./components/Farmer/Auth/LoginFarmer"
 import Page from './components/Buyer/Pages/Page'
+import BuyerLogin from './components/Buyer/Auth/BuyerLogin'
 import UserProtectedWrapper from "./components/Farmer/UserProtectedWrapper"
+import Account from './components/Buyer/Pages/Account'
+import Profile from './components/Buyer/Pages/Profile'
 function App() {
   return (
     <Routes>
@@ -22,6 +25,9 @@ function App() {
         } />
       <Route path="/role/buyer/" element={<Page/>} />
       <Route path='/role/buyer/signup' element={<BuyerSignup/>} />
+      <Route path='role/buyer/login' element={<BuyerLogin/>} />
+      <Route path='/role/buyer/account' element={<Account/>} />
+      <Route path='role/buyer/profile' element={<Profile/>}/>
       <Route path="/role/provider/provider-dashboard" element={<ProviderDashboard/>} />
     </Routes>
   )
