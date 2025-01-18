@@ -6,7 +6,7 @@ import { Search, ShoppingCart, Menu, MapPin } from 'lucide-react'
 import {useBuyer} from '../../../Context/BuyerContext'
 export default function Header() {
   const {buyer} =useBuyer();
-  console.log(buyer.address)
+  // console.log(buyer)
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ export default function Header() {
       >
         <span className='flex gap-2 mr-6 cursor-pointer'><MapPin/>Deliver to Your Business</span>
         {showPopup && (
-          <div className="absolute top-full left-0 mt-2 p-4 bg-white text-black border rounded shadow-lg z-2"
+          <div className="absolute top-full left-0 mt-2 p-4 bg-white text-black border rounded shadow-lg z-10"
           style={{ width: '220px', minHeight: '100px' }}
       >
         <div className='flex flex-col gap-2'>

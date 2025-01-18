@@ -11,6 +11,7 @@ import BuyerLogin from './components/Buyer/Auth/BuyerLogin'
 import UserProtectedWrapper from "./components/Farmer/UserProtectedWrapper"
 import Account from './components/Buyer/Pages/Account'
 import Profile from './components/Buyer/Pages/Profile'
+import Address from "./components/Buyer/Pages/Address"
 function App() {
   return (
     <Routes>
@@ -28,6 +29,7 @@ function App() {
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />
       <Route path='role/buyer/profile' element={<Profile/>}/>
+      <Route path="role/buyer/address" element={<Address/>} />
       <Route path="/role/provider/provider-dashboard" element={<ProviderDashboard/>} />
     </Routes>
   )

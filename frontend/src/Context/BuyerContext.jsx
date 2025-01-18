@@ -14,7 +14,7 @@ export const BuyerProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Buyertoken');
     const storedBuyer = localStorage.getItem('buyer');
     if (token) {
       axios.defaults.headers['Authorization'] = `Bearer ${token}`;
@@ -69,7 +69,7 @@ export const BuyerProvider = ({ children }) => {
   
       if (response.data.token) {
         localStorage.setItem('Buyertoken', response.data.token);
-        localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
+        localStorage.setItem('buyer', (response.data.buyer));
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
         setBuyer(response.data.buyer);
       }

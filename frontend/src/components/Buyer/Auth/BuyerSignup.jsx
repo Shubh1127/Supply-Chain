@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useBuyer } from "../../../Context/BuyerContext";
 import { Link } from "react-router-dom";
 
-const SignupFarmer = () => {
+const SignupBuyer = () => {
   // const navigate = useNavigate();
   const { signup, message } = useBuyer();
   const [user, setUser] = useState({
@@ -276,4 +276,4 @@ const styles = {
   },
 };
 
-export default SignupFarmer;
+export default SignupBuyer;
