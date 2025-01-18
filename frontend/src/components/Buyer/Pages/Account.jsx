@@ -1,6 +1,8 @@
 import Header from "../components/BuyerHeader";
 import { Link } from "react-router-dom";
+import { useBuyer } from "../../../Context/BuyerContext";
 const Account = () => {
+  const {logout,buyer} =useBuyer();
   return (
     <div className="w-full h-full">
       <Header />
@@ -75,6 +77,12 @@ const Account = () => {
           
         </div>
       </div>
+
+      {buyer && 
+      <div className=" w-1/4  flex ms-12 ps-8 mt-8 justify-center">
+        <button className="flex items-center px-4 py-2 bg-blue-500 font-semibold text-white rounded hover:bg-blue-600 " onClick={logout}>Logout</button>
+      </div>
+      }
     </div>
   );
 };

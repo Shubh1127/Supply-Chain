@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useBuyer } from '../../../Context/BuyerContext';
 import Header from "../components/BuyerHeader";
+import { useNavigate } from "react-router-dom";
 const Profile = () => {
+  const navigate=useNavigate();
   const { buyer, getProfile, updateProfile } = useBuyer();
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState({
@@ -55,6 +57,22 @@ const Profile = () => {
     await updateProfile(user); // Update the profile with the new data
     setIsEditing(false); // Exit editing mode
   };
+  if (!buyer) {
+    return (
+      <>
+      <Header />
+      <div className="w-full h-full flex flex-col justify-center items-center">
+        <h2 className="text-3xl font-semibold mb-4 p-4 ">Login First</h2>
+        <button
+          onClick={() => navigate('/role/buyer/login')}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+          Go to Login
+        </button>
+      </div>
+          </>
+    );
+  }
 
   return (
     <>

@@ -64,38 +64,41 @@ export const BuyerProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post('http://localhost:3000/buyer/login', { email, password });
-      console.log(response.data);
+      
+      // console.log('API Response:', response.data);
+  
       if (response.data.token) {
         localStorage.setItem('Buyertoken', response.data.token);
         localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
         setBuyer(response.data.buyer);
       }
-      
-      setMessage(response.data.message);
+  
+      setMessage(response.data.message || 'Login successful!');
       navigate('/role/buyer/');
     } catch (error) {
-      setMessage(error.response.data.message);
+      if (error.response && error.response.data) {
+        setMessage(error.response.data.message || 'An error occurred.');
+      } else {
+        setMessage('Unable to connect to the server. Please try again later.');
+      }
+  
+      console.error('Login Error:', error);
     }
   };
   const logout = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('Buyertoken');
       const response = await axios.get('http://localhost:3000/buyer/logout', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
-      // Remove user-related data from localStorage
-      localStorage.removeItem('buyer'); // Remove buyer data
-      localStorage.removeItem('token');  // Remove token
-  
-      // Clear the buyer state
+      localStorage.removeItem('buyer'); 
+      localStorage.removeItem('Buyertoken');
       setBuyer(null);
-  
-      console.log(response.data.message); // Log the success message
-      navigate('/'); // Navigate to the home page
+      console.log(response.data.message);
+      navigate('/role/buyer');
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
     }
