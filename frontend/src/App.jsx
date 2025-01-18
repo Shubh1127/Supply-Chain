@@ -12,6 +12,8 @@ import UserProtectedWrapper from "./components/Farmer/UserProtectedWrapper"
 import Account from './components/Buyer/Pages/Account'
 import Profile from './components/Buyer/Pages/Profile'
 import Address from "./components/Buyer/Pages/Address"
+import Orders from "./components/Buyer/Pages/Orders"
+import Cart from "./components/Buyer/Pages/Cart"
 function App() {
   return (
     <Routes>
@@ -26,6 +28,8 @@ function App() {
         } />
       <Route path="/role/buyer/" element={<Page/>} />
       <Route path='/role/buyer/signup' element={<BuyerSignup/>} />
+      <Route path='role/buyer/orders' element={<Orders/>} />
+      <Route path="role/buyer/cart" element={<Cart/>} />
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />
       <Route path='role/buyer/profile' element={<Profile/>}/>

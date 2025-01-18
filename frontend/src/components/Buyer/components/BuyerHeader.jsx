@@ -71,8 +71,8 @@ export default function Header() {
               ||
               <Link to="/role/buyer/account" className="hover:text-gray-300">Account</Link>
             }
-            <Link to="/orders" className="hover:text-gray-300">Orders</Link>
-            <Link to="/cart" className="flex items-center hover:text-gray-300">
+            <Link to="/role/buyer/orders" className="hover:text-gray-300">Orders</Link>
+            <Link to="/role/buyer/cart" className="flex items-center hover:text-gray-300">
               <ShoppingCart className="h-5 w-5 mr-1" />
               Cart
             </Link>

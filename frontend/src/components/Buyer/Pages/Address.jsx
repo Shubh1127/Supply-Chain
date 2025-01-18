@@ -70,7 +70,7 @@ const Address = () => {
       <Header />
       <div className="p-8">
         <h2 className="text-2xl font-bold mb-4">Your Addresses</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
           <div
             onClick={() => {
               setShowForm(true);
@@ -83,12 +83,12 @@ const Address = () => {
                 pincode: '',
               });
             }}
-            className="border-dashed border-2 border-gray-400 flex items-center justify-center p-6 rounded cursor-pointer"
+            className="border-dashed border-2 border-gray-400 flex items-center justify-center p-6 rounded cursor-pointer hover:bg-gray-200"
           >
-            <span className="text-blue-500 text-lg font-semibold">Add New Address</span>
+            <span className="text-blue-500 text-lg font-semibold ">Add New Address</span>
           </div>
           {buyer.addresses.map((address, index) => (
-            <div key={index} className="border border-gray-300 p-4 rounded">
+            <div key={index} className="border border-gray-300 p-4 rounded hover:bg-gray-200">
               <p>House No: {address.houseNo}</p>
               <p>Street: {address.street}</p>
               <p>City: {address.city}</p>
@@ -97,13 +97,13 @@ const Address = () => {
               <div className="flex justify-between mt-4">
                 <button
                   onClick={() => handleEdit(index)}
-                  className="text-blue-500 text-lg font-semibold"
+                  className="text-blue-500 text-lg font-semibold hover:text-blue-600"
                 >
                   Change
                 </button>
                 <button
                   onClick={() => handleDelete(index)}
-                  className="text-red-500 text-lg font-semibold"
+                  className="text-red-500 text-lg font-semibold hover:text-red-600"
                 >
                   Delete
                 </button>
