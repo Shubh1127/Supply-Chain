@@ -8,6 +8,7 @@ const addressSchema = new mongoose.Schema({
   city: { type: String, default: 'Jhajjar' },
   state: { type: String, default: 'Haryana' },
   pincode: { type: String, default: '124103' },
+  isDefault: { type: Boolean, default: false }
 });
 
 const buyerSchema = new mongoose.Schema({

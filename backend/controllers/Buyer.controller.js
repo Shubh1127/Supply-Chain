@@ -132,3 +132,112 @@ module.exports.updateProfile = async (req, res) => {
     return res.status(400).json({ message: 'Something went wrong.' });
   }
 };
+//address
+module.exports.addAddress = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    const { houseNo, street, city, state, pincode } = req.body;
+    const newAddress = { houseNo, street, city, state, pincode };
+
+    buyer.addresses.push(newAddress);
+    await buyer.save();
+
+    return res.status(200).json({ message: 'Address added successfully', buyer });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: 'Something went wrong.' });
+  }
+};
+
+module.exports.updateAddress = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    const { index } = req.params;
+    const { houseNo, street, city, state, pincode } = req.body;
+
+    if (index >= 0 && index < buyer.addresses.length) {
+      buyer.addresses[index] = { houseNo, street, city, state, pincode };
+      await buyer.save();
+      return res.status(200).json({ message: 'Address updated successfully', addresses: buyer.addresses ,buyer});
+    } else {
+      return res.status(400).json({ message: 'Invalid address index' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: 'Something went wrong.' });
+  }
+};
+
+module.exports.deleteAddress = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    const { index } = req.params;
+
+    if (index >= 0 && index < buyer.addresses.length) {
+      buyer.addresses.splice(index, 1);
+      await buyer.save();
+      return res.status(200).json({ message: 'Address deleted successfully', buyer });
+    } else {
+      return res.status(400).json({ message: 'Invalid address index' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: 'Something went wrong.' });
+  }
+};
+
+module.exports.setDefaultAddress = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    const { index } = req.params;
+
+    if (index >= 0 && index < buyer.addresses.length) {
+      buyer.addresses.forEach((address, i) => {
+        address.isDefault = i === parseInt(index);
+      });
+      await buyer.save();
+      return res.status(200).json({ message: 'Default address set successfully', buyer });
+    } else {
+      return res.status(400).json({ message: 'Invalid address index' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: 'Something went wrong.' });
+  }
+};

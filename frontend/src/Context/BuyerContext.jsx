@@ -146,15 +146,73 @@ export const BuyerProvider = ({ children }) => {
     }
   };
 
+  //address
+  const addAddress = async (address) => {
+    try {
+      const response = await axios.post('http://localhost:3000/buyer/addAddress', address, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
+        },
+      });
+      setBuyer(response.data.buyer);
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
+  };
+
+  const updateAddress = async (index, address) => {
+    try {
+      const response = await axios.put(`http://localhost:3000/buyer/address/${index}`, address, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
+        },
+      });
+      setBuyer(response.data.buyer);
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
+  };
+
+  const deleteAddress = async (index) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/buyer/address/${index}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
+        },
+      });
+      setBuyer(response.data.buyer);
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
+  };
+
+  const setDefaultAddress = async (index) => {
+    console.log('request is coming');
+    try {
+      const response = await axios.put(`http://localhost:3000/buyer/address/default/${index}`, {}, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
+        },
+      });
+      setBuyer(response.data.buyer);
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('Buyertoken');
     if (token) {
       getProfile(); // Fetch the profile if token is available
     }
   }, []);
 
   return (
-    <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile, message }}>
+    <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message }}>
       {children}
     </BuyerContext.Provider>
   );
