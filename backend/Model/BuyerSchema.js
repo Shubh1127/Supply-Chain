@@ -17,7 +17,11 @@ const buyerSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String, required: true },
   profileImageUrl: { type: String, default: '' },
-  addresses: { type: [addressSchema], default: [addressSchema] },
+  addresses: { type: [addressSchema], default: [] },
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Orders', default: [] }],
+  cart: [{
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+        quantity: { type: Number, required: true, min: 1 }}]
 });
 
 

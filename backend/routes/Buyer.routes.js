@@ -16,4 +16,11 @@ router.put('/address/:index',authMiddleware,BuyerController.updateAddress);
 router.delete('/address/:index',authMiddleware,BuyerController.deleteAddress);
 router.put('/address/default/:index', authMiddleware, BuyerController.setDefaultAddress);
 
+//orders and cart
+router.post('/addToCart',authMiddleware,BuyerController.addToCart);
+router.get('/cart',authMiddleware,BuyerController.getCart);
+router.put('/cart/:index',authMiddleware,BuyerController.updateCart);
+router.delete('/cart/:index',authMiddleware,BuyerController.deleteCart);
+// router.post('/placeOrder',authMiddleware,BuyerController.placeOrder);
+
 module.exports=router;

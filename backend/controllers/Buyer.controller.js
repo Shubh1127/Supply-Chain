@@ -241,3 +241,156 @@ module.exports.setDefaultAddress = async (req, res) => {
     return res.status(400).json({ message: 'Something went wrong.' });
   }
 };
+
+//orders and cart
+module.exports.getOrders = async (req, res) => {
+  const token=req.header('Authorization').replace('Bearer ','');
+  if(!token){
+    return res.status(401).json({message:'Please login first'});
+  }
+  try{
+    const decoded=jwt.verify(token,process.env.JWT_SECRET);
+    const buyer=await BuyerModel.findById(decoded._id);
+    if(!buyer){
+      return res.status(401).json({message:'Invalid token or user not found'});
+    }
+    return res.status(200).json({orders:buyer.orders});
+  }
+  catch(error){
+    console.error(error);
+    return res.status(500).json({message:'Something went wrong'});
+  }
+};
+
+module.exports.addToCart = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+    const { productId, quantity } = req.body;
+    if (!productId || !quantity || quantity <= 0) {
+      return res.status(400).json({ message: 'Invalid product ID or quantity' });
+    }
+    const cartItemIndex = buyer.cart.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+    if (cartItemIndex !== -1) {
+      buyer.cart[cartItemIndex].quantity += quantity;
+    } else {
+      buyer.cart.push({ productId, quantity });
+    }
+    await buyer.save();
+    res.status(200).json({ message: 'Item added to cart successfully', cart: buyer.cart });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getCart = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id).populate({
+      path: 'cart.productId', // populate the productId field
+      model: 'Product', // model to populate from (Product)
+      select: 'name price photo description' // fields to select from the Product model
+    });
+
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    // Format the cart data with populated product details
+    const cartDetails = buyer.cart.map(item => ({
+      productId: item.productId._id,
+      name: item.productId.name,
+      price: item.productId.price,
+      photo: item.productId.photo,
+      description: item.productId.description,
+      quantity: item.quantity
+    }));
+
+    return res.status(200).json({ cart: cartDetails });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+module.exports.updateCart = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+
+  try {
+    const { productId, quantity } = req.body; // Expect productId and quantity in the request body
+    if (!productId || !quantity) {
+      return res.status(400).json({ message: 'ProductId and quantity are required' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    // Find the item in the cart
+    const cartItem = buyer.cart.find(item => item.productId.toString() === productId);
+    
+    if (cartItem) {
+      // If the item is already in the cart, update the quantity
+      cartItem.quantity = quantity;
+    } else {
+      // If the item is not in the cart, add it to the cart
+      buyer.cart.push({ productId, quantity });
+    }
+
+    // Save the updated buyer's cart
+    await buyer.save();
+    return res.status(200).json({ message: 'Cart updated successfully', cart: buyer.cart });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+module.exports.deleteCart = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Please login first' });
+  }
+
+  try {
+    const { productId } = req.body; // Expect productId in the request body
+    if (!productId) {
+      return res.status(400).json({ message: 'ProductId is required' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const buyer = await BuyerModel.findById(decoded._id);
+
+    if (!buyer) {
+      return res.status(401).json({ message: 'Invalid token or user not found' });
+    }
+
+    // Remove the item from the cart
+    buyer.cart = buyer.cart.filter(item => item.productId.toString() !== productId);
+
+    // Save the updated buyer's cart
+    await buyer.save();
+    return res.status(200).json({ message: 'Item removed from cart successfully', cart: buyer.cart });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
