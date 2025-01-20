@@ -44,6 +44,7 @@ module.exports.login = async (req, res) => {
     }
     const token = buyer.generateAuthToken();
     res.cookie('token', token);
+    // console.log(buyer)
     return res.status(200).json({ token, buyer });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -267,30 +268,42 @@ module.exports.addToCart = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Please login first' });
   }
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const buyer = await BuyerModel.findById(decoded._id);
     if (!buyer) {
       return res.status(401).json({ message: 'Invalid token or user not found' });
     }
+
     const { productId, quantity } = req.body;
-    if (!productId || !quantity || quantity <= 0) {
-      return res.status(400).json({ message: 'Invalid product ID or quantity' });
+    console.log(req.body);
+
+    // Ensure the productId exists and set a default quantity if not provided
+    if (!productId) {
+      return res.status(400).json({ message: 'Invalid product ID' });
     }
+
+    // If quantity is not provided, default to 1
+    const quantityToAdd = quantity ? quantity : 1;
+
     const cartItemIndex = buyer.cart.findIndex(
       (item) => item.productId.toString() === productId
     );
+
     if (cartItemIndex !== -1) {
-      buyer.cart[cartItemIndex].quantity += quantity;
+      buyer.cart[cartItemIndex].quantity += quantityToAdd;
     } else {
-      buyer.cart.push({ productId, quantity });
+      buyer.cart.push({ productId, quantity: quantityToAdd });
     }
+
     await buyer.save();
     res.status(200).json({ message: 'Item added to cart successfully', cart: buyer.cart });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 module.exports.getCart = async (req, res) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -369,9 +382,9 @@ module.exports.deleteCart = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Please login first' });
   }
-
   try {
-    const { productId } = req.body; // Expect productId in the request body
+    const { productId } = req.body;
+     // Expect productId in the request body
     if (!productId) {
       return res.status(400).json({ message: 'ProductId is required' });
     }

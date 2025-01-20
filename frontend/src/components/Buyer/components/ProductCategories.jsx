@@ -1,21 +1,22 @@
 // import Image from 'next/image'
 import {Link} from 'react-router-dom'
-
+// import { useFarmer } from '../../../Context/FarmerContext'
 const categories = [
-  { name: 'Inventory Management', image: 'https://m.media-amazon.com/images/I/41-t93SpAGL._SY445_SX342_PQ25_.jpg' },
-  { name: 'Logistics Solutions', image: 'https://media.licdn.com/dms/image/v2/D4D12AQG8xwTte9Bp5w/article-inline_image-shrink_1000_1488/article-inline_image-shrink_1000_1488/0/1712375344673?e=1741824000&v=beta&t=8yaXHHUJ48MV3GX0Lc7XIBemJetRWcusSY1gJkQIteA' },
-  { name: 'Analytics Tools', image: 'https://www.deere.com/assets/images/region-4/products/combines/t680/r4x002420_rrd-1365x768.jpg' },
-  { name: 'Supplier Network', image: 'https://image.made-in-china.com/2f0j00SuwbdqlEGeom/OEM-Shovel-Spade-High-Strength-Gardening-Tool-Factory-Price-Customized-Wholesale-Hand-Tools.webp' },
+  { name: 'Fruits', image: 'https://imgs.search.brave.com/IiAxxKFYqN5FzdqXeUt1OjBSb5Ue3uXfJPZ7oqiUFrc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY1LzcwLzY1/LzM2MF9GXzY1NzA2/NTk3X3VObTJTd2xQ/SXVOVUR1TXdvNnN0/QmQ4MWUyNVk4Szhz/LmpwZw' },
+  { name: 'Vegetables', image: 'https://imgs.search.brave.com/D_VzhYsa-wiscSZsSahJV1w_09I8G0-_px7aP6C8G1g/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAxLzQ3LzUxLzYw/LzM2MF9GXzE0NzUx/NjA2M19oQ1hJOFZV/SWRCWXVkMEIwaGhT/M1lvNUNGVFQxYTRn/OC5qcGc' },
+  { name: 'Grains', image: 'https://imgs.search.brave.com/CZPt5HCxWCCuH1uWDI0xU-WKIpzCe9p5NLpRJpsmZlU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzQ0LzE2Lzc5/LzM2MF9GXzI0NDE2/Nzk3M19FN2FSZ1k5/TkhYOXFXMFFXT2Fa/TndtRzhOQkphYTFy/Zi5qcGc' },
+  { name: 'Dairy', image: 'https://imgs.search.brave.com/CHRRGi7LoxLkCyEkp1-XbGz4xMIKSKfQaZiLzx5oFpQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNDk1/OTUwODYwL3Bob3Rv/L2RhaXJ5LXByb2R1/Y3RzLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1VZGU2bW9T/NlFHR2ZQdDdnM05s/bVRXNUpNR3EwTmxw/c3NBZjdpT3ZDRmhJ/PQ' },
 ]
 
 export default function ProductCategories() {
+  // const { categories } = useFarmer()
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl font-bold mb-6">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {categories.map((category, index) => (
-            <Link key={index} to={`/category/${category.name.toLowerCase().replace(' ', '-')}`} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+            <Link key={index} to={`/category/${category.name}`} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
               <img
                 src={category.image}
                 alt={category.name}

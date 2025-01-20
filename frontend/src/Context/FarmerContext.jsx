@@ -9,6 +9,7 @@ export const useFarmer = () => {
 };
 
 export const FarmerProvider = ({ children }) => {
+  const [categories, setCategories] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [inventoryLength,setInventoryLength] = useState(0);
   const [totalItems,setTotalItems] = useState(0);
@@ -172,6 +173,7 @@ export const FarmerProvider = ({ children }) => {
       });
       const products = Array.isArray(response.data) ? response.data : response.data.products;
       setInventory(products);
+      setCategories(products.map((product) => product.category));
       setInventoryLength(products.length);
       setTotalItems(products.length);
     } catch (error) {
@@ -223,7 +225,9 @@ export const FarmerProvider = ({ children }) => {
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather,fetchInventory,totalItems,inventory,inventoryLength, message }}>
+    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather,fetchInventory,totalItems,inventory,inventoryLength,
+    categories,
+    message }}>
       {children}
     </FarmerContext.Provider>
   );

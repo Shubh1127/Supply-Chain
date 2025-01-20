@@ -9,6 +9,7 @@ export const useBuyer = () => {
 };
 
 export const BuyerProvider = ({ children }) => {
+  const [cart, setCart] = useState([]);
   const [buyer, setBuyer] = useState(null);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -72,6 +73,7 @@ export const BuyerProvider = ({ children }) => {
         localStorage.setItem('buyer', (response.data.buyer));
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
         setBuyer(response.data.buyer);
+        console.log(response.data.buyer);
       }
   
       setMessage(response.data.message || 'Login successful!');
@@ -205,6 +207,61 @@ export const BuyerProvider = ({ children }) => {
     }
   };
 
+  //orders and cart
+  const addToCart = async (productId) => {
+    try {
+      const response = await axios.post('http://localhost:3000/buyer/addToCart', { productId });
+      setCart(response.data.cart); // Update cart state after adding product
+      setMessage('Product added to cart');
+    } catch (error) {
+      setMessage(error.response.data.message || 'Error adding product to cart');
+    }
+  };
+
+  // Update Cart function
+  const updateCart = async (index, quantity) => {
+    try {
+      const response = await axios.put(`http://localhost:3000/buyer/cart/${index}`, { quantity });
+      setCart(response.data.cart); // Update cart state after updating quantity
+      setMessage('Cart updated successfully');
+    } catch (error) {
+      setMessage(error.response.data.message || 'Error updating cart');
+    }
+  };
+
+  // Delete Cart function
+  const deleteCart = async (productId) => {
+    const token=localStorage.getItem('Buyertoken');
+    try {
+      const response = await axios.delete(`http://localhost:3000/buyer/cart`,{
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        data: { productId :productId}
+      });
+      setCart(response.data.cart); // Update cart state after deleting item
+      setMessage('Product removed from cart');
+    } catch (error) {
+      setMessage(error.response.data.message || 'Error removing product from cart');
+    }
+  };
+
+  // Fetch the cart items
+  const getCart = async () => {
+    const token=localStorage.getItem('Buyertoken');
+
+    try {
+      const response = await axios.get('http://localhost:3000/buyer/cart',{
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setCart(response.data.cart);
+    } catch (error) {
+      setMessage(error.response.data.message || 'Error fetching cart');
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -213,7 +270,9 @@ export const BuyerProvider = ({ children }) => {
   }, []);
 
   return (
-    <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message }}>
+    <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
+      addToCart, updateCart, deleteCart, getCart,cart
+     }}>
       {children}
     </BuyerContext.Provider>
   );
