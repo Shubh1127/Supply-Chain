@@ -15,6 +15,10 @@ const ProductSchema = new mongoose.Schema({
     description: {
         type: String, 
     },
+    category:{
+        type:String,
+        required: true,
+    },
     quantity: {
         type: Number, 
         default: 1 ,
@@ -24,9 +28,11 @@ const ProductSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Farmer', 
         required: true 
+    },
+    date:{
+        type: Date,
+        default: Date.now
     }
 });
-
 const ProductModel = mongoose.model('Product', ProductSchema);
-
 module.exports = ProductModel;

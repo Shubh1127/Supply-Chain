@@ -71,7 +71,7 @@ module.exports.getProfile = async (req, res) => {
         name: buyer.name,
         email: buyer.email,
         phone: buyer.phone,
-        addresses: buyer.addresses, // Returning addresses as an array
+        addresses: buyer.addresses, 
         profileImageUrl: buyer.profileImageUrl,
       },
     });

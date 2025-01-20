@@ -27,11 +27,14 @@ const Cart = () => {
   return (
     <>
       <Header />
-      <div className="p-8">
-        <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+      <div className="p-8 bg-gray-200 h-screen">
+        <div className='bg-white'>
+        <h2 className="text-2xl font-bold mb-4 ">Your Cart</h2>
         {cartItems.length === 0 ? (
           <p>Your Supply Chain Cart is empty.</p>
-        ) : (
+        ) 
+        
+        : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {cartItems.map((item) => (
               <div key={item.id} className="border border-gray-300 p-4 rounded">
@@ -43,6 +46,7 @@ const Cart = () => {
             ))}
           </div>
         )}
+        </div>
       </div>
     </>
   );

@@ -25,7 +25,7 @@ export default function Header() {
   const defaultAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0];
 
   return (
-    <header className="bg-gray-900 text-white h-max">
+    <header className="bg-gray-900 text-white h-max p-1">
       <div className="container mx-auto px-4">
         <div className="flex items-center py-2">
           <Link to="/role/buyer/" className="text-2xl font-bold mr-4">Supply Chain Pro</Link>
@@ -81,13 +81,6 @@ export default function Header() {
             <Menu className="h-5 w-5" />
           </button>
         </div>
-        <nav className="flex py-2 space-x-4 text-sm">
-          <Link to="/inventory" className="hover:text-gray-300">Inventory</Link>
-          <Link to="/logistics" className="hover:text-gray-300">Logistics</Link>
-          <Link to="/analytics" className="hover:text-gray-300">Analytics</Link>
-          <Link to="/suppliers" className="hover:text-gray-300">Suppliers</Link>
-          <Link to="/deals" className="hover:text-gray-300">Today&apos;s Deals</Link>
-        </nav>
       </div>
     </header>
   );

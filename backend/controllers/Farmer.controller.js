@@ -160,7 +160,7 @@ module.exports.getProfile = async (req, res) => {
             return res.status(401).json({ message: 'Invalid token or user not found' });
         }
 
-        const { name, description, price ,quantity} = req.body;
+        const { name, description, price ,quantity,category} = req.body;
         let productPhotoUrl = null;
 
         if (req.file) {
@@ -171,12 +171,13 @@ module.exports.getProfile = async (req, res) => {
         }
 
         const product = await ProductModel.create({
+            farmerId: farmer._id,
             name,
             description,
             price,
             quantity,
+            category,
             photo: productPhotoUrl,
-            farmerId: farmer._id,
         });
 
         return res.status(201).json({

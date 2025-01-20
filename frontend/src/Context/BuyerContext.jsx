@@ -87,6 +87,7 @@ export const BuyerProvider = ({ children }) => {
     }
   };
   const logout = async () => {
+    console.log('rwq is coming')
     try {
       const token = localStorage.getItem('Buyertoken');
       const response = await axios.get('http://localhost:3000/buyer/logout', {

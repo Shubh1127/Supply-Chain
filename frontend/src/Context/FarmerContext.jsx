@@ -10,6 +10,7 @@ export const useFarmer = () => {
 
 export const FarmerProvider = ({ children }) => {
   const [inventory, setInventory] = useState([]);
+  const [inventoryLength,setInventoryLength] = useState(0);
   const [totalItems,setTotalItems] = useState(0);
   const [farmer, setFarmer] = useState(null);
   const [weather, setWeather] = useState(null);
@@ -171,6 +172,7 @@ export const FarmerProvider = ({ children }) => {
       });
       const products = Array.isArray(response.data) ? response.data : response.data.products;
       setInventory(products);
+      setInventoryLength(products.length);
       setTotalItems(products.length);
     } catch (error) {
       console.error("Error fetching inventory:", error);
@@ -184,6 +186,7 @@ export const FarmerProvider = ({ children }) => {
     formData.append('description', product.description);
     formData.append('price', product.price);
     formData.append('quantity', product.quantity);
+    formData.append('category',product.category)
     formData.append('productImage', product.productImage);
 
     try {
@@ -193,7 +196,10 @@ export const FarmerProvider = ({ children }) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      console.log(response);
+      if(response.data.message){
+        setMessage(response.data.message);
+      }
+
     } catch (error) {
       console.error('Error:', error.response?.data?.message || error.message);
     }
@@ -212,11 +218,12 @@ export const FarmerProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       getProfile();
+      fetchInventory();
     }
   }, []);
 
   return (
-    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather,fetchInventory,totalItems,inventory, message }}>
+    <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather,fetchInventory,totalItems,inventory,inventoryLength, message }}>
       {children}
     </FarmerContext.Provider>
   );

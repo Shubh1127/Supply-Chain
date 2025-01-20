@@ -5,7 +5,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { useFarmer } from "../../Context/FarmerContext";
 import { useNavigate } from "react-router-dom";
 const Home = () => {
-  const {logout,farmer,getprofile}=useFarmer();
+  const {logout,farmer,inventoryLength}=useFarmer();
+  console.log(inventoryLength)
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showPopup, setShowPopup] = useState(false);
@@ -104,7 +105,7 @@ const Home = () => {
         <div className="bg-gray-100 border p-2 rounded-xl">
           <div className="bg-white h-[12vh] shadow-xl  p-3 rounded-xl">
           <h2 className="text-sm font-bold">Inventory</h2>
-          <p className="text-xl">+2,350</p>
+          <p className="text-xl">{inventoryLength}</p>
           <span className="text-green-500 text-xs">+180.1% from last month</span>
           </div>
         </div>

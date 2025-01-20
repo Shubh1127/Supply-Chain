@@ -26,23 +26,27 @@ const InventoryGraph = () => {
         <table className="min-w-full bg-white">
           <thead className=" bg-gray-200">
             <tr>
-              <th className="py-2 px-4 border-b text-left">Name</th>
-              <th className="py-2 px-4 border-b text-left">Photo</th>
-              <th className="py-2 px-2 border-b text-left">Price/Kg</th>
-              <th className="py-2 px-4 border-b text-left">Description</th>
-              <th className="py-2 px-4 border-b text-left">Quantity</th>
+              <th className="py-2 px-4  text-left">Product</th>
+              <th className="py-2 px-8  text-left">Images</th>
+              <th className="py-2 px-2  text-left">Price/Kg</th>
+              <th className="py-2 px-4  text-left">Description</th>
+              <th className="py-2 px-4   text-center">Category</th>
+              <th className="py-2 px-4  text-center">Quantity</th>
+              <th className="py-2 px-4  text-left">Date</th>
             </tr>
           </thead>
           <tbody>
             {inventory.map((product) => (
               <tr key={product._id} className="hover:bg-gray-100">
-                <td className="py-2 px-4 border-b">{product.name}</td>
-                <td className="py-2 px-4 border-b">
-                  <img src={product.photo} alt={product.name} className="w-24 rounded-md h-16 object-cover" />
+                <td className="py-2 px-4 ">{product.name}</td>
+                <td className="py-2 px-4 ">
+                  <img src={product.photo} alt={product.name} className="w-24 rounded-md h-18 object-cover " />
                 </td>
-                <td className="py-2 px-4 border-b">₹{product.price}</td>
-                <td className="py-2 px-4 border-b">{product.description}</td>
-                <td className="py-2 px-8 border-b">{product.quantity}Kg</td>
+                <td className="py-2 px-4  ">₹{product.price}</td>
+                <td className="py-2 px-4  w-[70px]">{product.description}</td>
+                <td className="py-2 px-4 ms-12 text-center ">{product.category}</td>
+                <td className="py-2 px-8  text-center ">{product.quantity}Kg</td>
+                <td className="py-2 px-4 ">{new Date(product.date).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>

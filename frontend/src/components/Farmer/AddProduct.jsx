@@ -3,12 +3,13 @@ import { motion } from 'framer-motion';
 import { useFarmer } from '../../Context/FarmerContext';
 
 const AddProduct = () => {
-  const { addProduct } = useFarmer();
+  const { addProduct,message } = useFarmer();
   const [product, setProduct] = useState({
     name: '',
     description: '',
     quantity: '',
     price: '',
+    category: '',
     productImage: null,
   });
 
@@ -29,12 +30,14 @@ const AddProduct = () => {
       description: '',
       quantity: '',
       price: '',
+      category: '',
       productImage: null,
     });
   };
 
   return (
     <div style={styles.container}>
+      {message && <p>{message}</p>}
       <motion.form 
         onSubmit={handleSubmit} 
         style={styles.form}
@@ -89,6 +92,20 @@ const AddProduct = () => {
           />
         </motion.div>
         <motion.div 
+        style={styles.inputGroup}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        >
+        <label style={styles.label}>Category</label>
+        <select style={styles.input} name="category" value={product.category} onChange={handleChange} required>
+          <option value="" disabled className="font-semibold">Select Category</option>
+          <option value="Fruits" className="font-semibold">Fruits</option>
+          <option value="Vegetables" className="font-semibold">Vegetables</option>
+          <option value="Grains" className="font-semibold">Grains</option>
+          <option value="Dairy" className="font-semibold">Dairy</option>
+        </select>
+        </motion.div>
+        <motion.div 
           style={styles.inputGroup}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -135,7 +152,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '78vh',
+    height: 'max-content',
     widthMax: '80vw',
     backgroundColor: '#F0F0F0',
   },

@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const addressSchema = new mongoose.Schema({
-  houseNo: { type: String, default: '630' },
-  street: { type: String, default: 'Ward 19' },
-  city: { type: String, default: 'Jhajjar' },
-  state: { type: String, default: 'Haryana' },
-  pincode: { type: String, default: '124103' },
+  houseNo: { type: String },
+  street: { type: String},
+  city: { type: String},
+  state: { type: String},
+  pincode: { type: String},
   isDefault: { type: Boolean, default: false }
 });
 
