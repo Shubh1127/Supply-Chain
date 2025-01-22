@@ -7,7 +7,7 @@ export default function Header() {
   const { buyer } = useBuyer();
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
-
+  // console.log(buyer);
   const handleMouseEnter = () => {
     if (buyer && buyer.addresses.length > 0) {
       setShowPopup(true);

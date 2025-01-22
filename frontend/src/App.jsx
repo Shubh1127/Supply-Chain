@@ -31,7 +31,7 @@ function App() {
       <Route path='/role/buyer/signup' element={<BuyerSignup/>} />
       <Route path='role/buyer/orders' element={<Orders/>} />
       <Route path="role/buyer/cart" element={<Cart/>} />
-      <Route path='role/buyer/buy' element={<Buy/>} />
+      <Route path='role/buyer/buy/:productId' element={<Buy/>} />
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />
       <Route path='role/buyer/profile' element={<Profile/>}/>

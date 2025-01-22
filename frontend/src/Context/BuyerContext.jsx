@@ -210,7 +210,6 @@ export const BuyerProvider = ({ children }) => {
   };
 
   const setDefaultAddress = async (index) => {
-    console.log('request is coming');
     try {
       const response = await axios.put(`http://localhost:3000/buyer/address/default/${index}`, {}, {
         headers: {
@@ -305,7 +304,7 @@ export const BuyerProvider = ({ children }) => {
     try{
       const response=await axios.get(`http://localhost:3000/buyer/product/${productId}`);
       setItem(response.data.product);
-      navigate('/role/buyer/buy');
+      navigate(`/role/buyer/buy/${productId}`);
     }catch(error){
       setMessage(error.response.data.message || 'Error fetching product');
     }
@@ -319,7 +318,7 @@ export const BuyerProvider = ({ children }) => {
 
   return (
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
-      addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item
+      addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage
      }}>
       {children}
     </BuyerContext.Provider>
