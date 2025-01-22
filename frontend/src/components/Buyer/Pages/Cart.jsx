@@ -1,33 +1,38 @@
-import { useState, useEffect } from 'react';
-import Header from '../components/BuyerHeader';
-import { useBuyer } from '../../../Context/BuyerContext';
-
+import { useState, useEffect } from "react";
+import Header from "../components/BuyerHeader";
+import { useBuyer } from "../../../Context/BuyerContext";
+import { Trash, Plus } from "lucide-react";
 const Cart = () => {
   const { cart, getCart, updateCart, deleteCart } = useBuyer();
   const [cartItems, setCartItems] = useState([]);
-
   useEffect(() => {
+    console.log('req is  coming')
     const fetchCartItems = async () => {
       await getCart();
-      setCartItems(cart); // Set the cart data from context
     };
-
     if (cart.length === 0) {
       fetchCartItems();
     } else {
-      setCartItems(cart); // Use cart data if already available
+      setCartItems(cart);
     }
-  }, [cart, getCart]);
-
-  // Handle Increase Quantity
-  const handleIncrease = (index) => {
-    const newQuantity = cartItems[index].quantity + 1;
-    updateCart(index, newQuantity); // Update quantity in context and on the server
+  }, [cart.length, getCart]); 
+  const handleIncrease = async (productId) => {
+    const updatedCartItems = [...cartItems]; // Clone the cartItems
+    const itemIndex = updatedCartItems.findIndex((item) => item.productId === productId);
+    if (itemIndex !== -1) {
+      const newQuantity = updatedCartItems[itemIndex].quantity + 1;
+      await updateCart(productId, newQuantity);
+      updatedCartItems[itemIndex].quantity = newQuantity;
+      setCartItems(updatedCartItems);
+      await getCart();
+    }
   };
-
-  // Handle Delete Item from Cart
-  const handleDelete = (productId) => {
-    deleteCart(productId); // Remove item from cart
+  
+  const handleDelete = async (productId) => {
+    await deleteCart(productId); 
+    const updatedCartItems = cartItems.filter((item) => item.productId !== productId);
+    setCartItems(updatedCartItems); // Update UI
+    await getCart(); 
   };
 
   return (
@@ -39,31 +44,53 @@ const Cart = () => {
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className=" flex flex-col">
               {cartItems.map((item, index) => (
-                <div key={index} className="border border-gray-300 p-4 rounded-lg flex flex-col items-center">
+                <div
+                  key={index}
+                  className="border border-gray-300 p-4 rounded-lg flex  items-center"
+                >
                   <img
                     src={item.photo}
                     alt={item.productName}
-                    className="w-full h-60 mb-4 rounded object-cover object-center"
+                    className="w-1/4 h-60 mb-4 rounded object-cover object-center"
                   />
-                  <p className="text-lg font-semibold mb-2">{item.productName}</p>
-                  <p className="text-md font-semibold mb-2">Price: ₹{item.price}</p>
-                  <div className="flex items-center space-x-2 mb-4">
-                    <button
-                      onClick={() => handleIncrease(index)}
-                      className="bg-yellow-400 px-4 py-2 rounded-md text-white hover:bg-yellow-500 transition"
-                    >
-                      Increase Quantity
-                    </button>
-                    <p className="text-md">Quantity: {item.quantity}</p>
+                  <div className="flex flex-col ml-4 gap-7">
+                    <div className="flex gap-8 justify-between items-center mb-2 w-full ">
+                      <span className="flex">
+                        <p className="text-lg font-semibold mb-2">
+                          {item.name},
+                        </p>
+                        <p className="text-lg font-semibold mb-2">
+                          {item.description}
+                        </p>
+                      </span>
+                      <p className="text-md font-semibold mb-2 flex ">
+                        <div>₹</div>
+                        <span className="text-2xl">{item.price}.00</span>
+                      </p>
+                    </div>
+                    <div className="mb-3">
+                      <p className="text-green-500">In Stock</p>
+                      <p>Eligible for FREE Shipping</p>
+                    </div>
+                    <div className="flex items-center space-x-6 w-48 p-1 ps-2 mb-4 border border-gray-300 rounded-lg">
+                      <button
+                        onClick={() => handleDelete(item.productId)}
+                        className="bg-red-500 px-4 py-2 rounded-md text-white hover:bg-red-600 transition"
+                      >
+                        <Trash size={24} />
+                      </button>
+                      <p className="text-md"> {item.quantity}</p>
+
+                      <button
+                        onClick={() => handleIncrease(item.productId)}
+                        className="bg-yellow-400 px-4 py-2 rounded-md text-white hover:bg-yellow-500 transition"
+                      >
+                        <Plus />
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => handleDelete(item.productId)}
-                    className="bg-red-500 px-4 py-2 rounded-md text-white hover:bg-red-600 transition"
-                  >
-                    Remove from Cart
-                  </button>
                 </div>
               ))}
             </div>

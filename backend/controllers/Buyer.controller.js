@@ -1,4 +1,5 @@
 const BuyerModel = require('../Model/BuyerSchema');
+const ProductModel=require('../Model/ProductSchema')
 const cloudinary = require('../config/cloudinaryConfig');
 const jwt = require('jsonwebtoken');
 
@@ -275,28 +276,19 @@ module.exports.addToCart = async (req, res) => {
     if (!buyer) {
       return res.status(401).json({ message: 'Invalid token or user not found' });
     }
-
     const { productId, quantity } = req.body;
-    console.log(req.body);
-
-    // Ensure the productId exists and set a default quantity if not provided
     if (!productId) {
       return res.status(400).json({ message: 'Invalid product ID' });
     }
-
-    // If quantity is not provided, default to 1
     const quantityToAdd = quantity ? quantity : 1;
-
     const cartItemIndex = buyer.cart.findIndex(
       (item) => item.productId.toString() === productId
     );
-
     if (cartItemIndex !== -1) {
       buyer.cart[cartItemIndex].quantity += quantityToAdd;
     } else {
       buyer.cart.push({ productId, quantity: quantityToAdd });
     }
-
     await buyer.save();
     res.status(200).json({ message: 'Item added to cart successfully', cart: buyer.cart });
   } catch (err) {
@@ -346,26 +338,19 @@ module.exports.updateCart = async (req, res) => {
   }
 
   try {
-    const { productId, quantity } = req.body; // Expect productId and quantity in the request body
+    const { productId, quantity } = req.body; 
     if (!productId || !quantity) {
       return res.status(400).json({ message: 'ProductId and quantity are required' });
     }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const buyer = await BuyerModel.findById(decoded._id);
-
     if (!buyer) {
       return res.status(401).json({ message: 'Invalid token or user not found' });
     }
-
-    // Find the item in the cart
     const cartItem = buyer.cart.find(item => item.productId.toString() === productId);
-    
     if (cartItem) {
-      // If the item is already in the cart, update the quantity
       cartItem.quantity = quantity;
     } else {
-      // If the item is not in the cart, add it to the cart
       buyer.cart.push({ productId, quantity });
     }
 
@@ -384,7 +369,7 @@ module.exports.deleteCart = async (req, res) => {
   }
   try {
     const { productId } = req.body;
-     // Expect productId in the request body
+    // Expect productId in the request body
     if (!productId) {
       return res.status(400).json({ message: 'ProductId is required' });
     }
@@ -396,14 +381,50 @@ module.exports.deleteCart = async (req, res) => {
       return res.status(401).json({ message: 'Invalid token or user not found' });
     }
 
-    // Remove the item from the cart
-    buyer.cart = buyer.cart.filter(item => item.productId.toString() !== productId);
+    // Find the item in the cart
+    const cartItemIndex = buyer.cart.findIndex(item => item.productId.toString() === productId);
+
+    if (cartItemIndex !== -1) {
+      if (buyer.cart[cartItemIndex].quantity > 1) {
+        // Reduce the quantity by one
+        buyer.cart[cartItemIndex].quantity -= 1;
+      } else {
+        // Remove the item from the cart if the quantity is one
+        buyer.cart.splice(cartItemIndex, 1);
+      }
+    } else {
+      return res.status(400).json({ message: 'Product not found in cart' });
+    }
 
     // Save the updated buyer's cart
     await buyer.save();
-    return res.status(200).json({ message: 'Item removed from cart successfully', cart: buyer.cart });
+    return res.status(200).json({ message: 'Item updated in cart successfully', cart: buyer.cart });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+
+//products
+module.exports.getProducts=async(req,res)=>{
+  try{
+    const products=await ProductModel.find();
+    return res.status(200).json({products});
+  }catch(error){
+    console.error(error);
+    return res.status(500).json({message:'Something went wrong'});
+  }
+}
+module.exports.getProduct=async(req,res)=>{
+  try{
+    const {productId}=req.params;
+    const product=await ProductModel.findById(productId);
+    if(!product){
+      return res.status(404).json({message:'Product not found'});
+    }
+    return res.status(200).json({product});
+  }catch(err){
+    return res.status(500).json({message:err.message});
+  }
+}

@@ -14,6 +14,7 @@ import Profile from './components/Buyer/Pages/Profile'
 import Address from "./components/Buyer/Pages/Address"
 import Orders from "./components/Buyer/Pages/Orders"
 import Cart from "./components/Buyer/Pages/Cart"
+import Buy from './components/Buyer/Pages/Buy'
 function App() {
   return (
     <Routes>
@@ -30,6 +31,7 @@ function App() {
       <Route path='/role/buyer/signup' element={<BuyerSignup/>} />
       <Route path='role/buyer/orders' element={<Orders/>} />
       <Route path="role/buyer/cart" element={<Cart/>} />
+      <Route path='role/buyer/buy' element={<Buy/>} />
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />
       <Route path='role/buyer/profile' element={<Profile/>}/>

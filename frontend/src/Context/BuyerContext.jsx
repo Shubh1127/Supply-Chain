@@ -10,20 +10,35 @@ export const useBuyer = () => {
 
 export const BuyerProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [item,setItem]=useState([]);
   const [buyer, setBuyer] = useState(null);
   const [message, setMessage] = useState('');
+  const [products,setProducts]=useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('Buyertoken');
-    const storedBuyer = localStorage.getItem('buyer');
-    if (token) {
-      axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+  useEffect(()=>{
+    const token=localStorage.getItem('buyerToken');
+    const storedTime=localStorage.getItem('buyerTokenTime');
+    const storedBuyer=localStorage.getItem('buyer');
+
+    if(token && storedTime){
+      const currentTime=new Date().getTime();
+      const elapsedTime=currentTime-storedTime;
+    
+        if(elapsedTime>24*60*60*1000){
+          localStorage.removeItem('buyertoken');
+          localStorage.removeItem('buyerTokenTime');
+          localStorage.removeItem('buyer');
+          setBuyer(null);
+        }else{
+          axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+          if(storedBuyer){
+            setBuyer(JSON.parse(storedBuyer));
+          }
+        }
     }
-    if (storedBuyer) {
-      setBuyer(JSON.parse(storedBuyer)); 
-    }
-  }, []);
+    
+  })
 
   useEffect(() => {
     if (buyer) {
@@ -49,8 +64,9 @@ export const BuyerProvider = ({ children }) => {
       });
   
       if (response.data.token) {
-        // Save token in localStorage
+        const currentTime=new Date().getTime();
         localStorage.setItem('Buyertoken', response.data.token);
+        localStorage.setItem('buyerTokenTime', currentTime);
         localStorage.setItem('buyer', JSON.stringify(response.data.buyer));
         setBuyer(response.data.buyer);
       }
@@ -69,11 +85,12 @@ export const BuyerProvider = ({ children }) => {
       // console.log('API Response:', response.data);
   
       if (response.data.token) {
+        const currentTime=new Date().getTime();
+        localStorage.setItem('BuyerTokenTime',currentTime);
         localStorage.setItem('Buyertoken', response.data.token);
         localStorage.setItem('buyer', (response.data.buyer));
         axios.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
         setBuyer(response.data.buyer);
-        console.log(response.data.buyer);
       }
   
       setMessage(response.data.message || 'Login successful!');
@@ -209,8 +226,13 @@ export const BuyerProvider = ({ children }) => {
 
   //orders and cart
   const addToCart = async (productId) => {
+    const token=localStorage.getItem('Buyertoken');
     try {
-      const response = await axios.post('http://localhost:3000/buyer/addToCart', { productId });
+      const response = await axios.post('http://localhost:3000/buyer/addToCart', {productId},{
+        headers:{
+          'Authorization': `Bearer ${token}`,
+        },
+       });
       setCart(response.data.cart); // Update cart state after adding product
       setMessage('Product added to cart');
     } catch (error) {
@@ -219,9 +241,15 @@ export const BuyerProvider = ({ children }) => {
   };
 
   // Update Cart function
-  const updateCart = async (index, quantity) => {
+  const updateCart = async (productId, quantity) => {
+    const token=localStorage.getItem('Buyertoken');
     try {
-      const response = await axios.put(`http://localhost:3000/buyer/cart/${index}`, { quantity });
+      const response = await axios.put(`http://localhost:3000/buyer/updatecart`,{productId,quantity},{
+        headers:{
+          'Authorization': `Bearer ${token}`,
+        },
+       
+      });
       setCart(response.data.cart); // Update cart state after updating quantity
       setMessage('Cart updated successfully');
     } catch (error) {
@@ -262,6 +290,26 @@ export const BuyerProvider = ({ children }) => {
     }
   };
 
+  //getProducts
+  const getProducts=async()=>{
+    try{
+      const response=await axios.get('http://localhost:3000/buyer/products');
+      setProducts(response.data.products);  
+      // console.log(response)
+    }catch(error){
+      setMessage(error.response.data.message || 'Error fetching products');
+  }
+  }
+
+  const getProduct=async(productId)=>{
+    try{
+      const response=await axios.get(`http://localhost:3000/buyer/product/${productId}`);
+      setItem(response.data.product);
+      navigate('/role/buyer/buy');
+    }catch(error){
+      setMessage(error.response.data.message || 'Error fetching product');
+    }
+  }
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -271,7 +319,7 @@ export const BuyerProvider = ({ children }) => {
 
   return (
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
-      addToCart, updateCart, deleteCart, getCart,cart
+      addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item
      }}>
       {children}
     </BuyerContext.Provider>
