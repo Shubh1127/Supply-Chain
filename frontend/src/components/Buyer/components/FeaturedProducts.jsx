@@ -1,12 +1,10 @@
 import { useBuyer } from "../../../Context/BuyerContext"; // Import the useBuyer hook to access cart functions
 import { useEffect } from "react";
 export default function FeaturedProducts() {
-  const { getProducts,products,item,getProduct } = useBuyer();
-  const { addToCart } = useBuyer(); // Destructure addToCart from BuyerContext
+  const { getProducts,products,getProduct,addToCart } = useBuyer();
 
   useEffect(()=>{
     getProducts();
-    // console.log(products[0])
   },[])
   const handleAddToCart = (productId) => {
     addToCart(productId); // Call addToCart with the productId when the button is clicked

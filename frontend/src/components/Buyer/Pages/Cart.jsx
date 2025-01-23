@@ -3,10 +3,11 @@ import Header from "../components/BuyerHeader";
 import { useBuyer } from "../../../Context/BuyerContext";
 import { Trash, Plus } from "lucide-react";
 const Cart = () => {
-  const { cart, getCart, updateCart, deleteCart } = useBuyer();
+  const { cart, getCart, updateCart, deleteCart,getProduct } = useBuyer();
   const [cartItems, setCartItems] = useState([]);
+  console.log(cartItems);
   useEffect(() => {
-    console.log('req is  coming')
+    // console.log('req is  coming')
     const fetchCartItems = async () => {
       await getCart();
     };
@@ -27,6 +28,10 @@ const Cart = () => {
       await getCart();
     }
   };
+
+  const handleClick=async(productId_)=>{
+    await getProduct(productId_);
+  }
   
   const handleDelete = async (productId) => {
     await deleteCart(productId); 
@@ -48,20 +53,21 @@ const Cart = () => {
               {cartItems.map((item, index) => (
                 <div
                   key={index}
-                  className="border border-gray-300 p-4 rounded-lg flex  items-center"
+                  className="border border-gray-300 p-4  rounded-lg flex  items-center"
                 >
                   <img
                     src={item.photo}
                     alt={item.productName}
+                    onClick={()=>handleClick(item.productId)}
                     className="w-1/4 h-60 mb-4 rounded object-cover object-center"
                   />
-                  <div className="flex flex-col ml-4 gap-7">
+                  <div className="flex flex-col  ml-4 gap-7" >
                     <div className="flex gap-8 justify-between items-center mb-2 w-full ">
-                      <span className="flex">
+                      <span className="flex hover:underline hover:decoration-blue-300 " onClick={()=>handleClick(item.productId)}>
                         <p className="text-lg font-semibold mb-2">
                           {item.name},
                         </p>
-                        <p className="text-lg font-semibold mb-2">
+                        <p className="text-lg font-semibold mb-2 cursor-pointer " >
                           {item.description}
                         </p>
                       </span>

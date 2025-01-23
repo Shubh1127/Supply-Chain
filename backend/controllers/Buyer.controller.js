@@ -1,6 +1,7 @@
 const BuyerModel = require('../Model/BuyerSchema');
 const ProductModel=require('../Model/ProductSchema')
 const cloudinary = require('../config/cloudinaryConfig');
+const FarmerModel=require('../Model/FarmerSchema')
 const jwt = require('jsonwebtoken');
 
 module.exports.register = async (req, res) => {
@@ -302,29 +303,27 @@ module.exports.getCart = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Please login first' });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const buyer = await BuyerModel.findById(decoded._id).populate({
-      path: 'cart.productId', // populate the productId field
-      model: 'Product', // model to populate from (Product)
-      select: 'name price photo description' // fields to select from the Product model
+      path: 'cart.productId',
+      model: 'Product',
+      select: 'name price photo description farmerId' 
     });
-
     if (!buyer) {
       return res.status(401).json({ message: 'Invalid token or user not found' });
     }
+    // console.log(buyer.cart)
 
-    // Format the cart data with populated product details
     const cartDetails = buyer.cart.map(item => ({
       productId: item.productId._id,
       name: item.productId.name,
       price: item.productId.price,
       photo: item.productId.photo,
       description: item.productId.description,
-      quantity: item.quantity
+      quantity: item.quantity,
+      farmerId: item.productId.farmerId
     }));
-
     return res.status(200).json({ cart: cartDetails });
   } catch (error) {
     console.error(error);
@@ -336,7 +335,6 @@ module.exports.updateCart = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: 'Please login first' });
   }
-
   try {
     const { productId, quantity } = req.body; 
     if (!productId || !quantity) {
@@ -404,8 +402,6 @@ module.exports.deleteCart = async (req, res) => {
     return res.status(500).json({ message: 'Something went wrong' });
   }
 };
-
-
 //products
 module.exports.getProducts=async(req,res)=>{
   try{
@@ -423,8 +419,22 @@ module.exports.getProduct=async(req,res)=>{
     if(!product){
       return res.status(404).json({message:'Product not found'});
     }
-    return res.status(200).json({product});
+   
+    const farmer=await FarmerModel.findById(product.farmerId);
+   
+    return res.status(200).json({product,farmer:farmer});
   }catch(err){
     return res.status(500).json({message:err.message});
+  }
+}
+
+module.exports.getCategory=async(req,res)=>{
+  const {category}=req.params;
+  try{
+    const Categoryproducts=await ProductModel.find({category});
+    // console.log(Categoryproducts)
+    return res.status(200).json({Categoryproducts});
+  }catch(error){
+    return res.status(500).json({message:error.message});
   }
 }

@@ -22,6 +22,7 @@ router.get('/cart',authMiddleware,BuyerController.getCart);
 router.put('/updatecart',authMiddleware,BuyerController.updateCart);
 router.delete('/cart',authMiddleware,BuyerController.deleteCart);
 // router.post('/placeOrder',authMiddleware,BuyerController.placeOrder);
+router.get('/category/:category',BuyerController.getCategory);
 router.get('/product/:productId',BuyerController.getProduct);
 
 //products

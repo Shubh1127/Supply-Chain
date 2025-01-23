@@ -14,6 +14,9 @@ export const BuyerProvider = ({ children }) => {
   const [buyer, setBuyer] = useState(null);
   const [message, setMessage] = useState('');
   const [products,setProducts]=useState([]);
+  const [productfarmer,setProductFarmer]=useState([]);
+  const [categoryProducts,setCategoryProducts]=useState([]);
+ 
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -38,7 +41,7 @@ export const BuyerProvider = ({ children }) => {
         }
     }
     
-  })
+  },[])
 
   useEffect(() => {
     if (buyer) {
@@ -76,6 +79,7 @@ export const BuyerProvider = ({ children }) => {
     } catch (error) {
       setMessage(error.response.data.message);
     }
+    
   };
 
   const login = async (email, password) => {
@@ -98,15 +102,10 @@ export const BuyerProvider = ({ children }) => {
     } catch (error) {
       if (error.response && error.response.data) {
         setMessage(error.response.data.message || 'An error occurred.');
-      } else {
-        setMessage('Unable to connect to the server. Please try again later.');
-      }
-  
-      console.error('Login Error:', error);
+      }     
     }
-  };
+}
   const logout = async () => {
-    console.log('rwq is coming')
     try {
       const token = localStorage.getItem('Buyertoken');
       const response = await axios.get('http://localhost:3000/buyer/logout', {
@@ -117,11 +116,12 @@ export const BuyerProvider = ({ children }) => {
       localStorage.removeItem('buyer'); 
       localStorage.removeItem('Buyertoken');
       setBuyer(null);
-      console.log(response.data.message);
+      // console.log(response.data.message);
       navigate('/role/buyer');
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
     }
+    
   };
 
   const getProfile = async () => {
@@ -136,6 +136,7 @@ export const BuyerProvider = ({ children }) => {
     } catch (error) {
       setMessage(error.response.data.message);
     }
+    
   };
   const updateProfile = async (user) => {
     const formData = new FormData();
@@ -284,6 +285,7 @@ export const BuyerProvider = ({ children }) => {
         },
       });
       setCart(response.data.cart);
+      // setCartFarmer(response.data.farmer);
     } catch (error) {
       setMessage(error.response.data.message || 'Error fetching cart');
     }
@@ -293,7 +295,8 @@ export const BuyerProvider = ({ children }) => {
   const getProducts=async()=>{
     try{
       const response=await axios.get('http://localhost:3000/buyer/products');
-      setProducts(response.data.products);  
+      setProducts(response.data.products); 
+
       // console.log(response)
     }catch(error){
       setMessage(error.response.data.message || 'Error fetching products');
@@ -304,11 +307,22 @@ export const BuyerProvider = ({ children }) => {
     try{
       const response=await axios.get(`http://localhost:3000/buyer/product/${productId}`);
       setItem(response.data.product);
+      setProductFarmer(response.data.farmer);
       navigate(`/role/buyer/buy/${productId}`);
     }catch(error){
       setMessage(error.response.data.message || 'Error fetching product');
     }
   }
+  const Getcategory=async(category)=>{
+    try{
+      const response=await axios.get(`http://localhost:3000/buyer/category/${category}`);
+      setCategoryProducts(response.data.Categoryproducts);
+      navigate(`/role/buyer/products/${category}`);
+    }catch(error){
+      setMessage(error.response.data.message || 'Error fetching category');
+    }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -318,7 +332,10 @@ export const BuyerProvider = ({ children }) => {
 
   return (
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
-      addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage
+      addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage,Getcategory,categoryProducts,
+      productfarmer
+
+
      }}>
       {children}
     </BuyerContext.Provider>
