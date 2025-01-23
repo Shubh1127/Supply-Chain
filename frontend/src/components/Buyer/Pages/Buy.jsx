@@ -8,16 +8,14 @@ import { Link, useParams } from "react-router-dom";
 const Buy = () => {
   const {productId}=useParams();
   const [showPopup, setShowPopup] = useState(false);
-  const { item,setItem,setMessage,buyer,productfarmer } = useBuyer();
-  // console.log(item)
+  const { item,setItem,setMessage,buyer,productfarmer,setProductFarmer } = useBuyer();
   let defaultAddressAddress = {}
   if (buyer && buyer.addresses.length > 0){
      defaultAddressAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0]
   }
-  if(productfarmer){
-    console.log(productfarmer.name)
-  }
-
+  
+  // console.log(productfarmer.address); // { houseNo: '630', ... }
+  // console.log(productfarmer.address.city);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -32,19 +30,27 @@ const Buy = () => {
     try {
       const response = await axios.get(`http://localhost:3000/buyer/product/${productId}`);
       setItem(response.data.product);
+      setProductFarmer(response.data.farmer);
+
     } catch (error) {
       setMessage(error.response.data.message || 'Error fetching product');
     }
-  }, [setItem]);
-
+  }, [setItem],[setProductFarmer]);
+  
+  
   useEffect(() => {
     if (productId) {
-      memoizedGetProduct(productId);  
+      setItem(null);
+      setProductFarmer(null);
+      memoizedGetProduct(productId);
     }
   }, [productId, memoizedGetProduct]);
-
   if (!item) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading product details...</p>
+      </div>
+    );
   }
   return (
     <>
@@ -69,8 +75,8 @@ const Buy = () => {
           )}
         </div>
         <div className="order-section flex  flex-1">
-          <div className=" w-[38vw] p-4">
-            <div className="text-3xl h-[20vh]  m-2">
+          <div className=" w-[37vw] p-4">
+            <div className="text-3xl h-max  m-2">
               {item.description}
             </div>
             <div className="h-[10vh]  m-2">
@@ -126,7 +132,7 @@ const Buy = () => {
                 </span>
             </div>
           </div>
-          <div className="flex-1 mt-4">
+          <div className="flex-1 mt-4 border border-gray-400 p-1 mr-4">
             <div className="h-[10vh]  m-2">
             <p className="text-md font-semibold mb-2 flex ">
                         <div>₹</div>
@@ -155,20 +161,21 @@ const Buy = () => {
              
                 {/* <Link to='/role/buyer/address' className='flex gap-2 my-3 mr-6 cursor-pointer  bg-blue-500 text-white w-max p-2 rounded-md m-2 absolute right-0'>Add Address</Link> */}
             </div>
-            <div className=" h-[20vh] my-4  m-2">
+            <div className=" h-max my-4  m-2">
                 <div className="flex flex-col">
                     <p className="text-green-600">In Stock</p>
-                    <span className="flex gap-3 justify-start">
-                    <p>Payment</p>
-                    <p className="text-blue-400">Secure transaction</p>
-                    </span>
-                    <span className="flex gap-3">
-                    <p>Ships from</p>
-                    <p className="text-blue-400">SupplyPro</p>
-                    </span>
-                    <span className="flex gap-3">
-                    <p>Sold By</p>
-                    <p className="text-blue-400">{productfarmer.name}</p>
+                    <span className="grid grid-cols-2 grid-rows-3 gap-y-1 gap-x-0.5  w-2/4 ">
+                    <div>Payment</div>
+                    <div className="text-blue-400">Secure transaction</div>
+                    
+                    <div>Ships from</div>
+                    <div className="text-blue-400">SupplyPro</div>
+                    
+                    <div>Sold By</div>
+                    <div className="text-blue-400">{productfarmer.name} {productfarmer?.address?.city} </div>
+
+                    
+                    
                     </span>
                     
                 </div>

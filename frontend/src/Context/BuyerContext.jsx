@@ -307,6 +307,7 @@ export const BuyerProvider = ({ children }) => {
     try{
       const response=await axios.get(`http://localhost:3000/buyer/product/${productId}`);
       setItem(response.data.product);
+      // console.log(response.data)
       setProductFarmer(response.data.farmer);
       navigate(`/role/buyer/buy/${productId}`);
     }catch(error){
@@ -333,7 +334,7 @@ export const BuyerProvider = ({ children }) => {
   return (
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
       addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage,Getcategory,categoryProducts,
-      productfarmer
+      productfarmer,setProductFarmer
 
 
      }}>

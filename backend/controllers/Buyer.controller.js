@@ -422,7 +422,7 @@ module.exports.getProduct=async(req,res)=>{
    
     const farmer=await FarmerModel.findById(product.farmerId);
    
-    return res.status(200).json({product,farmer:farmer});
+    return res.status(200).json({product:product,farmer:farmer});
   }catch(err){
     return res.status(500).json({message:err.message});
   }
