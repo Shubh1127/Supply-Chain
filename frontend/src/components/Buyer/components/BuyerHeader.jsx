@@ -4,9 +4,11 @@ import { Search, ShoppingCart, Menu, MapPin } from 'lucide-react';
 import { useBuyer } from '../../../Context/BuyerContext';
 
 export default function Header() {
-  const { buyer } = useBuyer();
+  const { buyer,searchItem } = useBuyer();
   const [showPopup, setShowPopup] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+
   // console.log(buyer);
   const handleMouseEnter = () => {
     if (buyer && buyer.addresses.length > 0) {
@@ -20,6 +22,18 @@ export default function Header() {
 
   const handleClick = () => {
     navigate('/role/buyer/address');
+  };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = async(e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log(searchQuery);
+     await searchItem(searchQuery);
+      
+    }
   };
 
   const defaultAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0];
@@ -55,12 +69,21 @@ export default function Header() {
             )}
           </div>
           <div className="flex-grow flex items-center">
-            <div className="w-full max-w-xl flex ">
-              <input type="search" placeholder="Search Supply Chain Pro" className="rounded-r-none flex-1 rounded-md p-2" />
-              <button type="submit" className="rounded-l-none bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded">
+          <form className="w-full max-w-xl flex" onSubmit={handleSearchSubmit}>
+              <input
+                type="search"
+                placeholder="Search Supply Chain Pro"
+                className="rounded-r-none flex-1 rounded-md p-2 text-black"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <button
+                type="submit"
+                className="rounded-l-none bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded"
+              >
                 <Search className="h-5 w-5" />
               </button>
-            </div>
+            </form>
           </div>
           <nav className="hidden md:flex items-center ml-4 space-x-4">
             {buyer && <div className='mt-2 mr-2'>

@@ -15,6 +15,7 @@ export const BuyerProvider = ({ children }) => {
   const [message, setMessage] = useState('');
   const [products,setProducts]=useState([]);
   const [productfarmer,setProductFarmer]=useState([]);
+  const  [searchProducts,setSearchProducts]=useState([]);
   const [categoryProducts,setCategoryProducts]=useState([]);
  
   const navigate = useNavigate();
@@ -324,6 +325,17 @@ export const BuyerProvider = ({ children }) => {
     }
   }
 
+  const searchItem=async(searchQuery)=>{
+    console.log(searchQuery);
+    try{
+      const response = await axios.get(`http://localhost:3000/buyer/search?query=${searchQuery}`);
+      // console.log(response.data)
+      setSearchProducts(response.data);
+      navigate(`/role/buyer/search/${searchQuery}`);
+      }catch(error){
+        setMessage(error.response.data.message || 'Error fetching search');
+      }
+    }
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -334,7 +346,7 @@ export const BuyerProvider = ({ children }) => {
   return (
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
       addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage,Getcategory,categoryProducts,
-      productfarmer,setProductFarmer
+      productfarmer,setProductFarmer,searchItem,searchProducts
 
 
      }}>

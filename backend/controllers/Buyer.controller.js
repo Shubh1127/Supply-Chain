@@ -3,6 +3,7 @@ const ProductModel=require('../Model/ProductSchema')
 const cloudinary = require('../config/cloudinaryConfig');
 const FarmerModel=require('../Model/FarmerSchema')
 const jwt = require('jsonwebtoken');
+const Fuse = require('fuse.js');
 
 module.exports.register = async (req, res) => {
   try {
@@ -438,3 +439,45 @@ module.exports.getCategory=async(req,res)=>{
     return res.status(500).json({message:error.message});
   }
 }
+module.exports.SearchItem = async (req, res) => {
+  const { query } = req.query;
+  // console.log(req.query);
+
+  try {
+    // Validate query
+    if (!query) {
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+
+    // Split the query into terms by space (so user can search for multiple categories/keywords)
+    const searchTerms = query.split(' ').map(term => term.trim());
+
+    // Fetch all products from the database (consider limiting records for performance)
+    const products = await ProductModel.find();
+
+    // Prepare Fuse.js options for fuzzy search
+    const fuseOptions = {
+      keys: ['name', 'description', 'category'], // Fields to search in
+      threshold: 0.3, // Adjust fuzziness (lower = more fuzzy)
+      includeScore: true, // Optionally include score for relevance
+    };
+
+    // Initialize Fuse.js with the products and search options
+    const fuse = new Fuse(products, fuseOptions);
+
+    // Perform search for each term and collect the results
+    let allResults = [];
+    for (let term of searchTerms) {
+      const searchResults = fuse.search(term); // Search each term
+      // Extract the matched products from the search results
+      const resultProducts = searchResults.map(result => result.item);
+      allResults = [...new Set([...allResults, ...resultProducts])]; // Avoid duplicates by using Set
+    }
+
+    // Return the search results
+    res.status(200).json(allResults);
+  } catch (error) {
+    console.error('Search error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

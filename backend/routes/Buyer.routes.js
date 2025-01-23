@@ -24,6 +24,7 @@ router.delete('/cart',authMiddleware,BuyerController.deleteCart);
 // router.post('/placeOrder',authMiddleware,BuyerController.placeOrder);
 router.get('/category/:category',BuyerController.getCategory);
 router.get('/product/:productId',BuyerController.getProduct);
+router.get('/search',BuyerController.SearchItem);
 
 //products
 router.get('/products',BuyerController.getProducts);

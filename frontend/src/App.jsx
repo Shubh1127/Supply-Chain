@@ -16,6 +16,7 @@ import Orders from "./components/Buyer/Pages/Orders"
 import Cart from "./components/Buyer/Pages/Cart"
 import Buy from './components/Buyer/Pages/Buy'
 import Category from "./components/Buyer/Pages/Category"
+import SearchProducts from "./components/Buyer/Pages/SearchProducts"
 function App() {
   return (
     <Routes>
@@ -34,6 +35,7 @@ function App() {
       <Route path="role/buyer/cart" element={<Cart/>} />
       <Route path='role/buyer/buy/:productId' element={<Buy/>} />
       <Route path='role/buyer/products/:category' element={<Category/>} />
+      <Route path='role/buyer/search/:searchQuery' element={<SearchProducts/>} />
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />
       <Route path='role/buyer/profile' element={<Profile/>}/>

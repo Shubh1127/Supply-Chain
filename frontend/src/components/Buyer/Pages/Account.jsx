@@ -11,7 +11,7 @@ const Account = () => {
       </div>
       <div className="main h-max flex flex-col justify-center items-center gap-12 p-3 ps-[5vw]">
         <div className="flex gap-5">
-          <div className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
+          <Link to='/role/buyer/orders' className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
             <div className="h-max  ">
               <img src='https://m.media-amazon.com/images/G/31/x-locale/cs/ya/images/Box._CB485927553_.png'   />
             </div>
@@ -20,7 +20,7 @@ const Account = () => {
               <br />
               Track,return or buy things again
             </div>
-          </div>
+          </Link>
             <Link to='/role/buyer/profile' className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
             <div >
               <img src="https://m.media-amazon.com/images/G/31/x-locale/cs/ya/images/sign-in-lock._CB485931504_.png" />
@@ -44,7 +44,7 @@ const Account = () => {
           
         </div>
         <div className="flex gap-5">
-        <div className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
+        <Link to='/role/buyer/address' className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
             <div>
               <img src="https://m.media-amazon.com/images/G/31/x-locale/cs/ya/images/address-map-pin._CB485934183_.png" />
             </div>
@@ -53,7 +53,7 @@ const Account = () => {
               <br />
               Edit addresses for orders and gifts
             </div>
-          </div>
+          </Link>
         <div className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
             <div>
               <img src="https://m.media-amazon.com/images/G/31/AmazonBusiness/YAPATF/amazon_business_yap_atf._CB588250268_.jpg" />
