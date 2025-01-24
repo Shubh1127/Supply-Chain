@@ -61,7 +61,7 @@ export const BuyerProvider = ({ children }) => {
     formData.append('profileImage', user.profileImage);
   
     try {
-      const response = await axios.post('https://supply-chain-igtk.onrender.com/buyer/register', formData, {
+      const response = await axios.post('http://localhost:3000/buyer/register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -85,7 +85,7 @@ export const BuyerProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('https://supply-chain-igtk.onrender.com/buyer/login', { email, password });
+      const response = await axios.post('http://localhost:3000/buyer/login', { email, password });
       
       // console.log('API Response:', response.data);
   
@@ -109,7 +109,7 @@ export const BuyerProvider = ({ children }) => {
   const logout = async () => {
     try {
       const token = localStorage.getItem('Buyertoken');
-      const response = await axios.get('https://supply-chain-igtk.onrender.com/buyer/logout', {
+      const response = await axios.get('http://localhost:3000/buyer/logout', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -128,7 +128,7 @@ export const BuyerProvider = ({ children }) => {
   const getProfile = async () => {
     try {
       const token = localStorage.getItem('Buyertoken');
-      const response = await axios.get('https://supply-chain-igtk.onrender.com/buyer/profile', {
+      const response = await axios.get('http://localhost:3000/buyer/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -155,7 +155,7 @@ export const BuyerProvider = ({ children }) => {
 
     try {
       const token=localStorage.getItem('Buyertoken');
-      const response = await axios.put('https://supply-chain-igtk.onrender.com/buyer/updateprofile', formData, {
+      const response = await axios.put('http://localhost:3000/buyer/updateprofile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
@@ -171,7 +171,7 @@ export const BuyerProvider = ({ children }) => {
   //address
   const addAddress = async (address) => {
     try {
-      const response = await axios.post('https://supply-chain-igtk.onrender.com/buyer/addAddress', address, {
+      const response = await axios.post('http://localhost:3000/buyer/addAddress', address, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
         },
@@ -185,7 +185,7 @@ export const BuyerProvider = ({ children }) => {
 
   const updateAddress = async (index, address) => {
     try {
-      const response = await axios.put(`https://supply-chain-igtk.onrender.com/buyer/address/${index}`, address, {
+      const response = await axios.put(`http://localhost:3000/buyer/address/${index}`, address, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
         },
@@ -199,7 +199,7 @@ export const BuyerProvider = ({ children }) => {
 
   const deleteAddress = async (index) => {
     try {
-      const response = await axios.delete(`https://supply-chain-igtk.onrender.com/buyer/address/${index}`, {
+      const response = await axios.delete(`http://localhost:3000/buyer/address/${index}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
         },
@@ -213,7 +213,7 @@ export const BuyerProvider = ({ children }) => {
 
   const setDefaultAddress = async (index) => {
     try {
-      const response = await axios.put(`https://supply-chain-igtk.onrender.com/address/default/${index}`, {}, {
+      const response = await axios.put(`http://localhost:3000/buyer/address/default/${index}`, {}, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('Buyertoken')}`,
         },
@@ -229,7 +229,7 @@ export const BuyerProvider = ({ children }) => {
   const addToCart = async (productId) => {
     const token=localStorage.getItem('Buyertoken');
     try {
-      const response = await axios.post('https://supply-chain-igtk.onrender.com/buyer/addToCart', {productId},{
+      const response = await axios.post('http://localhost:3000/buyer/addToCart', {productId},{
         headers:{
           'Authorization': `Bearer ${token}`,
         },
@@ -245,7 +245,7 @@ export const BuyerProvider = ({ children }) => {
   const updateCart = async (productId, quantity) => {
     const token=localStorage.getItem('Buyertoken');
     try {
-      const response = await axios.put(`https://supply-chain-igtk.onrender.com/buyer/updatecart`,{productId,quantity},{
+      const response = await axios.put(`http://localhost:3000/buyer/updatecart`,{productId,quantity},{
         headers:{
           'Authorization': `Bearer ${token}`,
         },
@@ -262,7 +262,7 @@ export const BuyerProvider = ({ children }) => {
   const deleteCart = async (productId) => {
     const token=localStorage.getItem('Buyertoken');
     try {
-      const response = await axios.delete(`https://supply-chain-igtk.onrender.com/buyer/cart`,{
+      const response = await axios.delete(`http://localhost:3000/buyer/cart`,{
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -280,7 +280,7 @@ export const BuyerProvider = ({ children }) => {
     const token=localStorage.getItem('Buyertoken');
 
     try {
-      const response = await axios.get('https://supply-chain-igtk.onrender.com/buyer/cart',{
+      const response = await axios.get('http://localhost:3000/buyer/cart',{
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -295,7 +295,7 @@ export const BuyerProvider = ({ children }) => {
   //getProducts
   const getProducts=async()=>{
     try{
-      const response=await axios.get('https://supply-chain-igtk.onrender.com/buyer/products');
+      const response=await axios.get('http://localhost:3000/buyer/products');
       setProducts(response.data.products); 
 
       // console.log(response)
@@ -306,7 +306,7 @@ export const BuyerProvider = ({ children }) => {
 
   const getProduct=async(productId)=>{
     try{
-      const response=await axios.get(`https://supply-chain-igtk.onrender.com/buyer/product/${productId}`);
+      const response=await axios.get(`http://localhost:3000/buyer/product/${productId}`);
       setItem(response.data.product);
       // console.log(response.data)
       setProductFarmer(response.data.farmer);
@@ -317,7 +317,7 @@ export const BuyerProvider = ({ children }) => {
   }
   const Getcategory=async(category)=>{
     try{
-      const response=await axios.get(`https://supply-chain-igtk.onrender.com/buyer/category/${category}`);
+      const response=await axios.get(`http://localhost:3000/buyer/category/${category}`);
       setCategoryProducts(response.data.Categoryproducts);
       navigate(`/role/buyer/products/${category}`);
     }catch(error){
@@ -328,7 +328,7 @@ export const BuyerProvider = ({ children }) => {
   const searchItem=async(searchQuery)=>{
     console.log(searchQuery);
     try{
-      const response = await axios.get(`https://supply-chain-igtk.onrender.com/buyer/search?query=${searchQuery}`);
+      const response = await axios.get(`http://localhost:3000/buyer/search?query=${searchQuery}`);
       // console.log(response.data)
       setSearchProducts(response.data);
       navigate(`/role/buyer/search/${searchQuery}`);

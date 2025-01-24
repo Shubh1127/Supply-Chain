@@ -47,7 +47,7 @@ module.exports.login = async (req, res) => {
     }
     const token = buyer.generateAuthToken();
     res.cookie('token', token);
-    // console.log(buyer)
+    // console.log(buyer._id)
     return res.status(200).json({ token, buyer });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -481,3 +481,32 @@ module.exports.SearchItem = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+//chat
+const SendMessage= async (req, res) => {
+  try {
+      const { roomId, message, userName, userId, userType } = req.body;
+      
+      // Validate input (ensure required fields are provided)
+      if (!roomId || !message || !userName || !userId || !userType) {
+          return res.status(400).json({ error: 'All fields are required' });
+      }
+
+      // Create a new message document
+      const newMessage = new Message({
+          roomId,
+          message,
+          userName,
+          userId,
+          userType,
+      });
+
+      // Save the message to the database
+      await newMessage.save();
+
+      // Respond with the saved message
+      res.status(200).json(newMessage);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to send message' });
+  }
+}

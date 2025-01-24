@@ -4,28 +4,35 @@ import axios from "axios";
 import Header from "../components/BuyerHeader";
 import { useState,useEffect,useCallback } from "react";
 import FeaturedProducts from "../components/FeaturedProducts";
+import {Plus, Trash} from 'lucide-react';
 import { Link, useParams } from "react-router-dom";
 const Buy = () => {
   const {productId}=useParams();
   const [showPopup, setShowPopup] = useState(false);
-  const { item,setItem,setMessage,buyer,productfarmer,setProductFarmer } = useBuyer();
+  const { item,setItem,setMessage,buyer,productfarmer,setProductFarmer ,addToCart} = useBuyer();
   let defaultAddressAddress = {}
   if (buyer && buyer.addresses.length > 0){
      defaultAddressAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0]
   }
-  
+  // console.log(productfarmer.farmerId)
   // console.log(productfarmer.address); // { houseNo: '630', ... }
   // console.log(productfarmer.address.city);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // console.log(productfarmer)
+  
   const onMouseEnter = () => {
     setShowPopup(true);
   };
   const onMouseLeave = () => {
     setShowPopup(false);
   };
+
+  const handleClick=(productId)=>{
+    addToCart(productId)
+  }
   const memoizedGetProduct = useCallback(async (productId) => {
     try {
       const response = await axios.get(`http://localhost:3000/buyer/product/${productId}`);
@@ -180,7 +187,16 @@ const Buy = () => {
                     
                 </div>
             </div>
-            <div className="h-[10vh] bg-yellow-400 m-2">quantity and buy button</div>
+            <div className="h-max flex flex-col items-center w-[25vw]   m-2">
+            <div className="flex gap-6 items-start  w-full">
+              <span className="flex gap-6 border rounded-md p-2 cursor-pointer">
+              <Trash/> 1<Plus/>
+              </span>
+              <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={()=>handleClick(item._id)}>Add To Cart</span>
+              <Link  to='/role/buyer/chat' className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</Link>
+            </div>
+            <button className="bg-blue-500 text-white w-full p-2 rounded-md mt-4 ">Buy Now</button>
+            </div>
           </div>
         </div>
       </div>
