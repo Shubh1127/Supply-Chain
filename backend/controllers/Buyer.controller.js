@@ -47,7 +47,7 @@ module.exports.login = async (req, res) => {
     }
     const token = buyer.generateAuthToken();
     res.cookie('token', token);
-    // console.log(buyer._id)
+    console.log(buyer._id)
     return res.status(200).json({ token, buyer });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -72,6 +72,7 @@ module.exports.getProfile = async (req, res) => {
     }
     return res.status(200).json({
       buyer: {
+        _id: buyer._id,
         name: buyer.name,
         email: buyer.email,
         phone: buyer.phone,

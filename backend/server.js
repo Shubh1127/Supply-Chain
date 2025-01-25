@@ -17,19 +17,14 @@ io.on('connection', (socket) => {
   console.log('New client connected',socket.id);
 
 
-  socket.on('joinRoom',({buyerId,farmerId,productId})=>{
-    let roomId;
-    if(productId){
-      roomId=`${farmerId}-${productId}`;
-    }else{
-      roomId=`${buyerId}-${farmerId}`;
-    }
+  socket.on('joinRoom',({roomId})=>{
+   
     socket.join(roomId);
     console.log('Room Joined',roomId);
   })
 
   socket.on('sendMessage',async ({roomId,senderId,receiverId,message})=>{
-    const Message={
+    const messageData={
       senderId,
       receiverId,
       message,

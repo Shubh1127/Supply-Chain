@@ -1,19 +1,41 @@
-import React from 'react';
-import { useChat } from '../../../Context/UseChat';
+import  { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useBuyer } from '../../../Context/BuyerContext';
+import useChat from '../../../Context/UseChat';
+import axios from 'axios';
 
-const BuyerChat = ({ currentUserId, roomId, farmerId }) => {
+const ChatComponent = () => {
+  const { productId } = useParams();
+  const { buyer } = useBuyer();
+  const [roomId, setRoomId] = useState('');
+  const [farmerId, setFarmerId] = useState(null);
+   console.log(buyer?._id)
   const {
     messages,
     newMessage,
     setNewMessage,
     sendMessage,
-    setOtherUserId,
-  } = useChat({ currentUserId, roomId });
+  } = useChat({ senderId: buyer?._id, receiverId: farmerId, roomId });
+  console.log(farmerId)
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/buyer/product/${productId}`);
+        const product = response.data.product;
+        setFarmerId(product.farmerId);
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      }
+    };
 
-  // Set the farmer's ID as the other user
-  React.useEffect(() => {
-    setOtherUserId(farmerId);
-  }, [farmerId, setOtherUserId]);
+    fetchProduct();
+  }, [productId]);
+  useEffect(() => {
+    if (farmerId) {
+      const generateRoomId = `${buyer._id}-${farmerId}`;
+      setRoomId(generateRoomId);
+    }
+  }, [farmerId, buyer]);
 
   return (
     <div>
@@ -21,8 +43,7 @@ const BuyerChat = ({ currentUserId, roomId, farmerId }) => {
       <div>
         {messages.map((msg, index) => (
           <p key={index}>
-            <strong>{msg.senderId === currentUserId ? 'You' : 'Farmer'}:</strong>{' '}
-            {msg.content}
+            <strong>{msg.senderId === buyer._id ? 'You' : 'Farmer'}:</strong> {msg.content}
           </p>
         ))}
       </div>
@@ -37,4 +58,4 @@ const BuyerChat = ({ currentUserId, roomId, farmerId }) => {
   );
 };
 
-export default BuyerChat;
+export default ChatComponent;

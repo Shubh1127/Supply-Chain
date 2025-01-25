@@ -1,46 +1,62 @@
-import {useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket=io('http://localhost:3000')
+const socket = io('http://localhost:3000');
 
+export const useChat = ({ senderId, receiverId, roomId }) => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
-export const useChat=({currentUserId,roomId})=>{
-    const [messages,setMessages]=useState([]);
-    const [newMessage,setNewMessage]=useState('');
-    const [otherUserId,setOtherUserId]=useState('');
-
-    useEffect(()=>{
-        socket.emit('joinRoom',{roomId})
-
-        socket.on('recieveMessage',(message)=>{
-            setMessages((prev)=>[...prev,message])
-        })
-        return ()=>{
-            socket.disconnect();
-        };
-    },[roomId])
-
-    const sendMessage=()=>{
-        if(newMessage.trim()){
-            const message={
-                roomId,
-                senderId:currentUserId,
-                receiverId:otherUserId,
-                message:newMessage
-            };
-
-            socket.emit('sendMessage',message);
-
-            setMessages((prev)=>[...prev,message]);
-
-            setNewMessage('');
-        }
-    };
-    return {
-        messages,
-        newMessage,
-        setNewMessage,
-        sendMessage,
-        setOtherUserId
+  useEffect(() => {
+    if (roomId) {
+      socket.emit('joinRoom', { roomId });
     }
-}
+
+    socket.on('receiveMessage', (message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off('receiveMessage');
+    };
+  }, [roomId]);
+
+  const sendMessage = () => {
+
+    if (newMessage.trim() && roomId) {
+      const message = {
+        roomId,
+        senderId,
+        receiverId,
+        message: newMessage,
+      };
+      socket.emit('sendMessage', message);
+      setMessages((prev) => [...prev, message]);
+      setNewMessage('');
+    }
+  };
+
+  const fetchPreviousMessages = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/messages/${roomId}`);
+      const data = await response.json();
+      setMessages(data.messages);
+    } catch (error) {
+      console.error('Error fetching previous messages:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (roomId) {
+      fetchPreviousMessages();
+    }
+  }, [roomId]);
+
+  return {
+    messages,
+    newMessage,
+    setNewMessage,
+    sendMessage,
+  };
+};
+export default useChat;

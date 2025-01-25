@@ -36,7 +36,7 @@ function App() {
       <Route path="role/buyer/cart" element={<Cart/>} />
       <Route path='role/buyer/buy/:productId' element={<Buy/>} />
       <Route path='role/buyer/products/:category' element={<Category/>} />
-      <Route path="role/buyer/chat" element={<ChatComponent />} />
+      <Route path="/role/buyer/buy/chat/:productId" element={<ChatComponent />} />
       <Route path='role/buyer/search/:searchQuery' element={<SearchProducts/>} />
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />

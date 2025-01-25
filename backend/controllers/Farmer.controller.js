@@ -1,4 +1,5 @@
 const FarmerModel=require('../Model/FarmerSchema');
+const BuyerModel=require('../Model/BuyerSchema');
 const ProductModel=require('../Model/ProductSchema')
 const cloudinary=require('../config/cloudinaryConfig')
 const axios=require('axios');
@@ -81,6 +82,7 @@ module.exports.getProfile = async (req, res) => {
       }
       return res.status(200).json({
         farmer: {
+          _id: farmer._id,
           name: farmer.name,
           email: farmer.email,
           phone: farmer.phone,
@@ -217,5 +219,15 @@ module.exports.Weather = async (req, res) => {
     return res.status(200).json(response.data);
   } catch (err) {
     return res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports.getAllBuyers = async (req, res) => {
+  try {
+    const buyers = await BuyerModel.find({}, 'name address'); // Fetch all buyers with name and address fields
+    return res.status(200).json({ buyers });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Something went wrong' });
   }
 };

@@ -133,6 +133,7 @@ export const BuyerProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      // console.log(response.data.buyer);
       setBuyer(response.data.buyer);
     } catch (error) {
       setMessage(error.response.data.message);

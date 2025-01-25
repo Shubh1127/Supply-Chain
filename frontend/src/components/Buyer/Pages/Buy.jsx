@@ -6,7 +6,10 @@ import { useState,useEffect,useCallback } from "react";
 import FeaturedProducts from "../components/FeaturedProducts";
 import {Plus, Trash} from 'lucide-react';
 import { Link, useParams } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 const Buy = () => {
+
+  const navigate = useNavigate();
   const {productId}=useParams();
   const [showPopup, setShowPopup] = useState(false);
   const { item,setItem,setMessage,buyer,productfarmer,setProductFarmer ,addToCart} = useBuyer();
@@ -17,6 +20,12 @@ const Buy = () => {
   // console.log(productfarmer.farmerId)
   // console.log(productfarmer.address); // { houseNo: '630', ... }
   // console.log(productfarmer.address.city);
+
+  const handleChatWithFarmer = () => {
+
+    navigate(`/role/buyer/buy/chat/${productId}`);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -193,7 +202,7 @@ const Buy = () => {
               <Trash/> 1<Plus/>
               </span>
               <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={()=>handleClick(item._id)}>Add To Cart</span>
-              <Link  to='/role/buyer/chat' className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</Link>
+              <button  onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>
             </div>
             <button className="bg-blue-500 text-white w-full p-2 rounded-md mt-4 ">Buy Now</button>
             </div>

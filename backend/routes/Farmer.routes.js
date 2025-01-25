@@ -14,4 +14,6 @@ router.post('/addproduct',authMiddleware,upload.single('productImage'),farmerCon
 router.get('/products',authMiddleware,farmerController.getProducts);
 //weather route
 router.get('/weather',farmerController.Weather);
+//buyer's Details
+router.get('/buyers', farmerController.getAllBuyers);
 module.exports=router;
