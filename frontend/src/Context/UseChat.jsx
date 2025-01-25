@@ -1,35 +1,46 @@
-import { useState, useEffect } from 'react';
-import { joinRoom, sendMessage, listenForMessages, disconnectSocket } from '../socket';
+import {useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
-const useChat = (roomId, userName) => {
-    const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState([]);
+const socket=io('http://localhost:3000')
 
-    useEffect(() => {
-        joinRoom(roomId, userName);
-        listenForMessages(({ userName, message }) => {
-            setMessages((prev) => [...prev, { userName, message }]);
-        });
 
-        // Cleanup on component unmount
-        return () => {
-            disconnectSocket();
+export const useChat=({currentUserId,roomId})=>{
+    const [messages,setMessages]=useState([]);
+    const [newMessage,setNewMessage]=useState('');
+    const [otherUserId,setOtherUserId]=useState('');
+
+    useEffect(()=>{
+        socket.emit('joinRoom',{roomId})
+
+        socket.on('recieveMessage',(message)=>{
+            setMessages((prev)=>[...prev,message])
+        })
+        return ()=>{
+            socket.disconnect();
         };
-    }, [roomId, userName]);
+    },[roomId])
 
-    const handleSendMessage = () => {
-        if (message.trim()) {
-            sendMessage(roomId, message, userName);
-            setMessage('');
+    const sendMessage=()=>{
+        if(newMessage.trim()){
+            const message={
+                roomId,
+                senderId:currentUserId,
+                receiverId:otherUserId,
+                message:newMessage
+            };
+
+            socket.emit('sendMessage',message);
+
+            setMessages((prev)=>[...prev,message]);
+
+            setNewMessage('');
         }
     };
-
     return {
-        message,
-        setMessage,
         messages,
-        handleSendMessage,
-    };
-};
-
-export default useChat;
+        newMessage,
+        setNewMessage,
+        sendMessage,
+        setOtherUserId
+    }
+}

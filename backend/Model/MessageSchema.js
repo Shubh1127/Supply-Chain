@@ -1,35 +1,29 @@
 const mongoose = require('mongoose');
-const messageSchema = new mongoose.Schema({
-    roomId: {
-        type: String,
-        required: true,
-    },
-    message: {
-        type: String,
-        required: true,
-    },
-    userName: {
-        type: String,
-        required: true,
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,  // Store the user ID as an ObjectId
-        required: true,
-        refPath: 'userType',  // This dynamically determines which model to reference
-    },
-    userType: {  // This field stores the model name ('Buyer' or 'Farmer')
-        type: String,
-        required: true,
-        enum: ['Buyer', 'Farmer'],  // Only allows Buyer or Farmer
-    },
-    timestamp: {
-        type: Date,
-        default: Date.now,
-    },
+
+const MessageSchema = new mongoose.Schema({
+  senderId: {
+    type: mongoose.Schema.Types.ObjectId, // Refers to the user ID of the sender
+    required: true,
+    ref: 'User', // Assuming you have a User model
+  },
+  receiverId: {
+    type: mongoose.Schema.Types.ObjectId, // Refers to the user ID of the receiver
+    required: true,
+    ref: 'User', // Assuming you have a User model
+  },
+  message: {
+    type: String, // The content of the message
+    required: true,
+    trim: true,
+  },
+  timeStamp: {
+    type: Date, // The time the message was sent
+    default: Date.now, // Automatically sets the current date and time
+  },
+  roomId: {
+    type: String, // The room ID where the message was sent
+    required: true,
+  },
 });
 
-// Optional: Index for faster queries by room and timestamp
-messageSchema.index({ roomId: 1, timestamp: 1 });
-
-const Message = mongoose.model('Message', messageSchema);
-module.exports = Message;
+module.exports = mongoose.model('Message', MessageSchema);

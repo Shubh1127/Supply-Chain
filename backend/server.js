@@ -1,45 +1,54 @@
 require('dotenv').config();
 const http = require('http');
 const app = require('./app');
-const { Server } = require('socket.io');
+const socketIo = require('socket.io');
 const Message=require('./Model/MessageSchema');
-
-// Create the server with Express app
+const { timeStamp } = require('console');
 const server = http.createServer(app);
 
 // Initialize Socket.IO
-const io = new Server(server);
-
-// Handle Socket.IO connections
+const io =socketIo(server,{
+  cors:{
+    origin:"*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  }
+})
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+  console.log('New client connected',socket.id);
 
-    socket.on('joinRoom', ({ roomId, userName, userId }) => {
-        socket.join(roomId);
-        console.log(`${userName} joined room: ${roomId}`);
-        socket.to(roomId).emit('userJoined', `${userName} has joined the room`);
-    });
 
-    socket.on('chatMessage', ({ roomId, message, userName, userId }) => {
-        // Save message to the database
-        const newMessage = new Message({
-            roomId,
-            message,
-            userName,
-            userId,
-            timestamp: new Date()
-        });
+  socket.on('joinRoom',({buyerId,farmerId,productId})=>{
+    let roomId;
+    if(productId){
+      roomId=`${farmerId}-${productId}`;
+    }else{
+      roomId=`${buyerId}-${farmerId}`;
+    }
+    socket.join(roomId);
+    console.log('Room Joined',roomId);
+  })
 
-        newMessage.save().then(() => {
-            // Emit the message to the room
-            io.to(roomId).emit('newMessage', { userName, message, userId });
-        });
-    });
+  socket.on('sendMessage',async ({roomId,senderId,receiverId,message})=>{
+    const Message={
+      senderId,
+      receiverId,
+      message,
+      timeStamp:Date.now()
+    }
+    try{
+      const savedMesasage=await Message.create(messageData);
+      console.log('Message saved',savedMesasage); 
+    }catch(err){
+      console.error('Error saving Message',err);
+    }
+    io.to(roomId).emit('recieveMessage',messageData)
+    console.log(`Message from ${senderId} to ${receiverId}  in room ${roomId}: ${message}`);
+  })
+  socket.on('disconnect', () => {
+    console.log(`Client disconnected: ${socket.id}`);
+  });
+})
 
-    socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
-    });
-});
 
 // Listen on port 3000
 server.listen(3000, () => {
