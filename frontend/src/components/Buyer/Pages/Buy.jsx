@@ -39,7 +39,7 @@ const Buy = () => {
 
   const memoizedGetProduct = useCallback(async (productId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/buyer/product/${productId}`);
+      const response = await axios.get(`https://supply-chain-igtk.onrender.com/buyer/product/${productId}`);
       setItem(response.data.product);
       setProductFarmer(response.data.farmer);
     } catch (error) {
