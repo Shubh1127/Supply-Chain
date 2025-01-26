@@ -355,8 +355,13 @@ export const BuyerProvider = ({ children }) => {
       }
     };
     const getConversations = async (buyerId) => {
+      const token=localStorage.getItem('Buyertoken');
       try {
-        const response = await axios.get(`https://supply-chain-igtk.onrender.com/buyer/conversations/${buyerId}`);
+        const response = await axios.get(`https://supply-chain-igtk.onrender.com/buyer/conversations/${buyerId}`,{
+          headers:{
+            'Authorization':`Bearer ${token}`,
+          }
+        });
         setFarmers(response.data.farmers);
       } catch (error) {
         console.error('Error fetching conversations:', error);

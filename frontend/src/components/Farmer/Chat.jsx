@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useFarmer } from '../../Context/FarmerContext';
 import useChat from '../../Context/UseChat';
 
@@ -12,13 +12,23 @@ const FarmerChat = () => {
     sendMessage,
   } = useChat({ senderId: farmer?._id, receiverId: selectedBuyerId, roomId });
 
+  const messageEndRef = useRef(null);
+
   useEffect(() => {
     if (selectedBuyerId) {
       const generateRoomId = `${selectedBuyerId}-${farmer._id}`;
       setRoomId(generateRoomId);
-      getMessagesByRoomId(generateRoomId); // Fetch messages for the selected room
+      getMessagesByRoomId(generateRoomId).catch(error => {
+        console.error('Error fetching previous messages:', error);
+      }); // Fetch messages for the selected room
     }
   }, [selectedBuyerId, farmer, getMessagesByRoomId]);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   const getBuyerName = (buyerId) => {
     const buyer = buyers.find(buyer => buyer._id === buyerId);
@@ -53,9 +63,10 @@ const FarmerChat = () => {
                   maxWidth: '60%',
                 }}
               >
-                <strong>{msg.senderId === farmer._id ? '' : getBuyerName(msg.senderId)}</strong> {msg.message}
+                <strong>{msg.senderId === farmer._id ? 'You' : getBuyerName(msg.senderId)}</strong> {msg.message}
               </div>
             ))}
+            <div ref={messageEndRef} />
           </div>
           <div className='flex mt-4'>
             <input
@@ -64,6 +75,11 @@ const FarmerChat = () => {
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
               className='flex-grow p-2 border rounded-md'
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && newMessage.trim()) {
+                  sendMessage();
+                }
+              }}
             />
             <button onClick={sendMessage} className='ml-2 p-2 bg-blue-500 text-white rounded-md'>Send</button>
           </div>
