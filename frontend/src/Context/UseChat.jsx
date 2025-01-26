@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const socket = io('https://supply-chain-igtk.onrender.com');
 
 export const useChat = ({ senderId, receiverId, roomId }) => {
   const [messages, setMessages] = useState([]);
@@ -38,7 +38,7 @@ export const useChat = ({ senderId, receiverId, roomId }) => {
 
   const fetchPreviousMessages = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/messages/${roomId}`);
+      const response = await fetch(`https://supply-chain-igtk.onrender.com/messages/${roomId}`);
       const data = await response.json();
       setMessages(data.messages);
     } catch (error) {

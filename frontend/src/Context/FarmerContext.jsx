@@ -61,7 +61,7 @@ export const FarmerProvider = ({ children }) => {
     formData.append('profileImage', user.profileImage);
 
     try {
-      const response = await axios.post('http://localhost:3000/farmer/register', formData, {
+      const response = await axios.post('https://supply-chain-igtk.onrender.com/farmer/register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -84,7 +84,7 @@ export const FarmerProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:3000/farmer/login', { email, password });
+      const response = await axios.post('https://supply-chain-igtk.onrender.com/farmer/login', { email, password });
 
       if (response.data.token) {
         const currentTime = new Date().getTime();
@@ -105,7 +105,7 @@ export const FarmerProvider = ({ children }) => {
   const logout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/farmer/logout', {
+      const response = await axios.get('https://supply-chain-igtk.onrender.com/farmer/logout', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -126,7 +126,7 @@ export const FarmerProvider = ({ children }) => {
   const getProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/farmer/profile', {
+      const response = await axios.get('https://supply-chain-igtk.onrender.com/farmer/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -154,7 +154,7 @@ export const FarmerProvider = ({ children }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put('http://localhost:3000/farmer/updateprofile', formData, {
+      const response = await axios.put('https://supply-chain-igtk.onrender.com/farmer/updateprofile', formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -168,7 +168,7 @@ export const FarmerProvider = ({ children }) => {
   const fetchInventory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3000/farmer/products", {
+      const response = await axios.get("https://supply-chain-igtk.onrender.com/farmer/products", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -194,7 +194,7 @@ export const FarmerProvider = ({ children }) => {
     formData.append('productImage', product.productImage);
 
     try {
-      const response = await axios.post('http://localhost:3000/farmer/addproduct', formData, {
+      const response = await axios.post('https://supply-chain-igtk.onrender.com/farmer/addproduct', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
@@ -211,7 +211,7 @@ export const FarmerProvider = ({ children }) => {
 
   const getWeather = async (lat, lon) => {
     try {
-      const response = await axios.get(`http://localhost:3000/farmer/weather?lat=${lat}&lon=${lon}`);
+      const response = await axios.get(`https://supply-chain-igtk.onrender.com/farmer/weather?lat=${lat}&lon=${lon}`);
       setWeather(response.data);
     } catch (error) {
       console.error('Error:', error.response?.data?.message || error.message);
@@ -221,7 +221,7 @@ export const FarmerProvider = ({ children }) => {
   const fetchBuyers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/farmer/buyers', {
+      const response = await axios.get('https://supply-chain-igtk.onrender.com/farmer/buyers', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -235,7 +235,7 @@ export const FarmerProvider = ({ children }) => {
   const getMessagesByRoomId = async (roomId) => {
     const token=localStorage.getItem('token');
     try {
-      const response = await axios.get(`http://localhost:3000/farmer/messages/${roomId}`,{
+      const response = await axios.get(`https://supply-chain-igtk.onrender.com/farmer/messages/${roomId}`,{
         headers:{
           'Auhtorization':`Bearer ${token}`
         }
