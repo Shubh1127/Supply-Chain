@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import Header from "../components/BuyerHeader";
 import { useBuyer } from "../../../Context/BuyerContext";
 import { Trash, Plus } from "lucide-react";
+
 const Cart = () => {
-  const { cart, getCart, updateCart, deleteCart,getProduct } = useBuyer();
+  const { cart, getCart, updateCart, deleteCart, getProduct } = useBuyer();
   const [cartItems, setCartItems] = useState([]);
   console.log(cartItems);
+
   useEffect(() => {
-    // console.log('req is  coming')
     const fetchCartItems = async () => {
       await getCart();
     };
@@ -16,7 +17,8 @@ const Cart = () => {
     } else {
       setCartItems(cart);
     }
-  }, [cart.length, getCart]); 
+  }, [cart.length, getCart]);
+
   const handleIncrease = async (productId) => {
     const updatedCartItems = [...cartItems]; // Clone the cartItems
     const itemIndex = updatedCartItems.findIndex((item) => item.productId === productId);
@@ -29,79 +31,80 @@ const Cart = () => {
     }
   };
 
-  const handleClick=async(productId_)=>{
+  const handleClick = async (productId_) => {
     await getProduct(productId_);
-  }
-  
+  };
+
   const handleDelete = async (productId) => {
-    await deleteCart(productId); 
-    const updatedCartItems = cartItems.filter((item) => item.productId !== productId);
-    setCartItems(updatedCartItems); // Update UI
-    await getCart(); 
+    await deleteCart(productId);
+    await getCart();
   };
 
   return (
     <>
       <Header />
-      <div className="p-8 bg-gray-200 h-screen">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-          {cartItems.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            <div className=" flex flex-col">
-              {cartItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-300 p-4  rounded-lg flex  items-center"
-                >
-                  <img
-                    src={item.photo}
-                    alt={item.productName}
-                    onClick={()=>handleClick(item.productId)}
-                    className="w-1/4 h-60 mb-4 rounded object-cover object-center"
-                  />
-                  <div className="flex flex-col  ml-4 gap-7" >
-                    <div className="flex gap-8 justify-between items-center mb-2 w-full ">
-                      <span className="flex hover:underline hover:decoration-blue-300 " onClick={()=>handleClick(item.productId)}>
-                        <p className="text-lg font-semibold mb-2">
-                          {item.name},
-                        </p>
-                        <p className="text-lg font-semibold mb-2 cursor-pointer " >
-                          {item.description}
-                        </p>
-                      </span>
-                      <p className="text-md font-semibold mb-2 flex ">
-                        <div>₹</div>
-                        <span className="text-2xl">{item.price}.00</span>
-                      </p>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
+        {cartItems.length === 0 ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          <div className="flex flex-col lg:flex-row">
+            <div className="lg:w-2/3">
+              {cartItems.map((item) => (
+                <div key={item.productId} className="flex flex-col lg:flex-row items-center justify-between border-b py-4" onClick={() => handleClick(item.productId)}>
+                  <img src={item.photo} alt={item.name} className="w-24 h-24 object-cover rounded-md mb-4 lg:mb-0" />
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full lg:w-2/3">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full">
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full">
+                        <h2 className="text-lg font-semibold">{item.name}</h2>
+                        <p className="text-gray-600">₹{item.price}</p>
+                      </div>
+                      <div className="flex items-center mt-2 lg:mt-0">
+                        <button
+                          onClick={() => handleIncrease(item.productId)}
+                          className="px-2 py-1 ms-2 bg-gray-200 rounded-md"
+                        >
+                          <Plus/>
+                        </button>
+                        <span className="px-4">{item.quantity}</span>
+                        <button
+                          onClick={() => handleIncrease(item.productId)}
+                          className="px-2 py-1 bg-gray-200 rounded-md"
+                        >
+                         <Trash/>
+                        </button>
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <p className="text-green-500">In Stock</p>
-                      <p>Eligible for FREE Shipping</p>
-                    </div>
-                    <div className="flex items-center space-x-6 w-48 p-1 ps-2 mb-4 border border-gray-300 rounded-lg">
-                      <button
-                        onClick={() => handleDelete(item.productId)}
-                        className="bg-red-500 px-4 py-2 rounded-md text-white hover:bg-red-600 transition"
-                      >
-                        <Trash size={24} />
-                      </button>
-                      <p className="text-md"> {item.quantity}</p>
-
-                      <button
-                        onClick={() => handleIncrease(item.productId)}
-                        className="bg-yellow-400 px-4 py-2 rounded-md text-white hover:bg-yellow-500 transition"
-                      >
-                        <Plus />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleDelete(item.productId)}
+                      className="mt-2 lg:mt-0 lg:ml-4 px-4 py-2 bg-red-500 text-white rounded-md"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
-          )}
-        </div>
+            <div className="lg:w-1/3 lg:pl-4 mt-4 lg:mt-0">
+              <div className="border p-4 rounded-md">
+                <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+                <div className="flex justify-between mb-2">
+                  <span>Subtotal</span>
+                  <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span>Tax</span>
+                  <span>₹{(cartItems.reduce((total, item) => total + item.price * item.quantity, 0) * 0.1).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <span>Total</span>
+                  <span>₹{(cartItems.reduce((total, item) => total + item.price * item.quantity, 0) * 1.1).toFixed(2)}</span>
+                </div>
+                <button className="w-full bg-blue-500 text-white py-2 rounded-md">Proceed to Checkout</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

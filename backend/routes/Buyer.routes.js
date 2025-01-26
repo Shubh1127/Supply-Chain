@@ -33,5 +33,6 @@ router.get('/products',BuyerController.getProducts);
 router.get('/messages/:roomId',authMiddleware, BuyerController.getAllMessagesByRoomId);
 router.get('/conversations/:buyerId',authMiddleware, BuyerController.getConversations);
 router.get('/farmer/:productId', BuyerController.getFarmerByProductId);
+router.delete('/deleteConvo',authMiddleware,BuyerController.deleteMessage)
 
 module.exports=router;

@@ -2,27 +2,23 @@ import { useBuyer } from "../../../Context/BuyerContext";
 import { MapPin } from "lucide-react";
 import axios from "axios";
 import Header from "../components/BuyerHeader";
-import { useState,useEffect,useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import FeaturedProducts from "../components/FeaturedProducts";
-import {Plus, Trash} from 'lucide-react';
+import { Plus, Trash } from 'lucide-react';
 import { Link, useParams } from "react-router-dom";
-import {useNavigate} from "react-router-dom";
-const Buy = () => {
+import { useNavigate } from "react-router-dom";
 
+const Buy = () => {
   const navigate = useNavigate();
-  const {productId}=useParams();
+  const { productId } = useParams();
   const [showPopup, setShowPopup] = useState(false);
-  const { item,setItem,setMessage,buyer,productfarmer,setProductFarmer ,addToCart} = useBuyer();
-  let defaultAddressAddress = {}
-  if (buyer && buyer.addresses.length > 0){
-     defaultAddressAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0]
+  const { item, setItem, setMessage, buyer, productfarmer, setProductFarmer, addToCart } = useBuyer();
+  let defaultAddressAddress = {};
+  if (buyer && buyer.addresses.length > 0) {
+    defaultAddressAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0];
   }
-  // console.log(productfarmer.farmerId)
-  // console.log(productfarmer.address); // { houseNo: '630', ... }
-  // console.log(productfarmer.address.city);
 
   const handleChatWithFarmer = () => {
-
     navigate(`/role/buyer/buy/chat/${productId}`);
   };
 
@@ -30,8 +26,6 @@ const Buy = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // console.log(productfarmer)
-  
   const onMouseEnter = () => {
     setShowPopup(true);
   };
@@ -39,21 +33,20 @@ const Buy = () => {
     setShowPopup(false);
   };
 
-  const handleClick=(productId)=>{
-    addToCart(productId)
-  }
+  const handleClick = (productId) => {
+    addToCart(productId);
+  };
+
   const memoizedGetProduct = useCallback(async (productId) => {
     try {
       const response = await axios.get(`http://localhost:3000/buyer/product/${productId}`);
       setItem(response.data.product);
       setProductFarmer(response.data.farmer);
-
     } catch (error) {
       setMessage(error.response.data.message || 'Error fetching product');
     }
-  }, [setItem],[setProductFarmer]);
-  
-  
+  }, [setItem, setProductFarmer, setMessage]);
+
   useEffect(() => {
     if (productId) {
       setItem(null);
@@ -61,6 +54,7 @@ const Buy = () => {
       memoizedGetProduct(productId);
     }
   }, [productId, memoizedGetProduct]);
+
   if (!item) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -68,66 +62,66 @@ const Buy = () => {
       </div>
     );
   }
+
   return (
     <>
       <Header />
-      <div className=" w-full h-max   flex ">
-        <div
-          className="imgae-section  pt-5 p-4   static"
-        >
+      <div className="w-full h-max flex flex-col lg:flex-row">
+        <div className="image-section pt-5 p-4 static lg:w-1/2">
           <img
-           onMouseEnter={onMouseEnter}
-           onMouseLeave={onMouseLeave}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
             src={item.photo}
-            className="rounded-lg w-[35vw] mt-12 border-gray-400 border "
+            className="rounded-lg w-full lg:w-[35vw] mt-12 border-gray-400 border"
           />
           {showPopup && (
-            <div className="absolute top-[9vh] w-[62vw] h-[75vh] left-[36vw] mt-2 p-4 bg-white text-black border rounded shadow-lg z-10">
+            <div className="absolute top-[9vh] w-[90vw] lg:w-[62vw] h-[75vh] left-[5vw] lg:left-[36vw] mt-2 p-4 bg-white text-black border rounded shadow-lg z-10">
               <img
                 src={item.photo}
-                className="rounded-lg   w-full h-full "
+                className="rounded-lg w-full h-full"
               />
             </div>
           )}
         </div>
-        <div className="order-section flex  flex-1">
-          <div className=" w-[37vw] p-4">
-            <div className="text-3xl h-max  m-2">
+        <div className="order-section flex flex-col lg:flex-row flex-1">
+          <div className="w-full lg:w-[37vw] p-4">
+            <div className="text-3xl h-max m-2">
               {item.description}
             </div>
-            <div className="h-[10vh]  m-2">
-            <p className="text-md font-semibold mb-2 flex ">
-                        <div>₹</div>
-                        <span className="text-2xl">{item.price}.00</span>
-            </p>
-            <p>Inclusive of all taxes</p>
+            <div className="h-[10vh] m-2">
+              <p className="text-md font-semibold mb-2 flex">
+                <div>₹</div>
+                <span className="text-2xl">{item.price}.00</span>
+              </p>
+              <p>Inclusive of all taxes</p>
             </div>
             <div className="b h-[5vh] m-2">Use By {item.date}</div>
-            <div className="  h-max  m-2 flex items-center gap-3">
-                <span className="flex flex-col">
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB562549966_.png"/>
+            <div className="h-max m-2 flex items-center gap-3">
+              <span className="flex flex-col">
+                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB562549966_.png" />
                 <span>Free Delivery</span>
-                </span>
-                <span className="flex flex-col ">
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-cod._CB562506657_.png"/>
+              </span>
+              <span className="flex flex-col">
+                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-cod._CB562506657_.png" />
                 <span>Pay on Delivery</span>
-                </span>
-                <span>
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB562506492_.png"/>
+              </span>
+              <span>
+                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB562506492_.png" />
                 <span>Non Refundable</span>
-                </span>
-                <span>
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-amazon-delivered._CB562550117_.png"/>
+              </span>
+              <span>
+                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-amazon-delivered._CB562550117_.png" />
                 <span>SupplyPro Delivered</span>
-                </span>
-                <span>
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/Secure-payment._CB650126890_.png"/>
+              </span>
+              <span>
+                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/Secure-payment._CB650126890_.png" />
                 <span>Secure Payment</span>
-                </span>
+              </span>
             </div>
-            <div className=" h-[10vh] m-2"><span className="font-semibold text-lg">About this item</span>
-                <br/>
-                <span className="flex flex-col">
+            <div className="h-[10vh] m-2">
+              <span className="font-semibold text-lg">About this item</span>
+              <br />
+              <span className="flex flex-col">
                 <span className="flex gap-1">
                   <p className="font-semibold">Item :</p>
                   <p>{item.name}</p>
@@ -136,80 +130,70 @@ const Buy = () => {
                   <p className="font-semibold">Category :</p>
                   <p>{item.category}</p>
                 </span>
-                
                 <span className="flex gap-1">
                   <p className="font-semibold">Date :</p>
                   <p>{item.date}</p>
                 </span>
                 <span className="flex gap-1">
                   <p className="font-semibold">Description</p>
-                  <p> {item.description}</p>
+                  <p>{item.description}</p>
                 </span>
-                </span>
+              </span>
             </div>
           </div>
           <div className="flex-1 mt-4 border border-gray-400 p-1 mr-4">
-            <div className="h-[10vh]  m-2">
-            <p className="text-md font-semibold mb-2 flex ">
-                        <div>₹</div>
-                        <span className="text-2xl">{item.price}.00</span>
-            </p>
+            <div className="h-[10vh] m-2">
+              <p className="text-md font-semibold mb-2 flex">
+                <div>₹</div>
+                <span className="text-2xl">{item.price}.00</span>
+              </p>
             </div>
-            <div className=" h-[5vh] m-2">delivery date</div>
-            <div className="  h-[10vh] m-2">
-               
-                  <div className="flex flex-col  cursor-pointer leading-3 ">
-                    <span className="flex gap-2 items-center">
-                    <MapPin scale={0.5} />
-                    <p className="text-blue-500">Delivering to</p>
-                    </span>
-                    <br/>
-                    <div className=" text-blue-500">
-                    <Link to='/role/buyer/address' className='cursor-pointer flex  gap-1'>
+            <div className="h-[5vh] m-2">delivery date</div>
+            <div className="h-[10vh] m-2">
+              <div className="flex flex-col cursor-pointer leading-3">
+                <span className="flex gap-2 items-center">
+                  <MapPin scale={0.5} />
+                  <p className="text-blue-500">Delivering to</p>
+                </span>
+                <br />
+                <div className="text-blue-500">
+                  <Link to='/role/buyer/address' className='cursor-pointer flex gap-1'>
                     <span>{defaultAddressAddress.houseNo}</span>
                     <span>{defaultAddressAddress.street}</span>
                     <span>{defaultAddressAddress.city}</span>
                     <span>{defaultAddressAddress.state}</span>
                     <span>{defaultAddressAddress.pincode}</span>
-                    </Link>
-                    </div>
-                  </div>
-             
-                {/* <Link to='/role/buyer/address' className='flex gap-2 my-3 mr-6 cursor-pointer  bg-blue-500 text-white w-max p-2 rounded-md m-2 absolute right-0'>Add Address</Link> */}
-            </div>
-            <div className=" h-max my-4  m-2">
-                <div className="flex flex-col">
-                    <p className="text-green-600">In Stock</p>
-                    <span className="grid grid-cols-2 grid-rows-3 gap-y-1 gap-x-0.5  w-2/4 ">
-                    <div>Payment</div>
-                    <div className="text-blue-400">Secure transaction</div>
-                    
-                    <div>Ships from</div>
-                    <div className="text-blue-400">SupplyPro</div>
-                    
-                    <div>Sold By</div>
-                    <div className="text-blue-400">{productfarmer.name} {productfarmer?.address?.city} </div>
-
-                    
-                    
-                    </span>
-                    
+                  </Link>
                 </div>
+              </div>
             </div>
-            <div className="h-max flex flex-col items-center w-[25vw]   m-2">
-            <div className="flex gap-6 items-start  w-full">
-              <span className="flex gap-6 border rounded-md p-2 cursor-pointer">
-              <Trash/> 1<Plus/>
-              </span>
-              <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={()=>handleClick(item._id)}>Add To Cart</span>
-              <button  onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>
+            <div className="h-max my-4 m-2">
+              <div className="flex flex-col">
+                <p className="text-green-600">In Stock</p>
+                <span className="grid grid-cols-2 grid-rows-3 gap-y-1 gap-x-0.5 w-full lg:w-2/4">
+                  <div>Payment</div>
+                  <div className="text-blue-400">Secure transaction</div>
+                  <div>Ships from</div>
+                  <div className="text-blue-400">SupplyPro</div>
+                  <div>Sold By</div>
+                  <div className="text-blue-400">{productfarmer.name} {productfarmer?.address?.city}</div>
+                </span>
+              </div>
             </div>
-            <button className="bg-blue-500 text-white w-full p-2 rounded-md mt-4 ">Buy Now</button>
+            <div className="h-max flex flex-col items-center w-full lg:w-[25vw] m-2">
+              <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
+                <span className="flex gap-6 border rounded-md p-2 cursor-pointer">
+                  <Trash /> 1 <Plus />
+                </span>
+                <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={() => handleClick(item._id)}>Add To Cart</span>
+                <button onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>
+              </div>
+              <button className="bg-blue-500 text-white w-full p-2 rounded-md mt-4">Buy Now</button>
             </div>
           </div>
         </div>
       </div>
-        <FeaturedProducts />
+      <FeaturedProducts />
     </>
   );
 };

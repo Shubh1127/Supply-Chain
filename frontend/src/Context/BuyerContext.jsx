@@ -372,6 +372,22 @@ export const BuyerProvider = ({ children }) => {
         console.error('Error fetching farmer:', error);
       }
     };
+
+
+    const deleteMessage=async(messageId)=>{
+      const token=localStorage.getItem('Buyertoken');
+      try{
+        const response=await axios.delete('http://localhost:3000/buyer/deleteConvo',{
+          'headers':{
+            'Authorization':`Bearer ${token}`
+          },
+          'data':{messageId}
+        })
+        setMessage(response.data.message);
+      }catch(error){
+        console.error('Error deleting message:', error);
+      }
+    }
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -383,7 +399,7 @@ export const BuyerProvider = ({ children }) => {
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
       addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage,Getcategory,categoryProducts,
       productfarmer,setProductFarmer,searchItem,searchProducts, messages, getMessagesByRoomId,
-      farmers, getConversations, getFarmerByProductId,chatFarmer
+      farmers, getConversations, getFarmerByProductId,chatFarmer,deleteMessage
 
 
      }}>

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useBuyer } from '../../../Context/BuyerContext';
 import useChat from '../../../Context/UseChat';
 import Header from '../components/BuyerHeader';
+import { Ellipsis } from 'lucide-react';
 
 const ChatComponent = () => {
   const { productId } = useParams();
@@ -10,15 +11,17 @@ const ChatComponent = () => {
     buyer,
     messages,
     farmers,
-    productFarmer,
     chatFarmer,
     getMessagesByRoomId,
     getConversations,
+    deleteMessage,
     getFarmerByProductId,
   } = useBuyer();
   const [selectedFarmerId, setSelectedFarmerId] = useState(null);
   const [roomId, setRoomId] = useState('');
   const [dataFetched, setDataFetched] = useState(false);
+  const [showDeleteOption, setShowDeleteOption] = useState(null);
+  const [showMessageBox, setShowMessageBox] = useState(false);
   const {
     newMessage,
     setNewMessage,
@@ -50,6 +53,7 @@ const ChatComponent = () => {
       const generateRoomId = `${buyer._id}-${selectedFarmerId}`;
       setRoomId(generateRoomId);
       getMessagesByRoomId(generateRoomId); // Fetch messages for the selected room
+      setShowMessageBox(true);
     }
   }, [selectedFarmerId, buyer, getMessagesByRoomId]);
 
@@ -60,11 +64,40 @@ const ChatComponent = () => {
     return farmer ? farmer.name : 'Farmer';
   };
 
+  const handleDeleteMessage = (messageId) => {
+    deleteMessage(messageId);
+    setShowDeleteOption(null);
+  };
+
+  const handleClickOutside = (event) => {
+    if (!event.target.closest('.message-container')) {
+      setShowDeleteOption(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && newMessage.trim()) {
+      sendMessage();
+    }
+  };
+
+  const handleBack = () => {
+    setShowMessageBox(false);
+    setSelectedFarmerId(null);
+  };
+
   return (
     <>
       <Header />
-      <div className='flex h-full'>
-        <div className='w-1/3 bg-white rounded-md p-4'>
+      <div className='flex flex-col lg:flex-row h-[90vh]'>
+        <div className={`w-full lg:w-1/3 bg-white rounded-md p-4 ${showMessageBox ? 'hidden lg:block' : 'block'}`}>
           <h2 className='text-xl m-2'>Buyer Chat</h2>
           <div>
             <h3>Select a Farmer to Chat With:</h3>
@@ -85,20 +118,32 @@ const ChatComponent = () => {
           </div>
         </div>
         {selectedFarmerId && (
-          <div className='w-2/3 bg-gray-100 rounded-md p-4'>
-            <h3 className='text-xl font-semibold'> {getFarmerName(selectedFarmerId)}</h3>
-            <div className='overflow-y-auto h-4/5 flex flex-col'>
+          <div className='w-full lg:w-2/3 h-full bg-gray-100 rounded-md p-4 flex flex-col'>
+            <button onClick={handleBack} className='lg:hidden mb-4 text-blue-500'>Back</button>
+            <h3 className='text-xl font-semibold'>{getFarmerName(selectedFarmerId)}</h3>
+            <div className='overflow-y-auto flex-grow flex flex-col'>
               {messages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`p-2 my-2 flex flex-col rounded-md w-max ${msg.senderId === buyer._id ? 'bg-green-200 self-end' : 'bg-white self-start'}`}
+                  className={`message-container cursor-pointer p-2 my-2 flex flex-col rounded-md w-max relative ${msg.senderId === buyer._id ? 'bg-green-200 self-end' : 'bg-white self-start'}`}
                   style={{
                     border: msg.senderId === buyer._id ? '2px solid green' : '2px solid white',
                     alignSelf: msg.senderId === buyer._id ? 'flex-end' : 'flex-start',
                     maxWidth: '60%',
                   }}
+                  onClick={() => setShowDeleteOption(msg._id)}
                 >
                   <strong>{msg.senderId === buyer._id ? 'You' : getFarmerName(msg.senderId)}</strong> {msg.message}
+                  {showDeleteOption === msg._id && (
+                    <div className={`absolute top-0 ${msg.senderId === buyer._id ? 'left-[-50px]' : 'right-[-50px]'} p-1`}>
+                      <Ellipsis className='cursor-pointer' />
+                      {showDeleteOption === msg._id && (
+                        <div className='absolute top-0 bg-white border rounded shadow-md p-2'>
+                          <button onClick={() => handleDeleteMessage(msg._id)} className='text-red-500 text-sm'>Delete Message</button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -109,6 +154,7 @@ const ChatComponent = () => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Type a message..."
                 className='flex-grow p-2 border rounded-md'
+                onKeyPress={handleKeyPress}
               />
               <button onClick={sendMessage} className='ml-2 p-2 bg-blue-500 text-white rounded-md'>Send</button>
             </div>
