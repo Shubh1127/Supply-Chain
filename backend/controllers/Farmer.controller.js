@@ -1,6 +1,7 @@
 const FarmerModel=require('../Model/FarmerSchema');
 const BuyerModel=require('../Model/BuyerSchema');
 const ProductModel=require('../Model/ProductSchema')
+const Message=require('../Model/MessageSchema');
 const cloudinary=require('../config/cloudinaryConfig')
 const axios=require('axios');
 const jwt=require('jsonwebtoken');
@@ -224,10 +225,22 @@ module.exports.Weather = async (req, res) => {
 
 module.exports.getAllBuyers = async (req, res) => {
   try {
-    const buyers = await BuyerModel.find({}, 'name address'); // Fetch all buyers with name and address fields
+    const buyers = await BuyerModel.find({}, 'name address profileImageUrl'); // Fetch all buyers with name and address fields
+    // console.log(buyers)
     return res.status(200).json({ buyers });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+
+module.exports.getMessagesByRoomId = async (req, res) => {
+  const { roomId } = req.params;
+  try {
+    const messages = await Message.find({ roomId }).sort({ timeStamp: 1 });
+    return res.status(200).json({ messages });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
     return res.status(500).json({ message: 'Something went wrong' });
   }
 };

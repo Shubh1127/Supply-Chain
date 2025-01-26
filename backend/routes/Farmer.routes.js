@@ -16,4 +16,6 @@ router.get('/products',authMiddleware,farmerController.getProducts);
 router.get('/weather',farmerController.Weather);
 //buyer's Details
 router.get('/buyers', farmerController.getAllBuyers);
+//get Messages
+router.get('/messages/:roomId',authMiddleware, farmerController.getMessagesByRoomId);
 module.exports=router;

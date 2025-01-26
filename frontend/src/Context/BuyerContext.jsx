@@ -12,9 +12,12 @@ export const BuyerProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [item,setItem]=useState([]);
   const [buyer, setBuyer] = useState(null);
+  const [farmers, setFarmers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [products,setProducts]=useState([]);
   const [productfarmer,setProductFarmer]=useState([]);
+  const [chatFarmer, setChatFarmer] = useState(null)
   const  [searchProducts,setSearchProducts]=useState([]);
   const [categoryProducts,setCategoryProducts]=useState([]);
  
@@ -337,6 +340,38 @@ export const BuyerProvider = ({ children }) => {
         setMessage(error.response.data.message || 'Error fetching search');
       }
     }
+
+    const getMessagesByRoomId = async (roomId) => {
+      const token=localStorage.getItem('Buyertoken');
+      try {
+        const response = await axios.get(`http://localhost:3000/buyer/messages/${roomId}`,{
+          headers:{
+            'Auhtorization':`Bearer ${token}`
+          }
+      });
+        setMessages(response.data.messages);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+    const getConversations = async (buyerId) => {
+      try {
+        const response = await axios.get(`http://localhost:3000/buyer/conversations/${buyerId}`);
+        setFarmers(response.data.farmers);
+      } catch (error) {
+        console.error('Error fetching conversations:', error);
+      }
+    };
+    const getFarmerByProductId = async (productId) => {
+      // console.log('req is coming')
+      try {
+        const response = await axios.get(`http://localhost:3000/buyer/farmer/${productId}`);
+        setChatFarmer(response.data.farmer);
+        // console.log(response.data.farmer)
+      } catch (error) {
+        console.error('Error fetching farmer:', error);
+      }
+    };
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -347,7 +382,8 @@ export const BuyerProvider = ({ children }) => {
   return (
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
       addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage,Getcategory,categoryProducts,
-      productfarmer,setProductFarmer,searchItem,searchProducts
+      productfarmer,setProductFarmer,searchItem,searchProducts, messages, getMessagesByRoomId,
+      farmers, getConversations, getFarmerByProductId,chatFarmer
 
 
      }}>

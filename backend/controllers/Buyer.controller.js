@@ -1,6 +1,8 @@
+const Farmer = require('../Model/FarmerSchema'); // Import the Farmer model
 const BuyerModel = require('../Model/BuyerSchema');
 const ProductModel=require('../Model/ProductSchema')
 const cloudinary = require('../config/cloudinaryConfig');
+const Message=require('../Model/MessageSchema');
 const FarmerModel=require('../Model/FarmerSchema')
 const jwt = require('jsonwebtoken');
 const Fuse = require('fuse.js');
@@ -47,7 +49,8 @@ module.exports.login = async (req, res) => {
     }
     const token = buyer.generateAuthToken();
     res.cookie('token', token);
-    console.log(buyer._id)
+    // 
+    // .log(buyer._id)
     return res.status(200).json({ token, buyer });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -482,32 +485,44 @@ module.exports.SearchItem = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-//chat
-const SendMessage= async (req, res) => {
+
+module.exports.getAllMessagesByRoomId = async (req, res) => {
+  const { roomId } = req.params;
   try {
-      const { roomId, message, userName, userId, userType } = req.body;
-      
-      // Validate input (ensure required fields are provided)
-      if (!roomId || !message || !userName || !userId || !userType) {
-          return res.status(400).json({ error: 'All fields are required' });
-      }
-
-      // Create a new message document
-      const newMessage = new Message({
-          roomId,
-          message,
-          userName,
-          userId,
-          userType,
-      });
-
-      // Save the message to the database
-      await newMessage.save();
-
-      // Respond with the saved message
-      res.status(200).json(newMessage);
+    const messages = await Message.find({ roomId }).sort({ timeStamp: 1 });
+    return res.status(200).json({ messages });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to send message' });
+    console.error('Error fetching messages:', error);
+    return res.status(500).json({ message: 'Something went wrong' });
   }
-}
+};
+
+module.exports.getConversations = async (req, res) => {
+  const { buyerId } = req.params;
+  try {
+    // Find all messages where the buyer is involved
+    const messages = await Message.find({ senderId: buyerId }).distinct('receiverId');
+    const farmers = await Farmer.find({ _id: { $in: messages } });
+    return res.status(200).json({ farmers });
+  } catch (error) {
+    console.error('Error fetching conversations:', error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+module.exports.getFarmerByProductId = async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const product = await ProductModel.findById(productId);
+    if (!product || !product.farmerId) {
+      return res.status(404).json({ message: 'Product or farmer not found' });
+    }
+    const farmer = await Farmer.findById(product.farmerId);
+    if (!farmer) {
+      return res.status(404).json({ message: 'Farmer not found' });
+    }
+    return res.status(200).json({ farmer });
+  } catch (error) {
+    console.error('Error fetching farmer:', error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};

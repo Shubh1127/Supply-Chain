@@ -10,6 +10,7 @@ export const useFarmer = () => {
 
 export const FarmerProvider = ({ children }) => {
   const [buyers, setBuyers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [categories, setCategories] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [inventoryLength,setInventoryLength] = useState(0);
@@ -231,6 +232,20 @@ export const FarmerProvider = ({ children }) => {
     }
   };
 
+  const getMessagesByRoomId = async (roomId) => {
+    const token=localStorage.getItem('token');
+    try {
+      const response = await axios.get(`http://localhost:3000/farmer/messages/${roomId}`,{
+        headers:{
+          'Auhtorization':`Bearer ${token}`
+        }
+      });
+      setMessages(response.data.messages);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -242,7 +257,7 @@ export const FarmerProvider = ({ children }) => {
 
   return (
     <FarmerContext.Provider value={{ farmer, signup, login, logout, getProfile, updateProfile, addProduct, getWeather, weather,fetchInventory,totalItems,inventory,inventoryLength,
-    categories,buyers,fetchBuyers,
+    categories,buyers,fetchBuyers,messages,getMessagesByRoomId,
     message }}>
       {children}
     </FarmerContext.Provider>

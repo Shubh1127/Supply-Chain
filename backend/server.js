@@ -14,35 +14,49 @@ const io =socketIo(server,{
   }
 })
 io.on('connection', (socket) => {
-  console.log('New client connected',socket.id);
+  // console.log('New client connected', socket.id);
 
-
-  socket.on('joinRoom',({roomId})=>{
-   
+  socket.on('joinRoom', ({ roomId }) => {
     socket.join(roomId);
-    console.log('Room Joined',roomId);
-  })
+    // console.log('Room Joined', roomId);
+  });
 
-  socket.on('sendMessage',async ({roomId,senderId,receiverId,message})=>{
-    const messageData={
+  socket.on('sendMessage', async ({ roomId, senderId, receiverId, message }) => {
+    const messageData = {
+      roomId,
       senderId,
       receiverId,
       message,
-      timeStamp:Date.now()
+      timeStamp: Date.now(),
+    };
+
+    // console.log('Message Data', messageData);
+
+    try {
+      // Check if the room already exists
+      const existingMessages = await Message.find({ roomId });
+      // if (existingMessages.length > 0) {
+      //   // console.log(`Appending to existing room: ${roomId}`);
+      // } else {
+      //   // console.log(`Creating new room: ${roomId}`);
+      // }
+
+      // Save the new message
+      const savedMessage = await Message.create(messageData);
+      // console.log('Message saved', savedMessage);
+
+      // Emit the message to all clients in the room
+      io.to(roomId).emit('recieveMessage', messageData);
+      // console.log(`Message from ${senderId} to ${receiverId} in room ${roomId}: ${message}`);
+    } catch (err) {
+      console.error('Error saving Message', err);
     }
-    try{
-      const savedMesasage=await Message.create(messageData);
-      console.log('Message saved',savedMesasage); 
-    }catch(err){
-      console.error('Error saving Message',err);
-    }
-    io.to(roomId).emit('recieveMessage',messageData)
-    console.log(`Message from ${senderId} to ${receiverId}  in room ${roomId}: ${message}`);
-  })
-  socket.on('disconnect', () => {
-    console.log(`Client disconnected: ${socket.id}`);
   });
-})
+
+  socket.on('disconnect', () => {
+    // console.log(`Client disconnected: ${socket.id}`);
+  });
+});
 
 
 // Listen on port 3000

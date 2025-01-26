@@ -31,16 +31,16 @@ const Account = () => {
               Edit login,name and mobile number
             </div>
           </Link>
-          <div className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
+          <Link  className="border border-gray-300 rounded p-4 w-[25vw] h-[20vh] flex justify-center  cursor-pointer">
             <div>
               <img src="https://m.media-amazon.com/images/G/31/x-locale/cs/ya/images/rc_prime._CB485926807_.png" />
             </div>
             <div className="ms-3">
-              Subscription
+              Your Chat&apos;s
               <br />
-              View benefits and payment settings
+              View chat and send Messages
             </div>
-          </div>
+          </Link>
           
         </div>
         <div className="flex gap-5">

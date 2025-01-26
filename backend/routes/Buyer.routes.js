@@ -28,4 +28,10 @@ router.get('/search',BuyerController.SearchItem);
 
 //products
 router.get('/products',BuyerController.getProducts);
+
+//allMessages
+router.get('/messages/:roomId',authMiddleware, BuyerController.getAllMessagesByRoomId);
+router.get('/conversations/:buyerId',authMiddleware, BuyerController.getConversations);
+router.get('/farmer/:productId', BuyerController.getFarmerByProductId);
+
 module.exports=router;
