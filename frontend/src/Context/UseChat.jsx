@@ -38,7 +38,7 @@ export const useChat = ({ senderId, receiverId, roomId }) => {
 
   const fetchPreviousMessages = async () => {
     try {
-      const response = await fetch(`https://supply-chain-igtk.onrender.com/messages/${roomId}`);
+      const response = await fetch(`https://supply-chain-igtk.onrender.com/farmer/messages/${roomId}`);
       const data = await response.json();
       setMessages(data.messages);
     } catch (error) {

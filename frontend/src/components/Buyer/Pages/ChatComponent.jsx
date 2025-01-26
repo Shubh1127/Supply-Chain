@@ -54,7 +54,9 @@ const ChatComponent = () => {
     if (selectedFarmerId) {
       const generateRoomId = `${buyer._id}-${selectedFarmerId}`;
       setRoomId(generateRoomId);
-      getMessagesByRoomId(generateRoomId); // Fetch messages for the selected room
+      getMessagesByRoomId(generateRoomId).catch(error => {
+        console.error('Error fetching previous messages:', error);
+      }); // Fetch messages for the selected room
       setShowMessageBox(true);
     }
   }, [selectedFarmerId, buyer, getMessagesByRoomId]);
