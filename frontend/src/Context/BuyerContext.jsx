@@ -86,7 +86,7 @@ export const BuyerProvider = ({ children }) => {
     
   };
 
-  const login = async (email, password) => {
+  const login = async ({email, password}) => {
     try {
       const response = await axios.post('https://supply-chain-igtk.onrender.com/buyer/login', { email, password });
       
@@ -363,11 +363,9 @@ export const BuyerProvider = ({ children }) => {
       }
     };
     const getFarmerByProductId = async (productId) => {
-      // console.log('req is coming')
       try {
         const response = await axios.get(`https://supply-chain-igtk.onrender.com/buyer/farmer/${productId}`);
         setChatFarmer(response.data.farmer);
-        // console.log(response.data.farmer)
       } catch (error) {
         console.error('Error fetching farmer:', error);
       }

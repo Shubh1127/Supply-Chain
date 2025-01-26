@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBuyer } from '../../../Context/BuyerContext';
 import useChat from '../../../Context/UseChat';
@@ -28,6 +28,8 @@ const ChatComponent = () => {
     sendMessage,
   } = useChat({ senderId: buyer?._id, receiverId: selectedFarmerId, roomId });
 
+  const messageEndRef = useRef(null);
+
   useEffect(() => {
     if (buyer && !dataFetched) {
       getConversations(buyer._id);
@@ -56,6 +58,12 @@ const ChatComponent = () => {
       setShowMessageBox(true);
     }
   }, [selectedFarmerId, buyer, getMessagesByRoomId]);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   const getFarmerName = (farmerId) => {
     const farmer =
@@ -146,6 +154,7 @@ const ChatComponent = () => {
                   )}
                 </div>
               ))}
+              <div ref={messageEndRef} />
             </div>
             <div className='flex mt-4'>
               <input
