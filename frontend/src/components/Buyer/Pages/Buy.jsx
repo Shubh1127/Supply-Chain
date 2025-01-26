@@ -188,7 +188,7 @@ const Buy = () => {
                 <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={() => handleClick(item._id)}>Add To Cart</span>
                 <button onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>
               </div>
-              <button className="bg-blue-500 text-white w-full p-2 rounded-md mt-4">Buy Now</button>
+              <button className="bg-blue-500 text-white w-full  pe-4  rounded-md mt-4">Buy Now</button>
             </div>
           </div>
         </div>

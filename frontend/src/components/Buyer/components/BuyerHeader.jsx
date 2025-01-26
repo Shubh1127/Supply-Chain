@@ -75,9 +75,9 @@ export default function Header() {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <MapPin className="w-6 h-6 cursor-pointer" onClick={handleClick} />
+          <MapPin className="w-6 h-6 cursor-pointer" onClick={handleClick}  />
           {showPopup && (
-            <div className="absolute top-full mt-2 p-4 bg-white border rounded shadow-lg">
+            <div className="absolute top-full mt-2 p-4 bg-white border rounded shadow-lg z-10">
               <p>{buyer.addresses[0].street}</p>
               <p>{buyer.addresses[0].city}</p>
               <p>{buyer.addresses[0].state}</p>
