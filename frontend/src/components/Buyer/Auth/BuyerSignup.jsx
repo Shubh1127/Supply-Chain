@@ -1,12 +1,10 @@
 import Header from "../../Header";
 import { useState } from "react";
 import { motion } from 'framer-motion';
-// import { useNavigate } from "react-router-dom";
 import { useBuyer } from "../../../Context/BuyerContext";
 import { Link } from "react-router-dom";
 
 const SignupBuyer = () => {
-  // const navigate = useNavigate();
   const { signup, message } = useBuyer();
   const [user, setUser] = useState({
     name: '',
@@ -35,245 +33,136 @@ const SignupBuyer = () => {
 
   return (
     <>
-    <Header/>
-    <div style={styles.container} >
-      <div style={styles.animatedBackground} className="flex flex-col text-white font-semibold ">
-      <div className="absolute top-[28vh] text-4xl z-1 ">
-        Grow Your Business With Us<br/>
-       <p className="ms-[9vw] mt-9"> Get Started</p>
-      </div>
-        <motion.div
-          animate={{
-            scale: [1, 2, 2, 1, 1],
-            rotate: [0, 0, 270, 270, 0],
-            borderRadius: ["20%", "20%", "50%", "50%", "20%"],
-          }}
-          transition={{
-            duration: 10,
-            ease: "easeInOut",
-            times: [0, 0.2, 0.5, 0.8, 1],
-            repeat: Infinity,
-            repeatDelay: 1
-          }}
-          style={styles.animatedShape}
+      <Header />
+      <div className="container mx-auto p-4 flex flex-col lg:flex-row">
+        <div className="hidden lg:flex lg:w-1/2 p-4 flex-col text-white font-semibold items-center justify-center bg-[#6C63FF]">
+          <div className="text-4xl mb-4">
+            Grow Your Business With Us
+            <p className="mt-9">Get Started</p>
+          </div>
+          <motion.div
+            animate={{
+              scale: [1, 2, 2, 1, 1],
+              rotate: [0, 0, 270, 270, 0],
+              borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+            }}
+            transition={{
+              duration: 10,
+              ease: "easeInOut",
+              times: [0, 0.2, 0.5, 0.8, 1],
+              repeat: Infinity,
+              repeatDelay: 1
+            }}
+            className="w-24 h-24 bg-green-500"
           />
-      </div>
-      <div style={styles.formContainer}>
-        <motion.form 
-          onSubmit={handleSubmit} 
-          style={styles.form}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+        </div>
+        <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#F0F0F0]">
+          <motion.form 
+            onSubmit={handleSubmit} 
+            className="w-4/5 max-w-md p-6 bg-white rounded-lg shadow-md"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            {message && <p className="text-red-500 ms-[5rem]">{message}</p>}
-          <h2 style={styles.title}>Join the Future</h2>
-          <p style={styles.subtitle}>Sign up for an innovative experience</p>
-          <motion.div 
-            style={styles.inputGroup}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            {message && <p className="text-red-500">{message}</p>}
+            <h2 className="text-2xl font-bold mb-4 text-center">Join the Future</h2>
+            <p className="text-center text-gray-600 mb-4">Sign up for an innovative experience</p>
+            <motion.div 
+              className="mb-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-           <input
-              type="text"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-              placeholder="name"
-              style={styles.input}
-              required
+              <input
+                type="text"
+                name="name"
+                value={user.name}
+                onChange={handleChange}
+                placeholder="Name"
+                className="w-full p-2 border rounded-md"
+                required
               />
-          </motion.div>
-          <motion.div 
-            style={styles.inputGroup}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            </motion.div>
+            <motion.div 
+              className="mb-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-           <input
-              type="Number"
-              name="phoneNumber"
-              value={user.phoneNumber}
-              onChange={handleChange}
-              placeholder="PhoneNumber"
-              style={styles.input}
-              required
+              <input
+                type="number"
+                name="phoneNumber"
+                value={user.phoneNumber}
+                onChange={handleChange}
+                placeholder="Phone Number"
+                className="w-full p-2 border rounded-md"
+                required
               />
-          </motion.div>
-          <motion.div 
-            style={styles.inputGroup}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            </motion.div>
+            <motion.div 
+              className="mb-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-            <input
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              placeholder="Email"
-              style={styles.input}
-              required
+              <input
+                type="email"
+                name="email"
+                value={user.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className="w-full p-2 border rounded-md"
+                required
               />
-          </motion.div>
-
-          <motion.div 
-            style={styles.inputGroup}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            </motion.div>
+            <motion.div 
+              className="mb-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-            <input
-              type="password"
-              name="password"
-              value={user.password}
-              onChange={handleChange}
-              placeholder="Password"
-              style={styles.input}
-              required
+              <input
+                type="password"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className="w-full p-2 border rounded-md"
+                required
               />
-          </motion.div>
-          
-          
-          <motion.div 
-            style={styles.inputGroup}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            </motion.div>
+            <motion.div 
+              className="mb-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-            <label htmlFor="profileImage" style={styles.label}>Profile Image</label>
-            <input
-              type="file"
-              name="profileImage"
-              onChange={handleChange}
-              placeholder="Profile Image"
-              accept="image/*"
-              style={styles.input}
-              // required
+              <label htmlFor="profileImage" className="block mb-2 text-gray-700">Profile Image</label>
+              <input
+                type="file"
+                name="profileImage"
+                onChange={handleChange}
+                placeholder="Profile Image"
+                accept="image/*"
+                className="w-full p-2 border rounded-md"
               />
-          </motion.div>
-
-          <motion.button
-             type="submit"
-             style={styles.button}
-            whileHover={!loading && { scale: 1.1 }}
-            whileTap={!loading && { scale: 0.9 }}
-            disabled={loading}
+            </motion.div>
+            <motion.button
+              type="submit"
+              className="w-full bg-blue-500 text-white p-2 rounded-md"
+              whileHover={!loading && { scale: 1.1 }}
+              whileTap={!loading && { scale: 0.9 }}
+              disabled={loading}
             >
               {loading ? (
-                    <div className="spinner" style={styles.spinner}></div>
-                        ) : (
-                          "Sign Up"
+                <div className="spinner w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                "Sign Up"
               )}
-          </motion.button>
-
-          <p style={styles.loginLink}>
-            Already have an account? <Link to='/role/buyer/login' style={styles.link}>Log in</Link >
-          </p>
-        </motion.form>
+            </motion.button>
+            <p className="mt-4 text-center text-gray-600">
+              Already have an account? <Link to='/role/buyer/login' className="text-blue-500">Log in</Link>
+            </p>
+          </motion.form>
+        </div>
       </div>
-    </div>
-</>
+    </>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    height: '100vh',
-    fontFamily: 'Arial, sans-serif',
-  },
-  animatedBackground: {
-    flex: 1,
-    backgroundColor: '#6C63FF',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  spinner: {
-    width: '20px',
-    height: '20px',
-    border: '3px solid #fff',
-    borderTop: '3px solid transparent',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
-  },
-  '@keyframes spin': {
-    '0%': {
-      transform: 'rotate(0deg)',
-    },
-    '100%': {
-      transform: 'rotate(360deg)',
-    },
-  },
-  animatedShape: {
-    width: 100,
-    height: 100,
-    backgroundColor: '#4CAF50',
-  },
-  formContainer: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F0F0F0',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '5px',
-    fontSize: '14px',
-    color: '#333',
-  },  
-  form: {
-    width: '80%',
-    maxWidth: 400,
-    padding: 40,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    fontSize: 28,
-    color: '#333',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    padding: '10px 15px',
-    fontSize: 16,
-    border: '2px solid #ddd',
-    borderRadius: 5,
-    transition: 'border-color 0.3s',
-    outline: 'none',
-  },
-  button: {
-    width: '100%',
-    padding: '12px',
-    fontSize: 18,
-    color: 'white',
-    backgroundColor: '#6C63FF',
-    border: 'none',
-    borderRadius: 5,
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-  },
-  loginLink: {
-    marginTop: 20,
-    textAlign: 'center',
-    fontSize: 14,
-    color: '#666',
-  },
-  link: {
-    color: '#6C63FF',
-    textDecoration: 'none',
-  },
 };
 
 export default SignupBuyer;
