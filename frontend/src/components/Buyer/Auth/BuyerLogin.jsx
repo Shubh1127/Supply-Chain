@@ -97,7 +97,7 @@ const BuyerLogin = () => {
               disabled={loading}
             >
               {loading ? (
-                <div className="spinner w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="spinner w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
               ) : (
                 "Log In"
               )}

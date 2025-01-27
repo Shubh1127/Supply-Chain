@@ -313,6 +313,7 @@ export const BuyerProvider = ({ children }) => {
       const response=await axios.get(`https://supply-chain-igtk.onrender.com/buyer/product/${productId}`);
       setItem(response.data.product);
       // console.log(response.data)
+      localStorage.setItem('product',JSON.stringify(response.data.product));
       setProductFarmer(response.data.farmer);
       navigate(`/role/buyer/buy/${productId}`);
     }catch(error){

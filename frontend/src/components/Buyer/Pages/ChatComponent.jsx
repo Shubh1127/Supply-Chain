@@ -29,6 +29,7 @@ const ChatComponent = () => {
   } = useChat({ senderId: buyer?._id, receiverId: selectedFarmerId, roomId });
 
   const messageEndRef = useRef(null);
+  const [shouldScroll, setShouldScroll] = useState(true);
 
   useEffect(() => {
     if (buyer && !dataFetched) {
@@ -51,7 +52,7 @@ const ChatComponent = () => {
   }, [chatFarmer]);
 
   useEffect(() => {
-    if (selectedFarmerId) {
+    if (buyer && selectedFarmerId) {
       const generateRoomId = `${buyer._id}-${selectedFarmerId}`;
       setRoomId(generateRoomId);
       getMessagesByRoomId(generateRoomId).catch(error => {
@@ -62,10 +63,11 @@ const ChatComponent = () => {
   }, [selectedFarmerId, buyer, getMessagesByRoomId]);
 
   useEffect(() => {
-    if (messageEndRef.current) {
+    if (shouldScroll && messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      setShouldScroll(false); // Reset shouldScroll after scrolling
     }
-  }, [messages]);
+  }, [messages, shouldScroll]);
 
   const getFarmerName = (farmerId) => {
     const farmer =
@@ -94,13 +96,38 @@ const ChatComponent = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && newMessage.trim()) {
-      sendMessage();
+      sendMessage().then(() => {
+        setShouldScroll(true); // Set shouldScroll to true after sending a message
+      }).catch(error => {
+        console.error('Error sending message:', error);
+      });
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      sendMessage().then(() => {
+        setShouldScroll(true); // Set shouldScroll to true after sending a message
+      }).catch(error => {
+        console.error('Error sending message:', error);
+      });
     }
   };
 
   const handleBack = () => {
     setShowMessageBox(false);
     setSelectedFarmerId(null);
+  };
+
+  const handleScroll = () => {
+    if (messageEndRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messageEndRef.current.parentElement;
+      if (scrollTop + clientHeight < scrollHeight) {
+        setShouldScroll(false);
+      } else {
+        setShouldScroll(true);
+      }
+    }
   };
 
   return (
@@ -131,7 +158,7 @@ const ChatComponent = () => {
           <div className='w-full lg:w-2/3 h-full bg-gray-100 rounded-md p-4 flex flex-col'>
             <button onClick={handleBack} className='lg:hidden mb-4 text-blue-500'>Back</button>
             <h3 className='text-xl font-semibold'>{getFarmerName(selectedFarmerId)}</h3>
-            <div className='overflow-y-auto flex-grow flex flex-col'>
+            <div className='overflow-y-auto flex-grow flex flex-col' onScroll={handleScroll}>
               {messages.map((msg, index) => (
                 <div
                   key={index}
@@ -167,7 +194,7 @@ const ChatComponent = () => {
                 className='flex-grow p-2 border rounded-md'
                 onKeyPress={handleKeyPress}
               />
-              <button onClick={sendMessage} className='ml-2 p-2 bg-blue-500 text-white rounded-md'>Send</button>
+              <button onClick={handleSendMessage} className='ml-2 p-2 bg-blue-500 text-white rounded-md'>Send</button>
             </div>
           </div>
         )}

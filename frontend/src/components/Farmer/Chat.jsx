@@ -25,6 +25,18 @@ const FarmerChat = () => {
   }, [selectedBuyerId, farmer, getMessagesByRoomId]);
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      if (selectedBuyerId) {
+        getMessagesByRoomId(roomId).catch(error => {
+          console.error('Error fetching previous messages:', error);
+        });
+      }
+    }, 5000); // Fetch messages every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [selectedBuyerId, roomId, getMessagesByRoomId]);
+
+  useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
