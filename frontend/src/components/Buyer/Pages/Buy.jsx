@@ -85,10 +85,10 @@ const Buy = () => {
         </div>
         <div className="order-section flex flex-col lg:flex-row flex-1">
           <div className="w-full lg:w-[37vw] p-4">
-            <div className="text-3xl h-max m-2">
+            <div className="text-3xl h-max m-2 ">
               {item.description}
             </div>
-            <div className="h-[10vh] m-2">
+            <div className="h-[10vh]  m-2">
               <p className="text-md font-semibold mb-2 flex">
                 <div>₹</div>
                 <span className="text-2xl">{item.price}.00</span>
@@ -118,7 +118,7 @@ const Buy = () => {
                 <span>Secure Payment</span>
               </span>
             </div>
-            <div className="h-[10vh] m-2">
+            <div className="h-[10vh] mb-11 m-2">
               <span className="font-semibold text-lg">About this item</span>
               <br />
               <span className="flex flex-col">
@@ -141,7 +141,7 @@ const Buy = () => {
               </span>
             </div>
           </div>
-          <div className="flex-1 mt-4 border border-gray-400 p-1 mr-4">
+          <div className="flex-1 mt-12 border border-gray-400 p-1 mr-4">
             <div className="h-[10vh] m-2">
               <p className="text-md font-semibold mb-2 flex">
                 <div>₹</div>
@@ -158,11 +158,16 @@ const Buy = () => {
                 <br />
                 <div className="text-blue-500">
                   <Link to='/role/buyer/address' className='cursor-pointer flex gap-1'>
+                  {defaultAddressAddress && (
+                    <>
                     <span>{defaultAddressAddress.houseNo}</span>
                     <span>{defaultAddressAddress.street}</span>
                     <span>{defaultAddressAddress.city}</span>
                     <span>{defaultAddressAddress.state}</span>
                     <span>{defaultAddressAddress.pincode}</span>
+                    </>
+                    || <p>Your Address</p>
+                  )}
                   </Link>
                 </div>
               </div>
