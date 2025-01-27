@@ -2,10 +2,12 @@ require('dotenv').config();
 const http = require('http');
 const app = require('./app');
 const socketIo = require('socket.io');
+const path = require('path');
 const Message=require('./Model/MessageSchema');
 // const { timeStamp } = require('console');
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
+app.use(express.static(path.join(__dirname, 'build')));
 // Initialize Socket.IO
 const io =socketIo(server,{
   cors:{
