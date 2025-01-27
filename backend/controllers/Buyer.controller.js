@@ -39,7 +39,7 @@ module.exports.register = async (req, res) => {
 module.exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const buyer = await BuyerModel.findOne({ email:String(email) });
+    const buyer = await BuyerModel.findOne({ email });
     if (!buyer) {
       return res.status(400).json({ message: 'Invalid email' });
     }
