@@ -6,7 +6,7 @@ import { Trash, Plus } from "lucide-react";
 const Cart = () => {
   const { cart, getCart, updateCart, deleteCart, getProduct } = useBuyer();
   const [cartItems, setCartItems] = useState([]);
-  console.log(cartItems);
+  // console.log(cartItems);
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -37,6 +37,7 @@ const Cart = () => {
 
   const handleDelete = async (productId) => {
     await deleteCart(productId);
+    setCartItems(cartItems.filter(item => item.productId !== productId));
     await getCart();
   };
 
@@ -49,14 +50,14 @@ const Cart = () => {
           <p>Your cart is empty.</p>
         ) : (
           <div className="flex flex-col lg:flex-row">
-            <div className="lg:w-2/3">
+            <div className="lg:w-2/3 border p-2 rounded-md">
               {cartItems.map((item) => (
-                <div key={item.productId} className="flex flex-col lg:flex-row items-center justify-between border-b py-4" onClick={() => handleClick(item.productId)}>
-                  <img src={item.photo} alt={item.name} className="w-24 h-24 object-cover rounded-md mb-4 lg:mb-0" />
+                <div key={item.productId} className="flex flex-col lg:flex-row items-center justify-between border-b py-4" >
+                  <img src={item.photo} alt={item.name} onClick={() => handleClick(item.productId)} className="cursor-pointer w-24 h-24 object-cover rounded-md mb-4 lg:mb-0" />
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full lg:w-2/3">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full">
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full">
-                        <h2 className="text-lg font-semibold">{item.name}</h2>
+                        <h2 className="text-lg font-semibold cursor-pointer" onClick={() => handleClick(item.productId)}>{item.name}</h2>
                         <p className="text-gray-600">₹{item.price}</p>
                       </div>
                       <div className="flex items-center mt-2 lg:mt-0">
@@ -68,7 +69,7 @@ const Cart = () => {
                         </button>
                         <span className="px-4">{item.quantity}</span>
                         <button
-                          onClick={() => handleIncrease(item.productId)}
+                          onClick={() => handleDelete(item.productId)}
                           className="px-2 py-1 bg-gray-200 rounded-md"
                         >
                          <Trash/>

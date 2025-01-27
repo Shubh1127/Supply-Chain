@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search, ShoppingCart, Menu, MapPin } from 'lucide-react';
 import { useBuyer } from '../../../Context/BuyerContext';
 
 export default function Header() {
-  const { buyer, searchItem } = useBuyer();
+  const { buyer, searchItem,cart,getCart } = useBuyer();
   const [showPopup, setShowPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,6 +16,10 @@ export default function Header() {
     }
   };
 
+  useEffect(()=>{
+    // console.log('req is coming')
+     getCart();
+  },[cart.length])
   const handleMouseLeave = () => {
     setShowPopup(false);
   };
@@ -31,7 +35,7 @@ export default function Header() {
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log(searchQuery);
+      // console.log(searchQuery);
       await searchItem(searchQuery);
     }
   };
@@ -46,7 +50,7 @@ export default function Header() {
         <button className="lg:hidden mr-4" onClick={toggleMenu}>
           <Menu className="w-6 h-6" />
         </button>
-        <Link to="/" className="text-xl font-bold">
+        <Link to="/role/buyer" className="text-xl font-bold">
           Supply Chain
         </Link>
       </div>
@@ -64,11 +68,7 @@ export default function Header() {
           </button>
         </form>
         <Link to="/role/buyer/cart" className="relative">
-          <ShoppingCart className="w-6 h-6" />
-          {/* Add a badge for the cart items count */}
-          <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
-            3
-          </span>
+          
         </Link>
         <div
           className="relative"
@@ -97,9 +97,13 @@ export default function Header() {
             <Link to="/role/buyer/account" className="hover:text-gray-300">Account</Link>
           )}
           <Link to="/role/buyer/orders" className="hover:text-gray-300">Orders</Link>
-          <Link to="/role/buyer/cart" className="flex items-center hover:text-gray-300">
-            <ShoppingCart className="h-5 w-5 mr-1" />
-            Cart
+          <Link to="/role/buyer/cart" className="flex items-center  gap-1 hover:text-gray-300">
+          <ShoppingCart className="w-6 h-6" />
+          {/* Add a badge for the cart items count */}
+          <span className="absolute top-6 right-12 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+            {cart.length}
+          </span>
+            <span className='text-lg'>Cart</span>
           </Link>
         </nav>
       </div>

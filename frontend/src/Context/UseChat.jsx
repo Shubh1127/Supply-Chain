@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 const socket = io('https://supply-chain-igtk.onrender.com');
 
 export const useChat = ({ senderId, receiverId, roomId }) => {
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
@@ -12,13 +12,13 @@ export const useChat = ({ senderId, receiverId, roomId }) => {
       socket.emit('joinRoom', { roomId });
     }
 
-    socket.on('receiveMessage', (message) => {
-      setMessages((prev) => [...prev, message]);
-    });
+    // socket.on('receiveMessage', (message) => {
+    //   setMessages((prev) => [...prev, message]);
+    // });
 
-    return () => {
-      socket.off('receiveMessage');
-    };
+    // return () => {
+    //   socket.off('receiveMessage');
+    // };
   }, [roomId]);
 
   const sendMessage = () => {
@@ -31,29 +31,28 @@ export const useChat = ({ senderId, receiverId, roomId }) => {
         message: newMessage,
       };
       socket.emit('sendMessage', message);
-      setMessages((prev) => [...prev, message]);
+      // setMessages((prev) => [...prev, message]);
       setNewMessage('');
     }
   };
 
-  const fetchPreviousMessages = async () => {
-    try {
-      const response = await fetch(`https://supply-chain-igtk.onrender.com/farmer/messages/${roomId}`);
-      const data = await response.json();
-      setMessages(data.messages);
-    } catch (error) {
-      console.error('Error fetching previous messages:', error);
-    }
-  };
+  // const fetchPreviousMessages = async () => {
+  //   try {
+  //     const response = await fetch(`https://supply-chain-igtk.onrender.com/messages/${roomId}`);
+  //     const data = await response.json();
+  //     setMessages(data.messages);
+  //   } catch (error) {
+  //     console.error('Error fetching previous messages:', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (roomId) {
-      fetchPreviousMessages();
-    }
-  }, [roomId]);
+  // useEffect(() => {
+  //   if (roomId) {
+  //     fetchPreviousMessages();
+  //   }
+  // }, [roomId]);
 
   return {
-    messages,
     newMessage,
     setNewMessage,
     sendMessage,
