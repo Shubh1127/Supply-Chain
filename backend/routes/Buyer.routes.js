@@ -30,7 +30,7 @@ router.get('/search',BuyerController.SearchItem);
 router.get('/products',BuyerController.getProducts);
 
 //allMessages
-router.get('/messages/:roomId',authMiddleware, BuyerController.getAllMessagesByRoomId);
+router.get('/messages/:roomId', BuyerController.getAllMessagesByRoomId);
 router.get('/conversations/:buyerId', BuyerController.getConversations);
 router.get('/farmer/:productId', BuyerController.getFarmerByProductId);
 router.delete('/deleteConvo',authMiddleware,BuyerController.deleteMessage)
