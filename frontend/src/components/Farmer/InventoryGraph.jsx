@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useFarmer } from "../../Context/FarmerContext";
 import {
@@ -19,7 +20,7 @@ const InventoryGraph = () => {
   }, [fetchInventory]);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-purple-400">
       <h2 className="text-2xl font-semibold mb-4 text-white">Inventory</h2>
       {/* Scrollable table container */}
       <div className=" overflow-y-auto max-h-[400px] border border-gray-300 rounded shadow-md">

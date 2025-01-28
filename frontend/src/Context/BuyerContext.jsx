@@ -343,12 +343,9 @@ export const BuyerProvider = ({ children }) => {
     }
 
     const getMessagesByRoomId = async (roomId) => {
-      const token=localStorage.getItem('Buyertoken');
       try {
         const response = await axios.get(`https://supply-chain-igtk.onrender.com/buyer/messages/${roomId}`,{
-          headers:{
-            'Auhtorization':`Bearer ${token}`
-          }
+          
       });
         setMessages(response.data.messages);
       } catch (error) {
