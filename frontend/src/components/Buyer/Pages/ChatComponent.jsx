@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useBuyer } from '../../../Context/BuyerContext';
 import useChat from '../../../Context/UseChat';
 import Header from '../components/BuyerHeader';
-import { Ellipsis } from 'lucide-react';
-
+import { Ellipsis,ChevronLeft } from 'lucide-react';
 const ChatComponent = () => {
   const { productId } = useParams();
   const {
@@ -156,8 +155,13 @@ const ChatComponent = () => {
         </div>
         {selectedFarmerId && (
           <div className='w-full lg:w-2/3 h-full bg-gray-100 rounded-md p-4 flex flex-col'>
-            <button onClick={handleBack} className='lg:hidden mb-4 text-blue-500'>Back</button>
-            <h3 className='text-xl font-semibold'>{getFarmerName(selectedFarmerId)}</h3>
+            {/* <button onClick={handleBack} className='lg:hidden mb-4 text-blue-500'>Back</button> */}
+            <h3 className='text-xl font-semibold'>
+              <span className='flex items-center gap-1'>
+                <ChevronLeft className='cursor-pointer' onClick={handleBack} />
+              {getFarmerName(selectedFarmerId)}
+              </span>
+              </h3>
             <div className='overflow-y-auto flex-grow flex flex-col' onScroll={handleScroll}>
               {messages.map((msg, index) => (
                 <div
