@@ -2,6 +2,7 @@ const express=require('express');
 const router=express.Router();
 const BuyerController=require('../controllers/Buyer.controller');
 const authMiddleware=require('../middlewares/auth.middleware');
+const verifyOtp=require('../middlewares/VerifyOtp');
 const upload=require('../middlewares/upload');
 
 router.post('/register',upload.single('profileImage'),BuyerController.register);
@@ -34,5 +35,9 @@ router.get('/messages/:roomId', BuyerController.getAllMessagesByRoomId);
 router.get('/conversations/:buyerId', BuyerController.getConversations);
 router.get('/farmer/:productId', BuyerController.getFarmerByProductId);
 router.delete('/deleteConvo',authMiddleware,BuyerController.deleteMessage)
+//Forgot Password
+router.post('/forgot',BuyerController.ForgotPassword);
+router.post('/verify',BuyerController.VerifyOtp);
+router.post('/addNewPassword', BuyerController.addNewPassword);
 
 module.exports=router;

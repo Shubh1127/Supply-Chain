@@ -4,8 +4,11 @@ const ProductModel=require('../Model/ProductSchema')
 const cloudinary = require('../config/cloudinaryConfig');
 const Message=require('../Model/MessageSchema');
 const FarmerModel=require('../Model/FarmerSchema')
+const OTPModel=require('../Model/OtpSchema');
+const { sendOTPEmail }=require('../utils/sendEmail');
 const jwt = require('jsonwebtoken');
 const Fuse = require('fuse.js');
+const bcrypt = require('bcrypt');
 
 module.exports.register = async (req, res) => {
   try {
@@ -540,6 +543,75 @@ module.exports.deleteMessage=async(req,res)=>{
     return res.status(200).json({message:'Message deleted successfully'});
   }catch(err){
     console.log(err)
+    return res.status(500).json({message:err.message});
+  }
+}
+module.exports.ForgotPassword=async(req,res)=>{
+  const { email } = req.body;
+
+  // Validate email
+  if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+  }
+
+  // Generate a 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Convert to string
+
+  try {
+      const storeOtp = await OTPModel.updateOne(
+          { email },
+          {
+              email,
+              otp,
+              expires: new Date(Date.now() + 600000) // Set expiration to 10 minutes from now
+          },
+          { upsert: true } // Create a new document if it doesn't exist
+      );
+      await sendOTPEmail(email, otp);
+       // Await the email sending function
+
+      return res.status(200).json({ message: 'OTP sent successfully' });
+  } catch (err) {
+      console.error('Error sending OTP:', err);
+      return res.status(500).json({ message: 'Error sending OTP' });
+  }
+}
+module.exports.VerifyOtp=async(req,res)=>{
+  const {email,otp}=req.body;
+  try{
+      if(!email || !otp){
+          return res.status(400).json({message:'Email and OTP are required'});
+      }
+      const checkOtp=await OTPModel.findOne({email,otp});
+      if(!checkOtp){
+          
+          return res.status(400).json({message:'Invalid OTP'});
+      }
+      if (checkOtp.expires < Date.now()) {
+          return res.status(400).json({ message: 'OTP expired' });
+      }
+      return res.status(200).json({message:'OTP verified successfully'});
+
+  }catch(err){
+      console.error('Error verifying OTP:',err);
+      return res.status(500).json({message:'Error verifying OTP'});
+  }
+}
+module.exports.addNewPassword=async(req,res)=>{
+  console.log(req.body)
+  try{
+    const exisitngBuyer=await BuyerModel.findOne({email});
+    if(!exisitngBuyer){
+      return res.status(404).json({message:'Buyer not found'});
+    }
+    await OTPModel.deleteOne({ email });
+    const hashedPassword=await bcrypt.hash(newPassword,10);
+    exisitngBuyer.password=hashedPassword;
+    await exisitngBuyer.save();
+    return res.status(200).json({message:'Password updated successfully'});
+  }catch(err){
+
+    console.error(err)
     return res.status(500).json({message:err.message});
   }
 }
