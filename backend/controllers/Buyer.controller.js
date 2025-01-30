@@ -553,8 +553,10 @@ module.exports.ForgotPassword=async(req,res)=>{
   if (!email) {
       return res.status(400).json({ message: 'Email is required' });
   }
-
-  // Generate a 6-digit OTP
+  const buyer=await BuyerModel.fineOne({email});
+  if(!buyer){
+      return res.status(404).json({message:'Invalid email'});
+        }
   const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Convert to string
 
   try {
@@ -598,7 +600,8 @@ module.exports.VerifyOtp=async(req,res)=>{
   }
 }
 module.exports.addNewPassword=async(req,res)=>{
-  console.log(req.body)
+  const {email,newPassword}=req.body;
+  // console.log(req.body)
   try{
     const exisitngBuyer=await BuyerModel.findOne({email});
     if(!exisitngBuyer){
