@@ -14,7 +14,7 @@ const ForgotPassword = () => {
   const handleSendOtp = async () => {
     try {
       const { data } = await axios.post(
-        'http://localhost:3000/buyer/forgot', 
+        'https://supply-chain-igtk.onrender.com/buyer/forgot', 
         { email }
       );
       if(data.message === 'OTP sent successfully') {
@@ -31,7 +31,7 @@ const ForgotPassword = () => {
   const handleVerifyOtp = async () => {
     try {
       const { data } = await axios.post(
-        'http://localhost:3000/buyer/verify', 
+        'https://supply-chain-igtk.onrender.com/buyer/verify', 
         { email, otp }
       );
       if(data.message === 'OTP verified successfully') {
@@ -48,7 +48,7 @@ const ForgotPassword = () => {
   const handleNewPassword = async () => {
     try {
       const { data } = await axios.post(
-        'http://localhost:3000/buyer/addNewPassword', 
+        'https://supply-chain-igtk.onrender.com/buyer/addNewPassword', 
         { email, newPassword }
       );
       setMessage(data.message || 'Password reset successfully!');
