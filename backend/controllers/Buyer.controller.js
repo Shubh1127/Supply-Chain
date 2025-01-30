@@ -553,7 +553,7 @@ module.exports.ForgotPassword=async(req,res)=>{
   if (!email) {
       return res.status(400).json({ message: 'Email is required' });
   }
-  const buyer=await BuyerModel.fineOne({email});
+  const buyer=await BuyerModel.findOne({email});
   if(!buyer){
       return res.status(404).json({message:'Invalid email'});
         }
