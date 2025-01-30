@@ -389,6 +389,33 @@ export const BuyerProvider = ({ children }) => {
         console.error('Error deleting message:', error);
       }
     }
+    const sendOTP = async (email) => {
+      try {
+        const response = await axios.post(
+          'https://supply-chain-igtk.onrender.com/buyer/forgot-password',
+          { email }
+        );
+        setMessage(response.data.message || 'OTP sent successfully.');
+      } catch (error) {
+        setMessage(error.response?.data?.message || 'Failed to send OTP.');
+      }
+    };
+    const verifyOTP = async (email, otp) => {
+      try {
+        const response = await axios.post(
+          'https://supply-chain-igtk.onrender.com/buyer/verify-otp',
+          { email, otp }
+        );
+        setMessage(response.data.message);
+  
+        if (response.data.success) {
+          // OTP is correct; you could now prompt for a new password or redirect.
+        }
+      } catch (error) {
+        setMessage(error.response?.data?.message || 'Failed to verify OTP.');
+      }
+    };
+
   useEffect(() => {
     const token = localStorage.getItem('Buyertoken');
     if (token) {
@@ -400,7 +427,7 @@ export const BuyerProvider = ({ children }) => {
     <BuyerContext.Provider value={{ buyer, signup, login, logout, getProfile,updateProfile,addAddress,updateAddress,deleteAddress,setDefaultAddress, message,
       addToCart, updateCart, deleteCart, getCart,cart,products,getProducts,getProduct,item,setItem,setMessage,Getcategory,categoryProducts,
       productfarmer,setProductFarmer,searchItem,searchProducts, messages, getMessagesByRoomId,
-      farmers, getConversations, getFarmerByProductId,chatFarmer,deleteMessage
+      farmers, getConversations, getFarmerByProductId,chatFarmer,deleteMessage,sendOTP,verifyOTP,
 
 
      }}>

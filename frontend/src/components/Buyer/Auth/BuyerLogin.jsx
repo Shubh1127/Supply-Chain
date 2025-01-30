@@ -3,8 +3,10 @@ import { useState } from "react";
 import { motion } from 'framer-motion';
 import { useBuyer } from "../../../Context/BuyerContext";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const BuyerLogin = () => {
+
+  const navigate = useNavigate();
   const { login, message } = useBuyer();
   const [user, setUser] = useState({
     email: '',
@@ -102,6 +104,9 @@ const BuyerLogin = () => {
                 "Log In"
               )}
             </motion.button>
+            <p className="mt-4 text-center text-blue-500" onClick={()=>navigate('/role/buyer/forgotpassword')}>
+              Reset Password
+            </p>
             <p className="mt-4 text-center text-gray-600">
               Don&apos;t have an account? <Link to='/role/buyer/signup' className="text-blue-500">Sign Up</Link>
             </p>

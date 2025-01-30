@@ -18,6 +18,7 @@ import Buy from './components/Buyer/Pages/Buy'
 import Category from "./components/Buyer/Pages/Category"
 import SearchProducts from "./components/Buyer/Pages/SearchProducts"
 import ChatComponent from "./components/Buyer/Pages/ChatComponent"
+import ForgotPassword from "./components/Buyer/Auth/ForgotPassword"
 function App() {
   return (
     <Routes>
@@ -38,6 +39,7 @@ function App() {
       <Route path='role/buyer/products/:category' element={<Category/>} />
       <Route path="/role/buyer/buy/chat/:productId" element={<ChatComponent />} />
       <Route path='role/buyer/search/:searchQuery' element={<SearchProducts/>} />
+      <Route path="/role/buyer/forgotpassword" element={<ForgotPassword/>} />
       <Route path='role/buyer/login' element={<BuyerLogin/>} />
       <Route path='/role/buyer/account' element={<Account/>} />
       <Route path='role/buyer/profile' element={<Profile/>}/>

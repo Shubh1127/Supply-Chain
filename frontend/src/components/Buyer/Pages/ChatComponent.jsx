@@ -153,6 +153,7 @@ const ChatComponent = () => {
             )}
           </div>
         </div>
+        
         {selectedFarmerId && (
           <div className='w-full lg:w-2/3 h-full bg-gray-100 rounded-md p-4 flex flex-col'>
             {/* <button onClick={handleBack} className='lg:hidden mb-4 text-blue-500'>Back</button> */}
