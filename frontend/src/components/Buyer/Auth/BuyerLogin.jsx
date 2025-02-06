@@ -29,7 +29,7 @@ const BuyerLogin = () => {
   return (
     <>
       <Header />
-      <div className="container mx-auto p-4 flex flex-col lg:flex-row">
+      <div className=" lg:h-[80vh] sm:h-[90vh] mx-auto p-4 flex flex-col lg:flex-row">
         <div className="hidden lg:flex lg:w-1/2 p-4 flex-col text-white font-semibold items-center justify-center bg-[#6C63FF]">
           <div className="text-4xl mb-4">
             Welcome Back!
@@ -51,7 +51,7 @@ const BuyerLogin = () => {
             className="w-24 h-24 bg-green-500"
           />
         </div>
-        <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#F0F0F0]">
+        <div className="w-full lg:w-1/2 p-4 flex items-center justify-center bg-[#F0F0F0]">
           <motion.form 
             onSubmit={handleSubmit} 
             className="w-4/5 max-w-md p-6 bg-white rounded-lg shadow-md"
@@ -59,7 +59,7 @@ const BuyerLogin = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {message && <p className="text-red-500">{message}</p>}
+            {message && <p className="text-red-500 text-center">{message}</p>}
             <h2 className="text-2xl font-bold mb-4 text-center">Log In</h2>
             <motion.div 
               className="mb-4"

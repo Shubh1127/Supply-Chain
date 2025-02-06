@@ -13,11 +13,13 @@ const Buy = () => {
   const { productId } = useParams();
   const [showPopup, setShowPopup] = useState(false);
   const { item, setItem, setMessage, buyer, productfarmer, setProductFarmer, addToCart } = useBuyer();
+  const [quantity, setQuantity] = useState(1);
   let defaultAddressAddress = {};
   if (buyer && buyer.addresses.length > 0) {
     defaultAddressAddress = buyer?.addresses?.find(address => address.isDefault) || buyer?.addresses[0];
   }
 
+  
   const handleChatWithFarmer = () => {
     navigate(`/role/buyer/buy/chat/${productId}`);
   };
@@ -98,23 +100,23 @@ const Buy = () => {
             <div className="b h-[5vh] m-2">Use By {item.date}</div>
             <div className="h-max m-2 flex items-center gap-3">
               <span className="flex flex-col">
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB562549966_.png" />
+                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB562549966_.png" />
                 <span>Free Delivery</span>
               </span>
               <span className="flex flex-col">
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-cod._CB562506657_.png" />
+                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-cod._CB562506657_.png" />
                 <span>Pay on Delivery</span>
               </span>
               <span>
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB562506492_.png" />
+                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB562506492_.png" />
                 <span>Non Refundable</span>
               </span>
               <span>
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-amazon-delivered._CB562550117_.png" />
+                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-amazon-delivered._CB562550117_.png" />
                 <span>SupplyPro Delivered</span>
               </span>
               <span>
-                <img src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/Secure-payment._CB650126890_.png" />
+                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/Secure-payment._CB650126890_.png" />
                 <span>Secure Payment</span>
               </span>
             </div>
@@ -187,8 +189,8 @@ const Buy = () => {
             </div>
             <div className="h-max flex flex-col items-center w-full lg:w-[25vw] m-2">
               <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
-                <span className="flex gap-6 border rounded-md p-2 cursor-pointer">
-                  <Trash /> 1 <Plus />
+                <span className="flex gap-6 border-2 rounded-md p-2 cursor-pointer">
+                  <Trash onClick={()=>setQuantity(quantity>1?quantity-1:1)} /> {quantity} <Plus  onClick={()=>setQuantity(quantity+1)} />
                 </span>
                 <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={() => handleClick(item._id)}>Add To Cart</span>
                 <button onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>

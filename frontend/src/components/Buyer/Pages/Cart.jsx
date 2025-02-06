@@ -46,6 +46,24 @@ const Cart = () => {
       <Header />
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
+        <div className="lg:w-1/3 lg:pl-4 mt-4 lg:mt-0">
+              <div className="border p-4 rounded-md">
+                <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+                <div className="flex justify-between mb-2">
+                  <span>Subtotal</span>
+                  <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span>Tax</span>
+                  <span>₹{(cartItems.reduce((total, item) => total + item.price * item.quantity, 0) * 0.1).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <span>Total</span>
+                  <span>₹{(cartItems.reduce((total, item) => total + item.price * item.quantity, 0) * 1.1).toFixed(2)}</span>
+                </div>
+                <button className="w-full bg-blue-500 text-white py-2 rounded-md">Proceed to Checkout</button>
+              </div>
+            </div>
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
@@ -86,24 +104,7 @@ const Cart = () => {
                 </div>
               ))}
             </div>
-            <div className="lg:w-1/3 lg:pl-4 mt-4 lg:mt-0">
-              <div className="border p-4 rounded-md">
-                <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-                <div className="flex justify-between mb-2">
-                  <span>Subtotal</span>
-                  <span>₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}</span>
-                </div>
-                <div className="flex justify-between mb-2">
-                  <span>Tax</span>
-                  <span>₹{(cartItems.reduce((total, item) => total + item.price * item.quantity, 0) * 0.1).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between mb-4">
-                  <span>Total</span>
-                  <span>₹{(cartItems.reduce((total, item) => total + item.price * item.quantity, 0) * 1.1).toFixed(2)}</span>
-                </div>
-                <button className="w-full bg-blue-500 text-white py-2 rounded-md">Proceed to Checkout</button>
-              </div>
-            </div>
+            
           </div>
         )}
       </div>

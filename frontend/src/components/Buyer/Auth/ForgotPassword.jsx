@@ -120,7 +120,8 @@ const ForgotPassword = () => {
         </>
       )}
 
-      {message && <p className="text-red-500 mt-4">{message}</p>}
+      {message && message=='OTP verified successfully' && <p className="text-green-500 text-center mt-4">{message}</p> ||
+      <p className="text-red-500 text-center mt-4">{message}</p>}
     </div>
   );
 };
