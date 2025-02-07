@@ -87,7 +87,7 @@ const Buy = () => {
         </div>
         <div className="order-section flex flex-col lg:flex-row flex-1">
           <div className="w-full lg:w-[37vw] p-4">
-            <div className="text-3xl h-max m-2 ">
+            <div className="text-3xl h-max  m-2 ">
               {item.description}
             </div>
             <div className="h-[10vh]  m-2">
@@ -98,9 +98,9 @@ const Buy = () => {
               <p>Inclusive of all taxes</p>
             </div>
             <div className="b h-[5vh] m-2">Use By {item.date}</div>
-            <div className="h-max m-2 flex items-center gap-3">
+            <div className="h-max m-2 flex text-sm mb-4 items-center gap-3">
               <span className="flex flex-col">
-                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB562549966_.png" />
+                <img className="h-10 " src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/trust_icon_free_shipping_81px._CB562549966_.png" />
                 <span>Free Delivery</span>
               </span>
               <span className="flex flex-col">
@@ -120,30 +120,30 @@ const Buy = () => {
                 <span>Secure Payment</span>
               </span>
             </div>
-            <div className="h-[10vh] mb-11 m-2">
-              <span className="font-semibold text-lg">About this item</span>
+            <div className="h-max  m-2">
+              <span className="font-semibold mb-4  text-lg">About this item</span>
               <br />
-              <span className="flex flex-col">
-                <span className="flex gap-1">
+              <span className="flex mb-4  flex-col">
+                <span className="flex  mb-4 gap-1">
                   <p className="font-semibold">Item :</p>
                   <p>{item.name}</p>
                 </span>
-                <span className="flex gap-1">
+                <span className="flex mb-4  gap-1">
                   <p className="font-semibold">Category :</p>
                   <p>{item.category}</p>
                 </span>
-                <span className="flex gap-1">
+                <span className="flex  mb-4 gap-1">
                   <p className="font-semibold">Date :</p>
                   <p>{item.date}</p>
                 </span>
-                <span className="flex gap-1">
+                <span className="flex mb-4  gap-1">
                   <p className="font-semibold">Description</p>
                   <p>{item.description}</p>
                 </span>
               </span>
             </div>
           </div>
-          <div className="flex-1 mt-12 border border-gray-400 p-1 mr-4">
+          <div className="flex-1 mt-12 border m-2 border-gray-400 p-1 ">
             <div className="h-[10vh] m-2">
               <p className="text-md font-semibold mb-2 flex">
                 <div>₹</div>
@@ -187,15 +187,15 @@ const Buy = () => {
                 </span>
               </div>
             </div>
-            <div className="h-max flex flex-col items-center w-full lg:w-[25vw] m-2">
+            <div className="h-max flex flex-col items-center  w-full lg:w-[25vw] m-2">
               <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
-                <span className="flex gap-6 border-2 rounded-md p-2 cursor-pointer">
+                <span className="flex gap-6 border-2  rounded-md p-2 cursor-pointer">
                   <Trash onClick={()=>setQuantity(quantity>1?quantity-1:1)} /> {quantity} <Plus  onClick={()=>setQuantity(quantity+1)} />
                 </span>
-                <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white" onClick={() => handleClick(item._id)}>Add To Cart</span>
+                <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white " onClick={() => handleClick(item._id)}>Add To Cart</span>
                 <button onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>
               </div>
-              <button className="bg-blue-500 text-white w-full  pe-4  rounded-md mt-4">Buy Now</button>
+              <button className="bg-blue-500 text-white w-[98%]  p-2  mr-4 rounded-md mt-4">Buy Now</button>
             </div>
           </div>
         </div>
