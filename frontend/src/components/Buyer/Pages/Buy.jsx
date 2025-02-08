@@ -121,7 +121,7 @@ const Buy = () => {
               </span>
             </div>
             <div className="h-max  m-2">
-              <span className="font-semibold mb-4  text-lg">About this item</span>
+              <span className="font-semibold mb-4 text-base text-lg">About this item</span>
               <br />
               <span className="flex mb-4  flex-col">
                 <span className="flex  mb-4 gap-1">
