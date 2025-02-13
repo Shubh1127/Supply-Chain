@@ -108,7 +108,7 @@ const Buy = () => {
                 <span>Pay on Delivery</span>
               </span>
               <span>
-                <img className="h-12" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB562506492_.png" />
+                <img className="h-10" src="https://m.media-amazon.com/images/G/31/A2I-Convert/mobile/IconFarm/icon-returns._CB562506492_.png" />
                 <span>Non Refundable</span>
               </span>
               <span>
