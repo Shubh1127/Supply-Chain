@@ -86,7 +86,7 @@ const Buy = () => {
           )}
         </div>
         <div className="order-section flex flex-col lg:flex-row flex-1">
-          <div className="w-full lg:w-[37vw] p-4">
+          <div className="w-full lg:w-[36vw] p-4">
             <div className="text-3xl h-max  m-2 ">
               {item.description}
             </div>
