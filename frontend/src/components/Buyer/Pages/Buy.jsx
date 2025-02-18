@@ -95,7 +95,7 @@ const Buy = () => {
                 <div>₹</div>
                 <span className="text-2xl">{item.price}.00</span>
               </p>
-              <p>Inclusive of all taxes</p>
+              <p>Inclusive of all tax</p>
             </div>
             <div className="b h-[5vh] m-2">Use By {item.date}</div>
             <div className="h-max m-2 flex text-sm mb-4 items-center gap-3">
