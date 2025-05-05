@@ -7,7 +7,7 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import { Plus, Trash } from 'lucide-react';
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { initiatePayment } from "../../../Context/Paymentcontext";
 const Buy = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
@@ -195,7 +195,15 @@ const Buy = () => {
                 <span className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white " onClick={() => handleClick(item._id)}>Add To Cart</span>
                 <button onClick={handleChatWithFarmer} className="flex gap-6 border rounded-md p-2 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white">Chat with Farmer</button>
               </div>
-              <button className="bg-blue-500 text-white w-[98%]  p-2  mr-4 rounded-md mt-4">Buy Now</button>
+              <button
+                className="bg-blue-500 text-white w-[98%] p-2 mr-4 rounded-md mt-4"
+                onClick={() => {
+                  initiatePayment(item, buyer);
+                  navigate("/role/buyer/payment");
+                }}
+              >
+                Buy Now
+              </button>
             </div>
           </div>
         </div>
